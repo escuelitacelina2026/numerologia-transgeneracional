@@ -1,154 +1,66 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numerología Transgeneracional</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        h2 { color: #4a148c; text-align: center; margin-bottom: 25px; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        .readonly { background-color: #f0f0f0; color: #888; cursor: not-allowed; border: 1px solid #ccc; }
-        button { width: 100%; padding: 15px; background: #7b1fa2; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px; transition: 0.3s; }
-        button:hover { background: #4a148c; }
-        button:disabled { background: #ccc; cursor: not-allowed; }
-        .hidden { display: none; }
-        .error-msg { color: #d32f2f; text-align: center; font-weight: bold; margin-top: 15px; border: 1px solid #d32f2f; padding: 10px; border-radius: 5px; }
-    </style>
-</head>
-<body>
-
-<div class="card">
-    <h2>Estudio Numerológico</h2>
-    
-    <div id="paso-login">
-        <p style="text-align: center;">Ingresá tu correo electrónico para comenzar:</p>
-        <input type="email" id="email-acceso" placeholder="ejemplo@correo.com">
-        <button onclick="verificarUsuario()">Ingresar al sistema</button>
-    </div>
-
-    <div id="paso-formulario" class="hidden">
-        <label>Nombre y Apellido Completo</label>
-        <input type="text" id="nombre-input" placeholder="Nombre completo (como en tu acta)">
-        
-        <label>Fecha de Nacimiento</label>
-        <input type="date" id="fecha-input">
-        
-        <button id="btnCalcular" onclick="procesarYDescargar()">Calcular y Descargar PDF</button>
-        <div id="mensaje-final" class="hidden error-msg">
-            Usted ya ha descargado su informe único. El acceso para este mail está cerrado.
-        </div>
-    </div>
-</div>
-
-<script>
-    // --- CONFIGURACIÓN CON TUS LLAVES ---
-    const SUPABASE_URL = 'https://iiukfhdbhiimeordekpyw.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M'; // Llave integrada
-
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    let emailActual = "";
-    let esNuevoUsuario = true;
-
-    async function verificarUsuario() {
-        emailActual = document.getElementById('email-acceso').value.trim().toLowerCase();
-        if (!emailActual) return alert("Por favor, ingresá tu mail.");
-
-        // Buscamos en la tabla 'perfiles' por email
-        let { data: perfil, error } = await _supabase
-            .from('perfiles')
-            .select('*')
-            .eq('email', emailActual)
-            .maybeSingle();
-
-        document.getElementById('paso-login').classList.add('hidden');
-        document.getElementById('paso-formulario').classList.remove('hidden');
-
-        const nombreInp = document.getElementById('nombre-input');
-        const fechaInp = document.getElementById('fecha-input');
-        const btn = document.getElementById('btnCalcular');
-
-        if (perfil) {
-            // EL USUARIO EXISTE: Rellenamos datos y bloqueamos edición
-            esNuevoUsuario = false;
-            nombreInp.value = perfil.nombre_completo;
-            nombreInp.readOnly = true;
-            nombreInp.classList.add('readonly');
-
-            fechaInp.value = perfil.fecha_nacimiento;
-            fechaInp.readOnly = true;
-            fechaInp.classList.add('readonly');
-
-            // Si ya descargó el PDF antes, bloqueamos el botón
-            if (perfil.uso_completado) {
-                btn.disabled = true;
-                btn.innerText = "Acceso Denegado";
-                document.getElementById('mensaje-final').classList.remove('hidden');
-            }
-        } else {
-            // USUARIO NUEVO: Puede escribir libremente
-            esNuevoUsuario = true;
-        }
-    }
-
-    async function procesarYDescargar() {
-        const nombre = document.getElementById('nombre-input').value;
+async function procesarYDescargar() {
+        const nombre = document.getElementById('nombre-input').value.trim().toLowerCase();
         const fecha = document.getElementById('fecha-input').value;
 
         if (!nombre || !fecha) return alert("Por favor completa nombre y fecha.");
 
         try {
-            // Guardamos o actualizamos en la base de datos
-            if (esNuevoUsuario) {
-                await _supabase.from('perfiles').insert([
-                    { 
-                        email: emailActual, 
-                        nombre_completo: nombre, 
-                        fecha_nacimiento: fecha, 
-                        uso_completado: true 
-                    }
-                ]);
-            } else {
-                await _supabase.from('perfiles')
-                    .update({ uso_completado: true })
-                    .eq('email', emailActual);
+            // --- CANDADO 1: ¿EL MAIL YA USÓ SU OPORTUNIDAD? ---
+            // (Doble verificación por seguridad si el usuario intenta saltar el bloqueo visual)
+            let { data: usuarioUsado } = await _supabase
+                .from('perfiles')
+                .select('uso_completado')
+                .eq('email', emailActual)
+                .maybeSingle();
+
+            if (usuarioUsado && usuarioUsado.uso_completado) {
+                alert("Tu correo ya ha sido utilizado para una consulta. No puedes realizar más estudios.");
+                return location.reload();
             }
 
-            // --- GENERAR PDF ---
+            // --- CANDADO 2: ¿ESTA PERSONA (NOMBRE+FECHA) YA FUE CONSULTADA? ---
+            let { data: existeCopia } = await _supabase
+                .from('perfiles')
+                .select('*')
+                .eq('nombre_completo', nombre)
+                .eq('fecha_nacimiento', fecha)
+                .maybeSingle();
+
+            if (existeCopia) {
+                alert("Este estudio (mismo nombre y fecha) ya existe en nuestra base de datos. No se permiten duplicados.");
+                return;
+            }
+
+            // --- SI PASA AMBOS CANDADOS, GUARDAMOS Y GENERAMOS ---
+            const { error } = await _supabase.from('perfiles').insert([
+                { 
+                    email: emailActual, 
+                    nombre_completo: nombre, 
+                    fecha_nacimiento: fecha, 
+                    uso_completado: true 
+                }
+            ]);
+
+            if (error) throw error;
+
+            // GENERAR PDF
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
-            doc.setFontSize(22);
-            doc.setTextColor(74, 20, 140);
-            doc.text("Informe de Numerología Transgeneracional", 20, 30);
-            
+            doc.setFontSize(20);
+            doc.text("Informe Numerológico", 20, 30);
             doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
-            doc.text(`Consultante: ${nombre}`, 20, 50);
-            doc.text(`Fecha de Nacimiento: ${fecha}`, 20, 60);
-            doc.text(`Email de registro: ${emailActual}`, 20, 70);
+            doc.text(`Consultante: ${nombre.toUpperCase()}`, 20, 50);
+            doc.text(`Fecha: ${fecha}`, 20, 60);
+            doc.text("---------------------------------------", 20, 70);
+            doc.text("Análisis completado.", 20, 80);
             
-            doc.setLineWidth(0.5);
-            doc.line(20, 75, 190, 75);
-
-            doc.text("Tu análisis numerológico está siendo procesado...", 20, 90);
+            doc.save(`Estudio_${nombre.replace(/ /g, "_")}.pdf`);
             
-            // Descarga del archivo
-            doc.save(`Estudio_${nombre.replace(/\s+/g, '_')}.pdf`);
-            
-            alert("Estudio generado. Por seguridad, el sistema se cerrará.");
-            location.reload(); // Recarga para bloquear
+            alert("¡Éxito! Tu oportunidad ha sido utilizada. El sistema se bloqueará para este mail.");
+            location.reload(); 
 
         } catch (e) {
             console.error(e);
-            alert("Error al conectar con la base de datos.");
+            alert("Error al procesar los datos. Revisa la conexión.");
         }
     }
-</script>
-
-</body>
-</html>
