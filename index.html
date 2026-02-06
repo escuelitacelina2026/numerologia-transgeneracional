@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Navearcturiana</title>
+    <title>Acceso Navearcturiana</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px; width: 320px; text-align: center; border: 1px solid #00d2ff; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #00d2ff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; width: 320px; text-align: center; border: 1px solid #00d2ff; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.2); color: white; }
+        button { width: 100%; padding: 12px; background: #00d2ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .hidden { display: none; }
     </style>
 </head>
@@ -21,29 +21,26 @@
         <h2>🔒 Acceso</h2>
         <input type="text" id="user-input" placeholder="Usuario">
         <input type="password" id="pass-input" placeholder="Clave">
-        <button onclick="login()">Entrar</button>
+        <button onclick="login()">Ingresar</button>
     </div>
 
     <div id="app-box" class="hidden">
         <h2>✨ Bienvenido</h2>
-        <input type="text" id="nombre-input" placeholder="Nombre">
+        <input type="text" id="nombre-input" placeholder="Nombre del consultante">
         <input type="date" id="fecha-input">
-        <button onclick="descargar()">Generar PDF</button>
-        <button onclick="location.reload()" style="background:red;">Salir</button>
+        <button onclick="descargarPDF()">Generar PDF</button>
+        <button onclick="location.reload()" style="background:none; border:1px solid red; color:red; margin-top:15px;">Salir</button>
     </div>
 </div>
 
 <script>
-    const SUPABASE_URL = 'https://iiukfhdbhiimeordekpyw.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const _supabase = supabase.createClient('https://iiukfhdbhiimeordekpyw.supabase.co', 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M');
 
     async function login() {
-        const u = document.getElementById('user-input').value.trim().toLowerCase();
+        const u = document.getElementById('user-input').value.trim();
         const p = document.getElementById('pass-input').value.trim();
 
         try {
-            // Intentamos traer el usuario
             const { data, error } = await _supabase
                 .from('credenciales')
                 .select('*')
@@ -51,28 +48,24 @@
                 .eq('clave', p)
                 .maybeSingle();
 
-            if (error) {
-                alert("Error de Supabase: " + error.message);
-                return;
-            }
-
             if (data) {
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('app-box').classList.remove('hidden');
             } else {
-                alert("No se encontró el usuario. Verifica que el RLS esté en 'Disabled' en la tabla credenciales.");
+                alert("Usuario o clave incorrecta.");
             }
         } catch (err) {
-            alert("Error de red: " + err.message);
+            alert("Error de conexión. Prueba en modo incógnito.");
         }
     }
 
-    function descargar() {
-        const n = document.getElementById('nombre-input').value;
+    function descargarPDF() {
+        const nom = document.getElementById('nombre-input').value;
+        if (!nom) return alert("Completa los datos");
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text("Estudio para: " + n, 20, 20);
-        doc.save("estudio.pdf");
+        doc.text("Estudio para: " + nom.toUpperCase(), 20, 20);
+        doc.save(`Estudio_${nom}.pdf`);
     }
 </script>
 </body>
