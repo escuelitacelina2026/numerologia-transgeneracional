@@ -3,38 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Navearcturiana</title>
+    <title>Sistema Numerológico - Navearcturiana</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; }
-        .card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 2rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); width: 100%; max-width: 350px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        h2 { color: #00d2ff; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.2); color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #00d2ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0c29; background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; }
+        .card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); padding: 2.5rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); width: 100%; max-width: 380px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        h2 { color: #00d2ff; text-shadow: 0 0 10px rgba(0,210,255,0.3); margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; text-align: left; font-size: 14px; color: #aaa; }
+        input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.2); color: white; font-size: 16px; outline: none; box-sizing: border-box; }
+        input:focus { border-color: #00d2ff; background: rgba(0,0,0,0.4); }
+        button { width: 100%; padding: 15px; background: linear-gradient(to right, #00d2ff, #3a7bd5); color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; margin-top: 20px; font-weight: bold; transition: 0.3s; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.4); }
         .hidden { display: none; }
+        .logout-btn { background: transparent; border: 1px solid #ff4b2b; color: #ff4b2b; font-size: 14px; margin-top: 15px; }
+        .logout-btn:hover { background: rgba(255,75,43,0.1); box-shadow: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div id="login-box">
-        <h2>🚀 Acceso</h2>
-        <input type="text" id="user-input" placeholder="Usuario">
+        <h2>🚀 Acceso Nave</h2>
+        <input type="text" id="user-input" placeholder="Usuario" autocomplete="off">
         <input type="password" id="pass-input" placeholder="Contraseña">
-        <button onclick="login()">Entrar</button>
+        <button onclick="login()">Ingresar</button>
+        <p style="font-size: 12px; color: #666; margin-top: 15px;">Solo personal autorizado</p>
     </div>
 
     <div id="app-box" class="hidden">
-        <h2>✨ Consultas</h2>
-        <input type="text" id="nombre-input" placeholder="Nombre del consultante">
+        <h2>✨ Numerología</h2>
+        <p style="font-size: 14px; color: #00d2ff;">Sesión Iniciada</p>
+        
+        <label>Nombre Completo</label>
+        <input type="text" id="nombre-input" placeholder="Ej: Juan Pérez">
+        
+        <label>Fecha de Nacimiento</label>
         <input type="date" id="fecha-input">
-        <button onclick="generarPDF()">Descargar PDF</button>
-        <button onclick="location.reload()" style="background:none; border:1px solid red; font-size:12px; margin-top:10px;">Cerrar Sesión</button>
+        
+        <button onclick="generarPDF()">Descargar Estudio PDF</button>
+        
+        <button class="logout-btn" onclick="location.reload()">Cerrar Sesión</button>
     </div>
 </div>
 
 <script>
+    // Conexión a Supabase
     const SUPABASE_URL = 'https://iiukfhdbhiimeordekpyw.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -43,8 +57,10 @@
         const u = document.getElementById('user-input').value.trim();
         const p = document.getElementById('pass-input').value.trim();
 
+        if (!u || !p) return alert("Completa todos los campos");
+
         try {
-            // Buscamos en la tabla 'credenciales' usando la columna 'usuario' corregida
+            // Consulta exacta a tu tabla 'credenciales'
             let { data: acceso, error } = await _supabase
                 .from('credenciales')
                 .select('*')
@@ -52,27 +68,46 @@
                 .eq('clave', p)
                 .maybeSingle();
 
+            if (error) throw error;
+
             if (acceso) {
+                // Éxito: Cambiamos de pantalla
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('app-box').classList.remove('hidden');
             } else {
+                // Fallo: Datos incorrectos
                 alert("Usuario o clave incorrecta. Comunicate con Navearcturiana");
             }
         } catch (e) {
-            alert("Error de conexión. Verifica que el RLS esté desactivado.");
+            console.error(e);
+            alert("Error de conexión con la base de datos. Verifica el RLS.");
         }
     }
 
     function generarPDF() {
-        const nom = document.getElementById('nombre-input').value;
+        const nom = document.getElementById('nombre-input').value.trim();
         const fec = document.getElementById('fecha-input').value;
-        if(!nom || !fec) return alert("Faltan datos");
+
+        if (!nom || !fec) return alert("Faltan datos del consultante");
+
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text("Estudio Numerológico", 20, 20);
-        doc.text(`Nombre: ${nom}`, 20, 40);
-        doc.text(`Fecha: ${fec}`, 20, 50);
-        doc.save(`Estudio_${nom}.pdf`);
+
+        // Diseño del PDF
+        doc.setFontSize(22);
+        doc.text("Informe Numerológico", 20, 30);
+        doc.setFontSize(14);
+        doc.text(`Consultante: ${nom.toUpperCase()}`, 20, 50);
+        doc.text(`Fecha de Nacimiento: ${fec}`, 20, 60);
+        doc.line(20, 65, 190, 65);
+        
+        doc.text("Este informe contiene el análisis solicitado.", 20, 80);
+
+        doc.save(`Estudio_${nom.replace(/\s+/g, '_')}.pdf`);
+        
+        alert("¡PDF generado con éxito!");
+        document.getElementById('nombre-input').value = "";
+        document.getElementById('fecha-input').value = "";
     }
 </script>
 </body>
