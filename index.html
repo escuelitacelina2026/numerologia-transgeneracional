@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numerología Transgeneracional</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { color: #4a148c; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        .readonly { background-color: #f0f0f0; color: #888; cursor: not-allowed; border: 1px solid #ccc; }
+        button { width: 100%; padding: 15px; background: #7b1fa2; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px; transition: 0.3s; }
+        button:hover { background: #4a148c; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .hidden { display: none; }
+        .error { color: red; font-size: 14px; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Estudio Numerológico</h2>
+    
+    <div id="paso-login">
+        <p style="text-align: center;">Ingresá tu DNI para comenzar el estudio único.</p>
+        <input type="text" id="dni-input" placeholder="Número de DNI (sin puntos)">
+        <button onclick="verificarODarleDeAlta()">Ingresar al Sistema</button>
+    </div>
+
+    <div id="paso-formulario" class="hidden">
+        <label>Nombre y Apellido Completo</label>
+        <input type="text" id="nombre-input" placeholder="Como figura en tu partida de nacimiento">
+        
+        <label>Fecha de Nacimiento</label>
+        <input type="date" id="fecha-input">
+        
+        <button id="btnCalcular" onclick="generarYBloquear()">Calcular y Descargar PDF</button>
+        <p id="mensaje-bloqueo" class="hidden" style="color: #d32f2f; font-weight: bold; text-align: center; margin-top: 15px;">
+            ⚠️ Ya has utilizado tu oportunidad de descarga.
+        </p>
+    </div>
+</div>
+
+<script>
+    // --- 1. CONFIGURACIÓN (REEMPLAZÁ CON TUS DATOS) ---
+    const SUPABASE_URL = 'https://iiukfhdbhiimeordekpyw.supabase.co';
+    const SUPABASE_KEY = 'TU_LLAVE_PUBLISHABLE_AQUI'; // Pegá acá tu llave sb_publishable...
+
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let usuarioActivo = null;
+
+    // --- 2. LÓGICA DE INGRESO ---
+    async function verificarODarleDeAlta() {
+        const dni = document.getElementById('dni-input').value.trim();
+        if (!dni) return alert("Por favor, ingresá un DNI válido.");
+
+        // Buscamos si el DNI existe en la tabla 'perfiles'
+        let { data: perfil, error } = await _supabase
+            .from('perfiles')
+            .select('*')
+            .eq('dni', dni)
+            .maybeSingle();
+
+        document.getElementById('paso-login').classList.add('hidden');
+        document.getElementById('paso-formulario').classList.remove('hidden');
+
+        const inputNombre = document.getElementById('nombre-input');
+        const inputFecha = document.getElementById('fecha-input');
+        const btn = document.getElementById('btnCalcular');
+
+        if (perfil) {
+            // USUARIO YA EXISTE: Bloqueamos los campos con sus datos guardados
+            usuarioActivo = perfil;
+            inputNombre.value = perfil.nombre_completo;
+            inputNombre.readOnly = true;
+            inputNombre.classList.add('readonly');
+
+            inputFecha.value = perfil.fecha_nacimiento;
+            inputFecha.readOnly = true;
+            inputFecha.classList.add('readonly');
+
+            // Si ya descargó el PDF antes, bloqueamos el botón definitivamente
+            if (perfil.uso_completado) {
+                btn.disabled = true;
+                btn.innerText = "Estudio Finalizado";
+                document.getElementById('mensaje-bloqueo').classList.remove('hidden');
+            }
+        } else {
+            // USUARIO NUEVO
+            usuarioActivo = { dni: dni, esNuevo: true };
+        }
+    }
+
+    // --- 3. LÓGICA DE CÁLCULO Y GUARDADO ---
+    async function generarYBloquear() {
+        const nombre = document.getElementById('nombre-input').value.trim();
+        const fecha = document.getElementById('fecha-input').value;
+
+        if (!nombre || !fecha) return alert("Completá nombre y fecha para continuar.");
+
+        try {
+            if (usuarioActivo.esNuevo) {
+                // Guardamos en Supabase por primera vez
+                await _supabase.from('perfiles').insert([
+                    { 
+                        dni: usuarioActivo.dni, 
+                        nombre_completo: nombre, 
+                        fecha_nacimiento: fecha, 
+                        uso_completado: true 
+                    }
+                ]);
+            } else {
+                // Si existía pero no lo había usado, lo marcamos como usado
+                await _supabase.from('perfiles')
+                    .update({ uso_completado: true })
+                    .eq('dni', usuarioActivo.dni);
+            }
+
+            // GENERACIÓN DEL PDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.text("Estudio Numerológico Transgeneracional", 20, 20);
+            doc.setFontSize(14);
+            doc.text(`Consultante: ${nombre}`, 20, 40);
+            doc.text(`Fecha de Nacimiento: ${fecha}`, 20, 50);
+            doc.text("--------------------------------------------------", 20, 60);
+            doc.text("Aquí irán tus fórmulas y análisis numerológicos.", 20, 70);
+            
+            doc.save(`Estudio_${nombre.replace(/ /g, "_")}.pdf`);
+
+            // Recargamos la página para que el bloqueo sea efectivo
+            alert("¡Estudio generado con éxito! El sistema se bloqueará para este DNI.");
+            location.reload();
+
+        } catch (err) {
+            console.error(err);
+            alert("Hubo un error al guardar los datos.");
+        }
+    }
+</script>
+
+</body>
+</html>
