@@ -3,103 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Numerología Transgeneracional</title>
+    <title>Sistema Privado - Navearcturiana</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        h2 { color: #4a148c; text-align: center; }
-        label { display: block; margin-top: 15px; font-weight: bold; color: #555; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
-        .readonly { background-color: #f0f0f0; color: #888; cursor: not-allowed; border: 1px solid #ccc; }
-        button { width: 100%; padding: 15px; background: #7b1fa2; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; background: linear-gradient(to right, #24243e, #302b63, #0f0c29); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; }
+        .card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 2.5rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); width: 100%; max-width: 400px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+        h2 { color: #00d2ff; margin-bottom: 1.5rem; }
+        label { display: block; margin-top: 15px; text-align: left; font-size: 14px; color: #00d2ff; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.2); color: white; font-size: 16px; outline: none; }
+        input::placeholder { color: #ccc; }
+        button { width: 100%; padding: 15px; background: #00d2ff; background: linear-gradient(to right, #3a7bd5, #00d2ff); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; margin-top: 20px; font-weight: bold; transition: 0.3s; }
+        button:hover { transform: scale(1.02); box-shadow: 0 0 15px #00d2ff; }
         .hidden { display: none; }
-        .error-msg { color: #d32f2f; text-align: center; font-weight: bold; margin-top: 15px; padding: 10px; border: 1px solid #d32f2f; border-radius: 5px; }
+        .footer-text { margin-top: 20px; font-size: 12px; color: #888; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2>Estudio Numerológico</h2>
-    
-    <div id="paso-login">
-        <p style="text-align: center;">Ingresá tu mail para comenzar:</p>
-        <input type="email" id="email-acceso" placeholder="tu@email.com">
-        <button onclick="verificarUsuario()">Ingresar</button>
+    <div id="login-box">
+        <h2>🚀 Acceso Nave</h2>
+        <label>Usuario</label>
+        <input type="text" id="user-input" placeholder="Tu usuario">
+        <label>Contraseña</label>
+        <input type="password" id="pass-input" placeholder="••••••••">
+        <button onclick="login()">Entrar al Sistema</button>
+        <p class="footer-text">Si no tienes acceso, comunícate con Navearcturiana</p>
     </div>
 
-    <div id="paso-formulario" class="hidden">
-        <label>Nombre y Apellido Completo</label>
-        <input type="text" id="nombre-input" placeholder="Nombre completo">
+    <div id="app-box" class="hidden">
+        <h2>✨ Generador de Estudios</h2>
+        <p>Bienvenido. Puedes realizar consultas ilimitadas.</p>
+        
+        <label>Nombre y Apellido</label>
+        <input type="text" id="nombre-input" placeholder="Nombre del consultante">
         
         <label>Fecha de Nacimiento</label>
         <input type="date" id="fecha-input">
         
-        <button id="btnCalcular" onclick="procesarYDescargar()">Calcular y Descargar PDF</button>
-        <div id="mensaje-final" class="hidden error-msg">Este mail ya agotó su consulta.</div>
+        <button onclick="generarPDF()">Generar y Descargar PDF</button>
+        
+        <button onclick="location.reload()" style="background: transparent; border: 1px solid #ff4b2b; margin-top: 10px; font-size: 14px;">Cerrar Sesión</button>
     </div>
 </div>
 
 <script>
+    // Configuración de Supabase
     const SUPABASE_URL = 'https://iiukfhdbhiimeordekpyw.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    
-    let emailActual = "";
 
-    async function verificarUsuario() {
-        emailActual = document.getElementById('email-acceso').value.trim().toLowerCase();
-        if (!emailActual) return alert("Ingresá un mail");
+    // Función para validar contra la tabla 'credenciales'
+    async function login() {
+        const u = document.getElementById('user-input').value.trim();
+        const p = document.getElementById('pass-input').value.trim();
 
-        let { data: perfil } = await _supabase.from('perfiles').select('*').eq('email', emailActual).maybeSingle();
+        if (!u || !p) return alert("Por favor completa los campos de acceso.");
 
-        document.getElementById('paso-login').classList.add('hidden');
-        document.getElementById('paso-formulario').classList.remove('hidden');
+        try {
+            let { data: acceso, error } = await _supabase
+                .from('credenciales')
+                .select('*')
+                .eq('usuario', u)
+                .eq('clave', p)
+                .maybeSingle();
 
-        if (perfil && perfil.uso_completado) {
-            document.getElementById('nombre-input').value = perfil.nombre_completo;
-            document.getElementById('nombre-input').readOnly = true;
-            document.getElementById('nombre-input').classList.add('readonly');
-            document.getElementById('fecha-input').value = perfil.fecha_nacimiento;
-            document.getElementById('fecha-input').readOnly = true;
-            document.getElementById('fecha-input').classList.add('readonly');
-            document.getElementById('btnCalcular').disabled = true;
-            document.getElementById('mensaje-final').classList.remove('hidden');
+            if (acceso) {
+                // Si coinciden los datos en Supabase, mostramos el formulario
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('app-box').classList.remove('hidden');
+            } else {
+                alert("Usuario o clave incorrecta. Comunicate con Navearcturiana");
+            }
+        } catch (e) {
+            alert("Error de conexión con la base de datos.");
         }
     }
 
-    async function procesarYDescargar() {
-        const nombre = document.getElementById('nombre-input').value.trim().toLowerCase();
-        const fecha = document.getElementById('fecha-input').value;
+    // Función para generar el PDF (Consultas libres)
+    function generarPDF() {
+        const nom = document.getElementById('nombre-input').value.trim();
+        const fec = document.getElementById('fecha-input').value;
 
-        if (!nombre || !fecha) return alert("Completá los datos");
+        if (!nom || !fec) return alert("Completa los datos del consultante.");
 
-        try {
-            // CANDADO 1: ¿EL MAIL YA SE USÓ?
-            let { data: checkMail } = await _supabase.from('perfiles').select('uso_completado').eq('email', emailActual).maybeSingle();
-            if (checkMail && checkMail.uso_completado) return alert("Tu mail ya fue usado.");
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
 
-            // CANDADO 2: ¿NOMBRE+FECHA YA EXISTEN?
-            let { data: checkPersona } = await _supabase.from('perfiles').select('*').eq('nombre_completo', nombre).eq('fecha_nacimiento', fecha).maybeSingle();
-            if (checkPersona) return alert("Esta persona ya fue consultada previamente.");
+        // Diseño básico del PDF
+        doc.setFontSize(20);
+        doc.setTextColor(40, 40, 40);
+        doc.text("Estudio Numerológico Transgeneracional", 20, 30);
+        
+        doc.setFontSize(14);
+        doc.text(`Consultante: ${nom.toUpperCase()}`, 20, 50);
+        doc.text(`Fecha de Nacimiento: ${fec}`, 20, 60);
+        
+        doc.setLineWidth(0.5);
+        doc.line(20, 65, 190, 65);
+        
+        doc.text("Resultado del análisis:", 20, 80);
+        doc.setFontSize(12);
+        doc.text("Aquí se presentará el informe detallado de la persona.", 20, 90);
 
-            // GUARDAR
-            await _supabase.from('perfiles').insert([{ email: emailActual, nombre_completo: nombre, fecha_nacimiento: fecha, uso_completado: true }]);
-
-            // PDF
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.text("Informe Numerológico", 20, 20);
-            doc.text(`Nombre: ${nombre.toUpperCase()}`, 20, 40);
-            doc.text(`Fecha: ${fecha}`, 20, 50);
-            doc.save(`Estudio_${nombre}.pdf`);
-
-            alert("Estudio exitoso. El sistema se bloqueará.");
-            location.reload();
-        } catch (e) {
-            alert("Error de conexión");
-        }
+        doc.save(`Estudio_${nom.replace(/\s+/g, '_')}.pdf`);
+        
+        alert("¡PDF Descargado! Los campos se limpiarán para una nueva consulta.");
+        document.getElementById('nombre-input').value = "";
+        document.getElementById('fecha-input').value = "";
     }
 </script>
 </body>
