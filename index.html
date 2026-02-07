@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nave Arcturiana - Sistema</title>
+    <title>Nave Arcturiana - Sistema Inteligente</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
@@ -27,7 +27,6 @@
         .footer-copy { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .hidden { display: none; }
 
-        /* Estilo para el mensaje de error personalizado */
         #error-msg { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
     </style>
 </head>
@@ -37,7 +36,7 @@
         <div id="error-msg" class="hidden">
             <div style="font-size: 40px; margin-bottom: 10px;">👽</div>
             <p id="error-text" style="font-size: 14px; line-height: 1.4; color: white;"></p>
-            <button onclick="cerrarError()" style="background: #ff4d4d; color: white; padding: 8px; font-size: 12px;">Aceptar</button>
+            <button onclick="cerrarError()" style="background: #ff4d4d; color: white; padding: 8px; font-size: 12px; width: auto;">Aceptar</button>
         </div>
 
         <div id="box-login">
@@ -55,7 +54,7 @@
             
             <div class="input-group">
                 <label>Nombre y Apellido</label>
-                <input type="text" id="client_name" placeholder="Nombre del consultante">
+                <input type="text" id="client_name" placeholder="Ej: Juan Pérez">
             </div>
             
             <div class="input-group">
@@ -63,7 +62,7 @@
                 <input type="date" id="client_birth">
             </div>
             
-            <button onclick="exportPDF()">Generar Estudio</button>
+            <button onclick="procesarCarta()">Generar Estudio</button>
             <button onclick="location.reload()" class="btn-outline">Cerrar Sesión</button>
         </div>
 
@@ -75,11 +74,13 @@
     <script>
         const MASTER_U = "navearcturiana";
         const MASTER_P = "nubilis2026_";
+        const VALORES = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
+        const VOCALES = ['A','E','I','O','U'];
+        const KARMICOS = [13, 14, 16, 19];
 
         function checkAccess() {
             const u = document.getElementById('user_val').value.trim().toLowerCase();
             const p = document.getElementById('pass_val').value.trim();
-
             if (u === MASTER_U && p === MASTER_P) {
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
@@ -93,24 +94,80 @@
             document.getElementById('error-msg').classList.remove('hidden');
         }
 
-        function cerrarError() {
-            document.getElementById('error-msg').classList.add('hidden');
+        function cerrarError() { document.getElementById('error-msg').classList.add('hidden'); }
+
+        function analizarNumero(num) {
+            if (num === 11 || num === 22) return { valor: num, info: "(Número Maestro)" };
+            if (KARMICOS.includes(num)) {
+                let r = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                return { valor: `${num}/${r}`, info: "(Número Kármico: Deuda a trascender)" };
+            }
+            while (num > 9 && num !== 11 && num !== 22) {
+                num = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                if (KARMICOS.includes(num)) {
+                    let r = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
+                    return { valor: `${num}/${r}`, info: "(Número Kármico: Deuda a trascender)" };
+                }
+            }
+            return { valor: num, info: "" };
         }
 
-        function exportPDF() {
-            const nombre = document.getElementById('client_name').value.trim();
+        function procesarCarta() {
+            const nombre = document.getElementById('client_name').value.toUpperCase().trim();
             const fecha = document.getElementById('client_birth').value;
+            if(!nombre || !fecha) return alert("Por favor, completa los datos.");
 
-            if (!nombre || !fecha) {
-                alert("Por favor, completa todos los campos galácticos.");
-                return;
+            let alma = 0, pers = 0;
+            for(let letra of nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '')) {
+                if(VALORES[letra]) {
+                    if(VOCALES.includes(letra)) alma += VALORES[letra];
+                    else pers += VALORES[letra];
+                }
             }
 
+            const rA = analizarNumero(alma);
+            const rP = analizarNumero(pers);
+            const rT = analizarNumero(alma + pers);
+            const f = fecha.split('-');
+            const kSum = parseInt(f[0]) + parseInt(f[1]) + parseInt(f[2]);
+            const rK = analizarNumero(kSum);
+            const rM = analizarNumero((alma + pers) + kSum);
+
+            generarPDF(nombre, fecha, rA, rP, rT, rK, rM);
+        }
+
+        function generarPDF(nom, fec, a, p, t, k, m) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.text(`Consultante: ${nombre.toUpperCase()}`, 20, 20);
-            doc.text(`Nacimiento: ${fecha}`, 20, 30);
-            doc.save(`Estudio_${nombre}.pdf`);
+            doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 45, 'F');
+            doc.setTextColor(0, 210, 255); doc.setFontSize(22);
+            doc.text("INFORME DE FRECUENCIA ESTELAR", 105, 25, {align:"center"});
+            doc.setFontSize(10); doc.text("Sintonizando con la sabiduría de la Nave Arcturiana", 105, 35, {align:"center"});
+
+            doc.setTextColor(40, 40, 40); doc.setFontSize(12);
+            doc.text(`Consultante: ${nom}`, 20, 60);
+            doc.text(`Apertura de Portal: ${fec.split('-').reverse().join('/')}`, 20, 68);
+            doc.line(20, 72, 190, 72);
+
+            let secciones = [
+                {t:"EL ALMA (Vibración Interna)", d:"Es nuestra verdadera esencia y lo que traemos de vidas pasadas.", v:a},
+                {t:"PERSONALIDAD (Vibración Externa)", d:"Es la máscara social, cómo nos ven los demás en esta vida.", v:p},
+                {t:"TEMPERAMENTO (Vibración de Ingreso)", d:"Carácter que se forma de tu alma y tu personalidad.", v:t},
+                {t:"MISIÓN O KARMA (Carga a Sanar)", d:"Hacia donde tienes que ir para sanar tu carga de vida pasada.", v:k},
+                {t:"META FINAL (Número de Potencial)", d:"Tu segunda misión que se activa en la madurez.", v:m}
+            ];
+
+            let y = 85;
+            secciones.forEach(s => {
+                doc.setFont(undefined, 'bold'); doc.text(s.t, 20, y);
+                doc.setFont(undefined, 'normal'); doc.setFontSize(10); doc.text(s.d, 20, y+6);
+                doc.setFontSize(12); doc.text(`FRECUENCIA: ${s.v.valor} ${s.v.info}`, 20, y+14);
+                y += 30;
+            });
+
+            doc.setFontSize(9); doc.setTextColor(150);
+            doc.text("© Diseñado y Desarrollado por Nave Arcturiana", 105, 285, {align:"center"});
+            doc.save(`Estudio_${nom.replace(/\s/g, '_')}.pdf`);
         }
     </script>
 </body>
