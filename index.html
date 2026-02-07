@@ -8,73 +8,61 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 320px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.15); color: white; font-size: 16px; outline: none; }
-        button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 15px; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 20px; width: 300px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.2); color: white; outline: none; }
+        button { width: 100%; padding: 12px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
-
-<div class="card">
-    <div id="login-box">
-        <h2 style="color: #00d2ff;">🚀 Acceso</h2>
-        <input type="text" id="user" placeholder="Usuario" autocomplete="off">
-        <input type="password" id="pass" placeholder="Contraseña">
-        <button id="btn" onclick="login()">Ingresar</button>
+    <div class="card">
+        <div id="login-box">
+            <h2 style="color:#00d2ff">🚀 Acceso</h2>
+            <input type="text" id="u" placeholder="Usuario">
+            <input type="password" id="p" placeholder="Clave">
+            <button id="btn" onclick="entrar()">Ingresar</button>
+        </div>
+        <div id="app-box" class="hidden">
+            <h2 style="color:#00d2ff">✨ Bienvenida</h2>
+            <input type="text" id="nom" placeholder="Nombre Consultante">
+            <button onclick="generar()">Descargar PDF</button>
+            <button onclick="location.reload()" style="background:none; border:1px solid red; color:red; margin-top:15px;">Cerrar</button>
+        </div>
     </div>
 
-    <div id="app-box" class="hidden">
-        <h2 style="color: #00d2ff;">✨ Bienvenido</h2>
-        <input type="text" id="nom" placeholder="Nombre Consultante">
-        <button onclick="descargar()">Descargar PDF</button>
-        <button onclick="location.reload()" style="background:transparent; color:red; border:1px solid red; margin-top:20px;">Salir</button>
-    </div>
-</div>
+    <script>
+        const _sb = supabase.createClient('https://iiukfhdbhiimeordekpyw.supabase.co', 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M');
 
-<script>
-    const _sb = supabase.createClient(
-        'https://iiukfhdbhiimeordekpyw.supabase.co', 
-        'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M'
-    );
+        async function entrar() {
+            const user = document.getElementById('u').value.trim().toLowerCase();
+            const pass = document.getElementById('p').value.trim();
+            const btn = document.getElementById('btn');
+            btn.innerText = "Conectando...";
 
-    async function login() {
-        const u = document.getElementById('user').value.trim().toLowerCase();
-        const p = document.getElementById('pass').value.trim();
-        const b = document.getElementById('btn');
-
-        b.innerText = "Conectando...";
-
-        try {
-            const { data, error } = await _sb
-                .from('credenciales')
-                .select('*')
-                .eq('usuario', u)
-                .eq('clave', p)
-                .maybeSingle();
-
-            if (error) throw error;
-
-            if (data) {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('app-box').classList.remove('hidden');
-            } else {
-                alert("Datos incorrectos");
-                b.innerText = "Ingresar";
+            try {
+                const { data, error } = await _sb.from('credenciales').select('*').eq('usuario', user).eq('clave', pass).maybeSingle();
+                if (error) throw error;
+                if (data) {
+                    document.getElementById('login-box').classList.add('hidden');
+                    document.getElementById('app-box').classList.remove('hidden');
+                } else {
+                    alert("Datos incorrectos");
+                    btn.innerText = "Ingresar";
+                }
+            } catch (err) {
+                alert("BLOQUEO DETECTADO: Usá tu CELULAR con datos móviles (4G/5G). Tu WiFi está bloqueando la conexión.");
+                btn.innerText = "Reintentar";
             }
-        } catch (e) {
-            alert("⚠️ BLOQUEO DE RED: Tu WiFi o Navegador impiden la conexión. USA DATOS MÓVILES.");
-            b.innerText = "Reintentar";
         }
-    }
 
-    function descargar() {
-        const n = document.getElementById('nom').value;
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text("Estudio: " + n.toUpperCase(), 20, 20);
-        doc.save(`Estudio_${n}.pdf`);
-    }
-</script>
+        function generar() {
+            const n = document.getElementById('nom').value;
+            if(!n) return alert("Falta el nombre");
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text("Estudio: " + n.toUpperCase(), 20, 20);
+            doc.save(`Estudio_${n}.pdf`);
+        }
+    </script>
 </body>
 </html>
