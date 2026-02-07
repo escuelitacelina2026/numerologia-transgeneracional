@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navearcturiana - Sistema</title>
+    <title>Navearcturiana - Acceso</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); padding: 2.5rem; border-radius: 20px; width: 100%; max-width: 350px; border: 1px solid #00d2ff; text-align: center; box-shadow: 0 0 25px rgba(0, 210, 255, 0.2); }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.15); color: white; box-sizing: border-box; outline: none; font-size: 16px; }
+        body { font-family: sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 100%; max-width: 320px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.15); color: white; font-size: 16px; outline: none; }
         button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 15px; }
         .hidden { display: none; }
+        .status { font-size: 12px; margin-top: 10px; color: #00d2ff; }
     </style>
 </head>
 <body>
@@ -21,42 +22,39 @@
         <h2 style="color: #00d2ff;">🚀 Acceso Nave</h2>
         <input type="text" id="user-input" placeholder="Usuario" autocomplete="off">
         <input type="password" id="pass-input" placeholder="Contraseña">
+        <div id="status-msg" class="status">Listo para ingresar</div>
         <button id="btn-entrar" onclick="login()">Ingresar</button>
     </div>
 
     <div id="app-box" class="hidden">
         <h2 style="color: #00d2ff;">✨ Generador PDF</h2>
-        <p style="font-size: 0.9em; color: #00d2ff;">Conexión Exitosa</p>
         <input type="text" id="nombre-input" placeholder="Nombre Consultante">
-        <input type="date" id="fecha-input">
         <button onclick="generarPDF()">Descargar Estudio</button>
-        <button onclick="location.reload()" style="background:transparent; color:#ff4b2b; border:1px solid #ff4b2b; margin-top:20px; font-size: 12px;">Cerrar Sesión</button>
+        <button onclick="location.reload()" style="background:transparent; color:red; border:1px solid red; margin-top:20px; font-size:12px;">Cerrar Sesión</button>
     </div>
 </div>
 
 <script>
-    // Inicialización del cliente
     const _supabase = supabase.createClient(
         'https://iiukfhdbhiimeordekpyw.supabase.co', 
         'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M'
     );
 
     async function login() {
-        // Limpiamos espacios y convertimos a minúsculas para evitar fallos
         const u = document.getElementById('user-input').value.trim().toLowerCase();
         const p = document.getElementById('pass-input').value.trim();
+        const msg = document.getElementById('status-msg');
         const btn = document.getElementById('btn-entrar');
 
-        if (!u || !p) return alert("Por favor, ingresa los datos.");
+        if (!u || !p) return alert("Ingresa tus datos.");
 
-        btn.innerText = "Verificando...";
+        msg.innerText = "Verificando en la base de datos...";
         btn.disabled = true;
 
         try {
-            // Consulta directa a la tabla credenciales
             const { data, error } = await _supabase
                 .from('credenciales')
-                .select('usuario, clave')
+                .select('*')
                 .eq('usuario', u)
                 .eq('clave', p)
                 .maybeSingle();
@@ -64,31 +62,28 @@
             if (error) throw error;
 
             if (data) {
-                // Si hay datos, mostramos el generador
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('app-box').classList.remove('hidden');
             } else {
-                alert("Los datos no coinciden. Revisa que en Supabase el usuario sea 'navearcturiana' y la clave 'nubilis2026_'");
-                btn.innerText = "Ingresar";
+                alert("Usuario o clave no encontrados. Asegúrate de escribir navearcturiana y nubilis2026_");
+                msg.innerText = "Fallo en los datos.";
                 btn.disabled = false;
+                btn.innerText = "Reintentar";
             }
         } catch (err) {
             console.error(err);
-            alert("Error de conexión. Intenta nuevamente.");
-            btn.innerText = "Ingresar";
+            alert("Error de conexión. Intenta desde tu CELULAR con datos móviles.");
+            msg.innerText = "Error de red.";
             btn.disabled = false;
         }
     }
 
     function generarPDF() {
         const nom = document.getElementById('nombre-input').value;
-        if(!nom) return alert("Ingresa un nombre");
+        if(!nom) return alert("Ingresa un nombre.");
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.setFontSize(22);
-        doc.text("Estudio Numerológico", 20, 30);
-        doc.setFontSize(14);
-        doc.text("Consultante: " + nom.toUpperCase(), 20, 50);
+        doc.text("Estudio para: " + nom.toUpperCase(), 20, 20);
         doc.save(`Estudio_${nom}.pdf`);
     }
 </script>
