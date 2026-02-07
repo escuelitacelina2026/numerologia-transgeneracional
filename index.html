@@ -3,93 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Navearcturiana</title>
+    <title>Navearcturiana - Acceso</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 2rem; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); width: 100%; max-width: 350px; border: 1px solid rgba(255,255,255,0.2); text-align: center; }
-        h2 { color: #00d2ff; margin-bottom: 20px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: rgba(255,255,255,0.2); color: white; font-size: 16px; box-sizing: border-box; outline: none; }
-        button { width: 100%; padding: 14px; background: linear-gradient(45deg, #00d2ff, #3a7bd5); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; margin-top: 15px; transition: 0.3s; }
-        button:hover { opacity: 0.9; transform: scale(1.02); }
+        body { font-family: sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 15px; width: 320px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.2); color: white; }
+        button { width: 100%; padding: 12px; background: #00d2ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .hidden { display: none; }
-        .error-msg { color: #ff4b2b; font-size: 13px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div id="login-box">
-        <h2>🚀 Acceso Nave</h2>
-        <input type="text" id="user-input" placeholder="Usuario" autocomplete="off">
-        <input type="password" id="pass-input" placeholder="Contraseña">
-        <div id="error-text" class="error-msg">Datos incorrectos. Reintenta.</div>
+        <h2>🔒 Acceso</h2>
+        <input type="text" id="user-input" placeholder="Usuario">
+        <input type="password" id="pass-input" placeholder="Clave">
         <button onclick="login()">Ingresar</button>
     </div>
 
     <div id="app-box" class="hidden">
-        <h2>✨ Generador PDF</h2>
-        <input type="text" id="nombre-input" placeholder="Nombre del consultante">
+        <h2>✨ Bienvenido</h2>
+        <input type="text" id="nombre-input" placeholder="Nombre">
         <input type="date" id="fecha-input">
-        <button onclick="generarPDF()">Descargar Estudio</button>
-        <button onclick="location.reload()" style="background: transparent; border: 1px solid #ff4b2b; color: #ff4b2b; margin-top: 20px;">Cerrar Sesión</button>
+        <button onclick="descargar()">Descargar PDF</button>
+        <button onclick="location.reload()" style="background:red; margin-top:20px;">Cerrar</button>
     </div>
 </div>
 
 <script>
-    // Configuración exacta de tu proyecto
-    const _supabase = supabase.createClient(
-        'https://iiukfhdbhiimeordekpyw.supabase.co', 
-        'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M'
-    );
+    // Conexión simplificada al máximo
+    const supabaseUrl = 'https://iiukfhdbhiimeordekpyw.supabase.co';
+    const supabaseKey = 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M';
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
     async function login() {
-        // Obtenemos los valores, quitamos espacios y pasamos a minúsculas
         const u = document.getElementById('user-input').value.trim().toLowerCase();
         const p = document.getElementById('pass-input').value.trim();
-        const errorDiv = document.getElementById('error-text');
-
-        if (!u || !p) return alert("Por favor, completa ambos campos.");
 
         try {
-            // Buscamos en la tabla 'credenciales'
+            // Intentamos una consulta ultra básica
             const { data, error } = await _supabase
                 .from('credenciales')
                 .select('usuario, clave')
                 .eq('usuario', u)
                 .eq('clave', p)
-                .maybeSingle();
-
-            if (error) throw error;
+                .limit(1)
+                .single();
 
             if (data) {
-                // Si hay coincidencia, entramos
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('app-box').classList.remove('hidden');
             } else {
-                // Si no hay coincidencia
-                errorDiv.style.display = 'block';
-                alert("Usuario o clave no encontrados en la base de datos.");
+                alert("Usuario o clave incorrecta. Revisa los datos en Supabase.");
             }
         } catch (err) {
-            console.error(err);
-            alert("Error de conexión. Verifica que el SQL 'GRANT' se haya ejecutado bien.");
+            // Si falla el fetch, es probable que sea el bloqueo de red
+            alert("Error de conexión. Por favor, intenta entrar desde una ventana de INCÓGNITO o desde el CELULAR con datos móviles.");
         }
     }
 
-    function generarPDF() {
-        const nom = document.getElementById('nombre-input').value.trim();
-        if (!nom) return alert("Ingresa un nombre.");
-
+    function descargar() {
+        const n = document.getElementById('nombre-input').value;
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.setFontSize(20);
-        doc.text("Estudio Numerológico Transgeneracional", 20, 20);
-        doc.setFontSize(14);
-        doc.text(`Consultante: ${nom.toUpperCase()}`, 20, 40);
-        doc.text(`Fecha: ${document.getElementById('fecha-input').value}`, 20, 50);
-        doc.save(`Estudio_${nom}.pdf`);
+        doc.text("Estudio para: " + n, 20, 20);
+        doc.save("estudio.pdf");
     }
 </script>
 </body>
