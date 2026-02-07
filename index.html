@@ -3,67 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nave Arcturiana</title>
+    <title>Nave Arcturiana - Sistema</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 300px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(0,210,255,0.2); }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.2); color: white; outline: none; font-size: 16px; }
-        input::placeholder { color: #ccc; }
-        button { width: 100%; padding: 12px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 16px; }
-        button:hover { background: #00b8e6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 360px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0,210,255,0.2); position: relative; }
+        h2 { color: #00d2ff; margin-bottom: 5px; font-size: 24px; }
+        .status-badge { color: #00ffcc; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; display: block; }
+        .subtitle { font-size: 0.85rem; color: #ddd; margin-bottom: 20px; line-height: 1.5; font-style: italic; }
+        
+        .input-group { text-align: left; margin-bottom: 15px; }
+        label { display: block; font-size: 0.75rem; color: #00d2ff; margin-bottom: 5px; margin-left: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        input { width: 100%; padding: 12px; border-radius: 10px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.15); color: white; outline: none; font-size: 16px; border: 1px solid transparent; transition: 0.3s; }
+        input:focus { border-color: #00d2ff; background: rgba(255,255,255,0.25); }
+        
+        button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 16px; text-transform: uppercase; transition: 0.3s; }
+        button:hover { background: #00fff2; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.4); }
+        
+        .btn-outline { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; margin-top: 20px; padding: 10px; font-size: 13px; }
+        .btn-outline:hover { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; box-shadow: none; }
+        
+        .footer-copy { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <div id="login-box">
-            <h2 style="color:#00d2ff">🚀 Acceso Nave</h2>
-            <input type="text" id="u" placeholder="Usuario">
-            <input type="password" id="p" placeholder="Contraseña">
-            <button onclick="validarLocal()">Ingresar</button>
+        <div id="box-login">
+            <h2>🚀 Acceso Nave</h2>
+            <p style="font-size: 12px; color: #aaa; margin-bottom: 20px;">Ingresa tus credenciales estelares</p>
+            <input type="text" id="user_val" placeholder="Usuario" autocomplete="off" style="margin-bottom: 15px;">
+            <input type="password" id="pass_val" placeholder="Contraseña">
+            <button onclick="checkAccess()">Entrar al Sistema</button>
         </div>
 
-        <div id="app-box" class="hidden">
-            <h2 style="color:#00d2ff">✨ Bienvenida</h2>
-            <p>Sistema Activo</p>
-            <input type="text" id="nom" placeholder="Nombre del Consultante">
-            <button onclick="generarPDF()">Descargar PDF</button>
-            <button onclick="location.reload()" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; margin-top:20px;">Cerrar Sesión</button>
+        <div id="box-app" class="hidden">
+            <h2>✨ Bienvenido</h2>
+            <span class="status-badge">Sistema Activo</span>
+            
+            <p class="subtitle">"Ingresa tu nombre completo y tu fecha de nacimiento para poder conocerte mas en profundidad."</p>
+            
+            <div class="input-group">
+                <label>Nombre y Apellido</label>
+                <input type="text" id="client_name" placeholder="Nombre del consultante">
+            </div>
+            
+            <div class="input-group">
+                <label>Fecha de Nacimiento</label>
+                <input type="date" id="client_birth">
+            </div>
+            
+            <button onclick="exportPDF()">Generar Estudio</button>
+            
+            <button onclick="location.reload()" class="btn-outline">Cerrar Sesión</button>
+        </div>
+
+        <div class="footer-copy">
+            © Realizado y desarrollado por Nave Arcturiana
         </div>
     </div>
 
     <script>
-        // Definimos las credenciales aquí mismo para evitar bloqueos de red
-        const USUARIO_VALOR = "navearcturiana";
-        const CLAVE_VALOR = "nubilis2026_";
+        // Credenciales Maestras
+        const MASTER_U = "navearcturiana";
+        const MASTER_P = "nubilis2026_";
 
-        function validarLocal() {
-            const user = document.getElementById('u').value.trim().toLowerCase();
-            const pass = document.getElementById('p').value.trim();
+        function checkAccess() {
+            const u = document.getElementById('user_val').value.trim().toLowerCase();
+            const p = document.getElementById('pass_val').value.trim();
 
-            if (user === USUARIO_VALOR && pass === CLAVE_VALOR) {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('app-box').classList.remove('hidden');
+            if (u === MASTER_U && p === MASTER_P) {
+                document.getElementById('box-login').classList.add('hidden');
+                document.getElementById('box-app').classList.remove('hidden');
             } else {
-                alert("Usuario o clave incorrectos. Revisa los datos.");
+                alert("Error: Usuario o contraseña incorrectos.");
             }
         }
 
-        function generarPDF() {
-            const n = document.getElementById('nom').value.trim();
-            if(!n) return alert("Por favor, ingresa el nombre del consultante.");
-            
+        function exportPDF() {
+            const nombre = document.getElementById('client_name').value.trim();
+            const fecha = document.getElementById('client_birth').value;
+
+            if (!nombre || !fecha) {
+                alert("Por favor, completa todos los campos galácticos.");
+                return;
+            }
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
+
+            // Cabecera del PDF
+            doc.setFillColor(15, 12, 41);
+            doc.rect(0, 0, 210, 40, 'F');
+            doc.setTextColor(0, 210, 255);
             doc.setFontSize(22);
-            doc.text("ESTUDIO NUMEROLÓGICO", 20, 30);
-            doc.setFontSize(16);
-            doc.text("Consultante: " + n.toUpperCase(), 20, 50);
-            doc.text("Fecha: " + new Date().toLocaleDateString(), 20, 60);
-            
-            doc.save(`Estudio_${n}.pdf`);
+            doc.text("ESTUDIO NUMEROLÓGICO", 105, 25, { align: "center" });
+
+            // Cuerpo
+            doc.setTextColor(40, 40, 40);
+            doc.setFontSize(14);
+            doc.text("DATOS DEL CONSULTANTE", 20, 60);
+            doc.line(20, 62, 190, 62);
+
+            doc.setFontSize(12);
+            doc.text(`Nombre Completo: ${nombre.toUpperCase()}`, 20, 75);
+            doc.text(`Fecha de Nacimiento: ${fecha.split('-').reverse().join('/')}`, 20, 85);
+            doc.text(`Fecha de Emisión: ${new Date().toLocaleDateString()}`, 20, 95);
+
+            doc.setFontSize(10);
+            doc.setTextColor(150);
+            doc.text("Este informe es una guía espiritual basada en frecuencias numerológicas.", 105, 280, { align: "center" });
+
+            doc.save(`Estudio_${nombre.replace(/\s+/g, '_')}.pdf`);
         }
     </script>
 </body>
