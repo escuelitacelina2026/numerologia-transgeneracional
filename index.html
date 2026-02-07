@@ -26,7 +26,6 @@
 
     <div id="app-box" class="hidden">
         <h2 style="color: #00d2ff;">✨ Bienvenido</h2>
-        <p>Sesión activa</p>
         <input type="text" id="nombre-input" placeholder="Nombre Consultante">
         <button onclick="generarPDF()">Descargar PDF</button>
         <button onclick="location.reload()" style="background:transparent; color:red; border:1px solid red; margin-top:20px;">Cerrar</button>
@@ -34,7 +33,6 @@
 </div>
 
 <script>
-    // Conexión directa a tu proyecto
     const _supabase = supabase.createClient(
         'https://iiukfhdbhiimeordekpyw.supabase.co', 
         'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M'
@@ -45,7 +43,7 @@
         const p = document.getElementById('pass-input').value.trim();
         const btn = document.getElementById('btn-entrar');
 
-        btn.innerText = "Verificando...";
+        btn.innerText = "Conectando...";
 
         try {
             const { data, error } = await _supabase
@@ -55,22 +53,18 @@
                 .eq('clave', p)
                 .maybeSingle();
 
-            if (error) {
-                // Si hay error de red, lo mostramos técnico para saber qué pasa
-                alert("Error técnico: " + error.message);
-                btn.innerText = "Ingresar";
-                return;
-            }
+            if (error) throw error;
 
             if (data) {
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('app-box').classList.remove('hidden');
             } else {
-                alert("Usuario o clave incorrecta.");
+                alert("Datos incorrectos. Revisa el usuario y clave.");
                 btn.innerText = "Ingresar";
             }
         } catch (err) {
-            alert("Error de conexión total. Revisa tu internet.");
+            console.error(err);
+            alert("Bloqueo de red detectado. Por favor, prueba desde tu CELULAR con datos móviles.");
             btn.innerText = "Ingresar";
         }
     }
@@ -80,7 +74,7 @@
         if(!nom) return alert("Falta el nombre");
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text("Estudio: " + nom.toUpperCase(), 20, 20);
+        doc.text("Estudio para: " + nom.toUpperCase(), 20, 20);
         doc.save(`Estudio_${nom}.pdf`);
     }
 </script>
