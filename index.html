@@ -50,14 +50,14 @@
                     btn.innerText = "Ingresar";
                 }
             } catch (err) {
-                alert("BLOQUEO DETECTADO: Usá tu CELULAR con datos móviles (4G/5G). Tu WiFi está bloqueando la conexión.");
+                alert("ERROR DE RED: Usá tu CELULAR con DATOS MÓVILES (apagá el WiFi). Tu internet actual bloquea la conexión.");
                 btn.innerText = "Reintentar";
+                console.error(err);
             }
         }
 
         function generar() {
             const n = document.getElementById('nom').value;
-            if(!n) return alert("Falta el nombre");
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             doc.text("Estudio: " + n.toUpperCase(), 20, 20);
