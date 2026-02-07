@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nave Arcturiana</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 20px; width: 300px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 300px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); }
         input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.2); color: white; outline: none; }
         button { width: 100%; padding: 12px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
         .hidden { display: none; }
@@ -17,42 +16,53 @@
 <body>
     <div class="card">
         <div id="login-box">
-            <h2 style="color:#00d2ff">🚀 Acceso</h2>
+            <h2 style="color:#00d2ff">🚀 Acceso Nave</h2>
             <input type="text" id="u" placeholder="Usuario">
             <input type="password" id="p" placeholder="Clave">
-            <button id="btn" onclick="entrar()">Ingresar</button>
+            <button id="btn" onclick="validar()">Ingresar</button>
         </div>
         <div id="app-box" class="hidden">
             <h2 style="color:#00d2ff">✨ Bienvenida</h2>
             <input type="text" id="nom" placeholder="Nombre Consultante">
             <button onclick="generar()">Descargar PDF</button>
-            <button onclick="location.reload()" style="background:none; border:1px solid red; color:red; margin-top:15px;">Cerrar</button>
+            <button onclick="location.reload()" style="background:none; border:1px solid red; color:red; margin-top:15px;">Salir</button>
         </div>
     </div>
 
     <script>
-        const _sb = supabase.createClient('https://iiukfhdbhiimeordekpyw.supabase.co', 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M');
-
-        async function entrar() {
+        async function validar() {
             const user = document.getElementById('u').value.trim().toLowerCase();
             const pass = document.getElementById('p').value.trim();
             const btn = document.getElementById('btn');
+            
             btn.innerText = "Conectando...";
-
+            
+            // Usamos una llamada directa (fetch) para evitar bloqueos de la librería Supabase
+            const url = "https://iiukfhdbhiimeordekpyw.supabase.co/rest/v1/credenciales?usuario=eq." + user + "&clave=eq." + pass;
+            
             try {
-                const { data, error } = await _sb.from('credenciales').select('*').eq('usuario', user).eq('clave', pass).maybeSingle();
-                if (error) throw error;
-                if (data) {
+                const res = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'apikey': 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M',
+                        'Authorization': 'Bearer sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await res.json();
+
+                if (data && data.length > 0) {
                     document.getElementById('login-box').classList.add('hidden');
                     document.getElementById('app-box').classList.remove('hidden');
                 } else {
-                    alert("Datos incorrectos");
+                    alert("Usuario o clave incorrectos.");
                     btn.innerText = "Ingresar";
                 }
             } catch (err) {
-                alert("ERROR DE RED: Usá tu CELULAR con DATOS MÓVILES (apagá el WiFi). Tu internet actual bloquea la conexión.");
-                btn.innerText = "Reintentar";
                 console.error(err);
+                alert("Error técnico de red. Intentá en modo INCÓGNITO.");
+                btn.innerText = "Reintentar";
             }
         }
 
