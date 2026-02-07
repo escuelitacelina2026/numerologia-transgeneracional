@@ -26,11 +26,20 @@
         
         .footer-copy { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .hidden { display: none; }
+
+        /* Estilo para el mensaje de error personalizado */
+        #error-msg { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
     </style>
 </head>
 <body>
 
     <div class="card">
+        <div id="error-msg" class="hidden">
+            <div style="font-size: 40px; margin-bottom: 10px;">👽</div>
+            <p id="error-text" style="font-size: 14px; line-height: 1.4; color: white;"></p>
+            <button onclick="cerrarError()" style="background: #ff4d4d; color: white; padding: 8px; font-size: 12px;">Aceptar</button>
+        </div>
+
         <div id="box-login">
             <h2>🚀 Acceso Nave</h2>
             <p style="font-size: 12px; color: #aaa; margin-bottom: 20px;">Ingresa tus credenciales estelares</p>
@@ -42,7 +51,6 @@
         <div id="box-app" class="hidden">
             <h2>✨ Bienvenido</h2>
             <span class="status-badge">Sistema Activo</span>
-            
             <p class="subtitle">"Ingresa tu nombre completo y tu fecha de nacimiento para poder conocerte mas en profundidad."</p>
             
             <div class="input-group">
@@ -56,17 +64,15 @@
             </div>
             
             <button onclick="exportPDF()">Generar Estudio</button>
-            
             <button onclick="location.reload()" class="btn-outline">Cerrar Sesión</button>
         </div>
 
         <div class="footer-copy">
-            © Realizado y desarrollado por Nave Arcturiana
+            © Diseñado y Desarrollado por Nave Arcturiana
         </div>
     </div>
 
     <script>
-        // Credenciales Maestras
         const MASTER_U = "navearcturiana";
         const MASTER_P = "nubilis2026_";
 
@@ -78,8 +84,17 @@
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
-                alert("Error: Usuario o contraseña incorrectos.");
+                mostrarError("Algo ingresaste mal o no tenes acceso a la nave, comunícate con el comandante");
             }
+        }
+
+        function mostrarError(txt) {
+            document.getElementById('error-text').innerText = txt;
+            document.getElementById('error-msg').classList.remove('hidden');
+        }
+
+        function cerrarError() {
+            document.getElementById('error-msg').classList.add('hidden');
         }
 
         function exportPDF() {
@@ -93,30 +108,9 @@
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-
-            // Cabecera del PDF
-            doc.setFillColor(15, 12, 41);
-            doc.rect(0, 0, 210, 40, 'F');
-            doc.setTextColor(0, 210, 255);
-            doc.setFontSize(22);
-            doc.text("ESTUDIO NUMEROLÓGICO", 105, 25, { align: "center" });
-
-            // Cuerpo
-            doc.setTextColor(40, 40, 40);
-            doc.setFontSize(14);
-            doc.text("DATOS DEL CONSULTANTE", 20, 60);
-            doc.line(20, 62, 190, 62);
-
-            doc.setFontSize(12);
-            doc.text(`Nombre Completo: ${nombre.toUpperCase()}`, 20, 75);
-            doc.text(`Fecha de Nacimiento: ${fecha.split('-').reverse().join('/')}`, 20, 85);
-            doc.text(`Fecha de Emisión: ${new Date().toLocaleDateString()}`, 20, 95);
-
-            doc.setFontSize(10);
-            doc.setTextColor(150);
-            doc.text("Este informe es una guía espiritual basada en frecuencias numerológicas.", 105, 280, { align: "center" });
-
-            doc.save(`Estudio_${nombre.replace(/\s+/g, '_')}.pdf`);
+            doc.text(`Consultante: ${nombre.toUpperCase()}`, 20, 20);
+            doc.text(`Nacimiento: ${fecha}`, 20, 30);
+            doc.save(`Estudio_${nombre}.pdf`);
         }
     </script>
 </body>
