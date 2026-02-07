@@ -11,23 +11,16 @@
         h2 { color: #00d2ff; margin-bottom: 5px; font-size: 24px; }
         .status-badge { color: #00ffcc; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; display: block; }
         .subtitle { font-size: 0.85rem; color: #ddd; margin-bottom: 20px; line-height: 1.5; font-style: italic; }
-        
         .input-group { text-align: left; margin-bottom: 15px; }
         label { display: block; font-size: 0.75rem; color: #00d2ff; margin-bottom: 5px; margin-left: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        
         input { width: 100%; padding: 12px; border-radius: 10px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.15); color: white; outline: none; font-size: 16px; border: 1px solid transparent; transition: 0.3s; }
         input:focus { border-color: #00d2ff; background: rgba(255,255,255,0.25); }
-        
         button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 16px; text-transform: uppercase; transition: 0.3s; }
         button:hover { background: #00fff2; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.4); }
-        
-        .btn-outline { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; margin-top: 20px; padding: 10px; font-size: 13px; }
-        .btn-outline:hover { background: rgba(255, 77, 77, 0.1); color: #ff4d4d; box-shadow: none; }
-        
+        .btn-outline { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; margin-top: 20px; padding: 10px; font-size: 13px; cursor: pointer; border-radius: 8px; }
         .footer-copy { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .hidden { display: none; }
-
-        #error-msg { background: rgba(0, 0, 0, 0.8); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
+        #error-msg { background: rgba(0, 0, 0, 0.9); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
     </style>
 </head>
 <body>
@@ -36,39 +29,34 @@
         <div id="error-msg" class="hidden">
             <div style="font-size: 40px; margin-bottom: 10px;">👽</div>
             <p id="error-text" style="font-size: 14px; line-height: 1.4; color: white;"></p>
-            <button onclick="cerrarError()" style="background: #ff4d4d; color: white; padding: 8px; font-size: 12px; width: auto;">Aceptar</button>
+            <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background: #ff4d4d; color: white; width: auto; padding: 5px 15px;">Aceptar</button>
         </div>
 
         <div id="box-login">
             <h2>🚀 Acceso Nave</h2>
             <p style="font-size: 12px; color: #aaa; margin-bottom: 20px;">Ingresa tus credenciales estelares</p>
-            <input type="text" id="user_val" placeholder="Usuario" autocomplete="off" style="margin-bottom: 15px;">
-            <input type="password" id="pass_val" placeholder="Contraseña">
-            <button onclick="checkAccess()">Entrar al Sistema</button>
+            <input type="text" id="user_val" placeholder="Usuario">
+            <input type="password" id="pass_val" placeholder="Contraseña" style="margin-top:10px;">
+            <button onclick="checkAccess()" style="margin-top:20px;">Entrar al Sistema</button>
         </div>
 
         <div id="box-app" class="hidden">
             <h2>✨ Bienvenido</h2>
             <span class="status-badge">Sistema Activo</span>
-            <p class="subtitle">"Ingresa tu nombre completo y tu fecha de nacimiento para poder conocerte mas en profundidad."</p>
-            
+            <p class="subtitle">"Ingresa nombre y fecha para conocerte en profundidad."</p>
             <div class="input-group">
                 <label>Nombre y Apellido</label>
-                <input type="text" id="client_name" placeholder="Ej: Juan Pérez">
+                <input type="text" id="client_name" placeholder="Ej: Juan Perez">
             </div>
-            
             <div class="input-group">
                 <label>Fecha de Nacimiento</label>
                 <input type="date" id="client_birth">
             </div>
-            
-            <button onclick="procesarCarta()">Generar Estudio</button>
+            <button onclick="procesarCarta()">Generar Estudio Místico</button>
             <button onclick="location.reload()" class="btn-outline">Cerrar Sesión</button>
         </div>
 
-        <div class="footer-copy">
-            © Diseñado y Desarrollado por Nave Arcturiana
-        </div>
+        <div class="footer-copy">© Diseñado y Desarrollado por Nave Arcturiana</div>
     </div>
 
     <script>
@@ -76,93 +64,96 @@
         const MASTER_P = "nubilis2026_";
         const VALORES = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
         const VOCALES = ['A','E','I','O','U'];
-        const KARMICOS = [13, 14, 16, 19];
 
         function checkAccess() {
-            const u = document.getElementById('user_val').value.trim().toLowerCase();
-            const p = document.getElementById('pass_val').value.trim();
-            if (u === MASTER_U && p === MASTER_P) {
+            if (document.getElementById('user_val').value.trim().toLowerCase() === MASTER_U && document.getElementById('pass_val').value.trim() === MASTER_P) {
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
-                mostrarError("Algo ingresaste mal o no tenes acceso a la nave, comunícate con el comandante");
+                document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenes acceso a la nave, comunícate con el comandante";
+                document.getElementById('error-msg').classList.remove('hidden');
             }
         }
 
-        function mostrarError(txt) {
-            document.getElementById('error-text').innerText = txt;
-            document.getElementById('error-msg').classList.remove('hidden');
-        }
-
-        function cerrarError() { document.getElementById('error-msg').classList.add('hidden'); }
-
-        function analizarNumero(num) {
-            if (num === 11 || num === 22) return { valor: num, info: "(Número Maestro)" };
-            if (KARMICOS.includes(num)) {
-                let r = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
-                return { valor: `${num}/${r}`, info: "(Número Kármico: Deuda a trascender)" };
+        function reducir(n) {
+            if (n === 11 || n === 22) return { v: n, m: "(Número Maestro)" };
+            const karmicos = [13, 14, 16, 19];
+            if (karmicos.includes(n)) {
+                let r = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+                return { v: n + "/" + r, m: "(Número Kármico: Deuda a trascender)" };
             }
-            while (num > 9 && num !== 11 && num !== 22) {
-                num = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
-                if (KARMICOS.includes(num)) {
-                    let r = num.toString().split('').reduce((a, b) => parseInt(a) + parseInt(b), 0);
-                    return { valor: `${num}/${r}`, info: "(Número Kármico: Deuda a trascender)" };
+            while (n > 9 && n !== 11 && n !== 22) {
+                n = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+                if (karmicos.includes(n)) {
+                    let r = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+                    return { v: n + "/" + r, m: "(Número Kármico: Deuda a trascender)" };
                 }
             }
-            return { valor: num, info: "" };
+            return { v: n, m: "" };
         }
 
         function procesarCarta() {
-            const nombre = document.getElementById('client_name').value.toUpperCase().trim();
+            const nomOriginal = document.getElementById('client_name').value;
             const fecha = document.getElementById('client_birth').value;
-            if(!nombre || !fecha) return alert("Por favor, completa los datos.");
+            if(!nomOriginal || !fecha) return alert("Por favor completa los datos.");
 
-            let alma = 0, pers = 0;
-            for(let letra of nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '')) {
+            const nombre = nomOriginal.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z ]/g, "");
+            
+            let sA = 0, sP = 0;
+            for(let letra of nombre.replace(/\s/g, '')) {
                 if(VALORES[letra]) {
-                    if(VOCALES.includes(letra)) alma += VALORES[letra];
-                    else pers += VALORES[letra];
+                    if(VOCALES.includes(letra)) sA += VALORES[letra];
+                    else sP += VALORES[letra];
                 }
             }
 
-            const rA = analizarNumero(alma);
-            const rP = analizarNumero(pers);
-            const rT = analizarNumero(alma + pers);
+            const rA = reducir(sA), rP = reducir(sP), rT = reducir(sA + sP);
             const f = fecha.split('-');
-            const kSum = parseInt(f[0]) + parseInt(f[1]) + parseInt(f[2]);
-            const rK = analizarNumero(kSum);
-            const rM = analizarNumero((alma + pers) + kSum);
+            const sK = f.join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+            const rK = reducir(sK);
+            const rM = reducir((sA + sP) + sK);
 
-            generarPDF(nombre, fecha, rA, rP, rT, rK, rM);
+            generarPDF(nomOriginal.toUpperCase(), fecha, rA, rP, rT, rK, rM);
         }
 
         function generarPDF(nom, fec, a, p, t, k, m) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            
+            // Encabezado
             doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 45, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
-            doc.text("INFORME DE FRECUENCIA ESTELAR", 105, 25, {align:"center"});
-            doc.setFontSize(10); doc.text("Sintonizando con la sabiduría de la Nave Arcturiana", 105, 35, {align:"center"});
+            doc.text("ESTUDIO VIBRACIONAL ARCTURIANO", 105, 25, {align:"center"});
+            doc.setFontSize(10); doc.text("Manual de Navegación del Ser", 105, 35, {align:"center"});
 
             doc.setTextColor(40, 40, 40); doc.setFontSize(12);
-            doc.text(`Consultante: ${nom}`, 20, 60);
-            doc.text(`Apertura de Portal: ${fec.split('-').reverse().join('/')}`, 20, 68);
-            doc.line(20, 72, 190, 72);
-
-            let secciones = [
-                {t:"EL ALMA (Vibración Interna)", d:"Es nuestra verdadera esencia y lo que traemos de vidas pasadas.", v:a},
-                {t:"PERSONALIDAD (Vibración Externa)", d:"Es la máscara social, cómo nos ven los demás en esta vida.", v:p},
-                {t:"TEMPERAMENTO (Vibración de Ingreso)", d:"Carácter que se forma de tu alma y tu personalidad.", v:t},
-                {t:"MISIÓN O KARMA (Carga a Sanar)", d:"Hacia donde tienes que ir para sanar tu carga de vida pasada.", v:k},
-                {t:"META FINAL (Número de Potencial)", d:"Tu segunda misión que se activa en la madurez.", v:m}
-            ];
+            doc.text(`Consultante: ${nom}`, 20, 58);
+            doc.text(`Fecha: ${fec.split('-').reverse().join('/')}`, 20, 66);
+            doc.line(20, 70, 190, 70);
 
             let y = 85;
-            secciones.forEach(s => {
-                doc.setFont(undefined, 'bold'); doc.text(s.t, 20, y);
-                doc.setFont(undefined, 'normal'); doc.setFontSize(10); doc.text(s.d, 20, y+6);
-                doc.setFontSize(12); doc.text(`FRECUENCIA: ${s.v.valor} ${s.v.info}`, 20, y+14);
-                y += 30;
+            const items = [
+                {t: "1. ALMA (Lo que traes de vidas pasadas)", d: "Representa tu esencia interna, quién eres en la intimidad y los talentos que tu alma ya domina de encarnaciones anteriores.", v: a},
+                {t: "2. PERSONALIDAD (Tu máscara social)", d: "Es cómo te muestras al mundo, cómo te ven los demás y la herramienta de comunicación que has desarrollado en esta vida.", v: p},
+                {t: "3. TEMPERAMENTO (Tu energía de ingreso)", d: "Es la fusión de tu alma y tu personalidad. Determina tu carácter base y la vibración con la que te enfrentas a los desafíos.", v: t},
+                {t: "4. MISIÓN O KARMA (Tu aprendizaje)", d: "Es el sendero que has elegido recorrer para sanar y evolucionar. Indica la lección maestra que vienes a aprender en esta tierra.", v: k},
+                {t: "5. META FINAL (Tu potencial sagrado)", d: "Es tu segunda misión, la vibración que se activa en tu madurez para llevarte a la plenitud total de tu destino.", v: m}
+            ];
+
+            items.forEach(item => {
+                doc.setFont(undefined, 'bold'); doc.setFontSize(12);
+                doc.text(item.t, 20, y);
+                doc.setFont(undefined, 'normal'); doc.setFontSize(10);
+                
+                // Texto largo ajustable
+                let splitTxt = doc.splitTextToSize(item.d, 170);
+                doc.text(splitTxt, 20, y + 6);
+                
+                doc.setFontSize(13); doc.setTextColor(0, 100, 150);
+                doc.text(`FRECUENCIA: ${item.v.v} ${item.v.m}`, 20, y + (splitTxt.length * 5) + 8);
+                
+                doc.setTextColor(40, 40, 40);
+                y += (splitTxt.length * 5) + 20;
             });
 
             doc.setFontSize(9); doc.setTextColor(150);
