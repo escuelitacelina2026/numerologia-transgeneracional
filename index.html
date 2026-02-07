@@ -3,70 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nave Arcturiana - Sistema Inteligente</title>
+    <title>Nave Arcturiana - Sistema Transgeneracional</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 360px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0,210,255,0.2); position: relative; }
-        h2 { color: #00d2ff; margin-bottom: 5px; font-size: 24px; }
-        .status-badge { color: #00ffcc; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; display: block; }
-        .subtitle { font-size: 0.85rem; color: #ddd; margin-bottom: 20px; line-height: 1.5; font-style: italic; }
-        .input-group { text-align: left; margin-bottom: 15px; }
-        label { display: block; font-size: 0.75rem; color: #00d2ff; margin-bottom: 5px; margin-left: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        input { width: 100%; padding: 12px; border-radius: 10px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.15); color: white; outline: none; font-size: 16px; border: 1px solid transparent; transition: 0.3s; }
-        input:focus { border-color: #00d2ff; background: rgba(255,255,255,0.25); }
-        button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 16px; text-transform: uppercase; transition: 0.3s; }
-        button:hover { background: #00fff2; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,210,255,0.4); }
-        .btn-outline { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; margin-top: 20px; padding: 10px; font-size: 13px; cursor: pointer; border-radius: 8px; }
-        .footer-copy { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 20px; width: 400px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0,210,255,0.2); position: relative; }
+        h2 { color: #00d2ff; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: none; background: rgba(255,255,255,0.15); color: white; outline: none; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; text-transform: uppercase; transition: 0.3s; }
+        button:hover { background: #00fff2; transform: translateY(-2px); }
         .hidden { display: none; }
-        #error-msg { background: rgba(0, 0, 0, 0.9); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
+        .footer-copy { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+        #error-msg { background: rgba(0,0,0,0.9); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
     </style>
 </head>
 <body>
 
     <div class="card">
         <div id="error-msg" class="hidden">
-            <div style="font-size: 40px; margin-bottom: 10px;">👽</div>
-            <p id="error-text" style="font-size: 14px; line-height: 1.4; color: white;"></p>
-            <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background: #ff4d4d; color: white; width: auto; padding: 5px 15px;">Aceptar</button>
+            <div style="font-size: 40px;">👽</div>
+            <p id="error-text"></p>
+            <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background:#ff4d4d; color:white; width:auto; padding:5px 15px;">Aceptar</button>
         </div>
 
         <div id="box-login">
             <h2>🚀 Acceso Nave</h2>
-            <p style="font-size: 12px; color: #aaa; margin-bottom: 20px;">Ingresa tus credenciales estelares</p>
             <input type="text" id="user_val" placeholder="Usuario">
-            <input type="password" id="pass_val" placeholder="Contraseña" style="margin-top:10px;">
-            <button onclick="checkAccess()" style="margin-top:20px;">Entrar al Sistema</button>
+            <input type="password" id="pass_val" placeholder="Contraseña">
+            <button onclick="checkAccess()">Entrar al Sistema</button>
         </div>
 
         <div id="box-app" class="hidden">
             <h2>✨ Bienvenido</h2>
-            <span class="status-badge">Sistema Activo</span>
-            <p class="subtitle">"Ingresa nombre y fecha para conocerte en profundidad."</p>
-            <div class="input-group">
-                <label>Nombre y Apellido</label>
-                <input type="text" id="client_name" placeholder="Ej: Juan Perez">
+            <p style="font-size: 0.8rem; color: #00ffcc; margin-bottom: 15px;">Sistema Transgeneracional Activo</p>
+            
+            <input type="text" id="client_name" placeholder="Nombre y Apellido Completo">
+            <label style="font-size: 0.7rem; color: #00d2ff;">TU FECHA DE NACIMIENTO</label>
+            <input type="date" id="client_birth">
+
+            <div style="margin: 20px 0; border: 1px dashed rgba(0,210,255,0.3); padding: 10px; border-radius: 10px;">
+                <label style="font-size: 0.8rem;">¿Querés conocer la vibración de tu alma con otra persona?</label>
+                <select id="extra_choice" onchange="toggleExtra()">
+                    <option value="NO">NO</option>
+                    <option value="SI">SI</option>
+                </select>
+                <div id="extra_input" class="hidden">
+                    <label style="font-size: 0.7rem; color: #ff00ff;">FECHA DE LA OTRA PERSONA</label>
+                    <input type="date" id="extra_birth">
+                </div>
             </div>
-            <div class="input-group">
-                <label>Fecha de Nacimiento</label>
-                <input type="date" id="client_birth">
-            </div>
-            <button onclick="procesarCarta()">Generar Estudio Místico</button>
-            <button onclick="location.reload()" class="btn-outline">Cerrar Sesión</button>
+
+            <button onclick="procesarEstudio()">Generar Estudio Galáctico</button>
+            <button onclick="location.reload()" style="background:none; color:#ff4d4d; border:1px solid #ff4d4d; font-size: 11px;">Cerrar Sesión</button>
         </div>
 
         <div class="footer-copy">© Diseñado y Desarrollado por Nave Arcturiana</div>
     </div>
 
     <script>
-        const MASTER_U = "navearcturiana";
-        const MASTER_P = "nubilis2026_";
         const VALORES = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
         const VOCALES = ['A','E','I','O','U'];
 
         function checkAccess() {
-            if (document.getElementById('user_val').value.trim().toLowerCase() === MASTER_U && document.getElementById('pass_val').value.trim() === MASTER_P) {
+            if (document.getElementById('user_val').value.trim() === "navearcturiana" && document.getElementById('pass_val').value === "nubilis2026_") {
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
@@ -75,12 +74,17 @@
             }
         }
 
+        function toggleExtra() {
+            const extra = document.getElementById('extra_choice').value;
+            document.getElementById('extra_input').classList.toggle('hidden', extra === 'NO');
+        }
+
         function reducir(n) {
             if (n === 11 || n === 22) return { v: n, m: "(Número Maestro)" };
             const karmicos = [13, 14, 16, 19];
             if (karmicos.includes(n)) {
                 let r = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-                return { v: n + "/" + r, m: "(Número Kármico: Deuda a trascender)" };
+                return { v: n + "/" + r, m: "(Número Kármico: Deuda de vidas pasadas a trascender)" };
             }
             while (n > 9 && n !== 11 && n !== 22) {
                 n = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
@@ -92,73 +96,85 @@
             return { v: n, m: "" };
         }
 
-        function procesarCarta() {
-            const nomOriginal = document.getElementById('client_name').value;
-            const fecha = document.getElementById('client_birth').value;
-            if(!nomOriginal || !fecha) return alert("Por favor completa los datos.");
+        function procesarEstudio() {
+            const nom = document.getElementById('client_name').value.toUpperCase();
+            const fec1 = document.getElementById('client_birth').value;
+            const choice = document.getElementById('extra_choice').value;
+            const fec2 = document.getElementById('extra_birth').value;
 
-            const nombre = nomOriginal.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z ]/g, "");
-            
+            if(!nom || !fec1) return alert("Completa tus datos estelares.");
+
+            // Lógica Numerológica Manual
             let sA = 0, sP = 0;
-            for(let letra of nombre.replace(/\s/g, '')) {
-                if(VALORES[letra]) {
-                    if(VOCALES.includes(letra)) sA += VALORES[letra];
-                    else sP += VALORES[letra];
+            const limpio = nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
+            for(let l of limpio) {
+                if(VALORES[l]) {
+                    if(VOCALES.includes(l)) sA += VALORES[l];
+                    else sP += VALORES[l];
                 }
             }
 
             const rA = reducir(sA), rP = reducir(sP), rT = reducir(sA + sP);
-            const f = fecha.split('-');
-            const sK = f.join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-            const rK = reducir(sK);
-            const rM = reducir((sA + sP) + sK);
+            const sumK1 = fec1.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+            const rK1 = reducir(sumK1);
+            const rMeta = reducir((sA+sP) + sumK1);
 
-            generarPDF(nomOriginal.toUpperCase(), fecha, rA, rP, rT, rK, rM);
+            let compat = null;
+            if(choice === "SI" && fec2) {
+                const sumK2 = fec2.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+                const rK2 = reducir(sumK2);
+                // Vibración de Pareja (pág 16): Suma de misiones de ambos
+                const vPareja = reducir(parseInt(rK1.v.toString().split('/')[0]) + parseInt(rK2.v.toString().split('/')[0]));
+                compat = vPareja.v;
+            }
+
+            generarPDF(nom, fec1, rA, rP, rT, rK1, rMeta, compat);
         }
 
-        function generarPDF(nom, fec, a, p, t, k, m) {
+        function generarPDF(nom, fec, a, p, t, k, m, comp) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Encabezado
-            doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 45, 'F');
+            // Estética
+            doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
-            doc.text("ESTUDIO VIBRACIONAL ARCTURIANO", 105, 25, {align:"center"});
-            doc.setFontSize(10); doc.text("Manual de Navegación del Ser", 105, 35, {align:"center"});
+            doc.text("INFORME NUMEROLÓGICO TRANSGENERACIONAL", 105, 25, {align:"center"});
 
-            doc.setTextColor(40, 40, 40); doc.setFontSize(12);
-            doc.text(`Consultante: ${nom}`, 20, 58);
-            doc.text(`Fecha: ${fec.split('-').reverse().join('/')}`, 20, 66);
-            doc.line(20, 70, 190, 70);
+            doc.setTextColor(40); doc.setFontSize(11);
+            doc.text(`Consultante: ${nom}`, 20, 50);
+            doc.line(20, 52, 190, 52);
 
-            let y = 85;
-            const items = [
-                {t: "1. ALMA (Lo que traes de vidas pasadas)", d: "Representa tu esencia interna, quién eres en la intimidad y los talentos que tu alma ya domina de encarnaciones anteriores.", v: a},
-                {t: "2. PERSONALIDAD (Tu máscara social)", d: "Es cómo te muestras al mundo, cómo te ven los demás y la herramienta de comunicación que has desarrollado en esta vida.", v: p},
-                {t: "3. TEMPERAMENTO (Tu energía de ingreso)", d: "Es la fusión de tu alma y tu personalidad. Determina tu carácter base y la vibración con la que te enfrentas a los desafíos.", v: t},
-                {t: "4. MISIÓN O KARMA (Tu aprendizaje)", d: "Es el sendero que has elegido recorrer para sanar y evolucionar. Indica la lección maestra que vienes a aprender en esta tierra.", v: k},
-                {t: "5. META FINAL (Tu potencial sagrado)", d: "Es tu segunda misión, la vibración que se activa en tu madurez para llevarte a la plenitud total de tu destino.", v: m}
+            let y = 65;
+            const info = [
+                {t: "ALMA (Vibración Interna)", d: "Es tu esencia pura, lo que traes de vidas pasadas y quién eres en la intimidad.", v: a},
+                {t: "PERSONALIDAD (Vibración Externa)", d: "La máscara social. Cómo te comunicas y cómo te criaron en esta vida.", v: p},
+                {t: "TEMPERAMENTO", d: "El carácter formado por la unión de tu esencia y tu aprendizaje social.", v: t},
+                {t: "MISIÓN O KARMA", d: "El sendero que tu alma eligió para sanar cargas de vidas pasadas en este plano.", v: k},
+                {t: "META FINAL", d: "Tu potencial sagrado que se activa en la madurez (50-55 años).", v: m}
             ];
 
-            items.forEach(item => {
-                doc.setFont(undefined, 'bold'); doc.setFontSize(12);
-                doc.text(item.t, 20, y);
-                doc.setFont(undefined, 'normal'); doc.setFontSize(10);
-                
-                // Texto largo ajustable
-                let splitTxt = doc.splitTextToSize(item.d, 170);
-                doc.text(splitTxt, 20, y + 6);
-                
-                doc.setFontSize(13); doc.setTextColor(0, 100, 150);
-                doc.text(`FRECUENCIA: ${item.v.v} ${item.v.m}`, 20, y + (splitTxt.length * 5) + 8);
-                
-                doc.setTextColor(40, 40, 40);
-                y += (splitTxt.length * 5) + 20;
+            info.forEach(i => {
+                doc.setFont(undefined, 'bold'); doc.text(i.t, 20, y);
+                doc.setFont(undefined, 'normal'); doc.setFontSize(9);
+                doc.text(i.d, 20, y+5);
+                doc.setFontSize(11); doc.setTextColor(0, 100, 150);
+                doc.text(`RESULTADO: ${i.v.v} ${i.v.m}`, 20, y+11);
+                doc.setTextColor(40);
+                y += 22;
             });
 
-            doc.setFontSize(9); doc.setTextColor(150);
-            doc.text("© Diseñado y Desarrollado por Nave Arcturiana", 105, 285, {align:"center"});
-            doc.save(`Estudio_${nom.replace(/\s/g, '_')}.pdf`);
+            if(comp) {
+                y += 10;
+                doc.setFillColor(240, 240, 255); doc.rect(15, y, 180, 45, 'F');
+                doc.setFont(undefined, 'bold'); doc.text("ESTUDIO DE COMPATIBILIDAD (Vibración de Vínculo)", 20, y+10);
+                doc.setFontSize(9); doc.setFont(undefined, 'normal');
+                let intro = "Si necesitas abrir una sociedad, saber como vibras con tu pareja, amigos o compañeros, esta es la llave de vuestra compatibilidad.";
+                doc.text(doc.splitTextToSize(intro, 170), 20, y+18);
+                doc.setFontSize(14); doc.setTextColor(200, 0, 200);
+                doc.text(`VIBRACIÓN DE VÍNCULO: ${comp}`, 105, y+35, {align:"center"});
+            }
+
+            doc.save(`Estudio_Nave_${nom.replace(/\s/g, '_')}.pdf`);
         }
     </script>
 </body>
