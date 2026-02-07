@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Navearcturiana - Sistema</title>
+    <title>Nave Arcturiana</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -18,35 +18,35 @@
 
 <div class="card">
     <div id="login-box">
-        <h2 style="color: #00d2ff;">🚀 Acceso Nave</h2>
-        <input type="text" id="user-input" placeholder="Usuario" autocomplete="off">
-        <input type="password" id="pass-input" placeholder="Contraseña">
-        <button id="btn-entrar" onclick="login()">Ingresar</button>
+        <h2 style="color: #00d2ff;">🚀 Acceso</h2>
+        <input type="text" id="user" placeholder="Usuario" autocomplete="off">
+        <input type="password" id="pass" placeholder="Contraseña">
+        <button id="btn" onclick="login()">Ingresar</button>
     </div>
 
     <div id="app-box" class="hidden">
         <h2 style="color: #00d2ff;">✨ Bienvenido</h2>
-        <input type="text" id="nombre-input" placeholder="Nombre Consultante">
-        <button onclick="generarPDF()">Descargar PDF</button>
-        <button onclick="location.reload()" style="background:transparent; color:red; border:1px solid red; margin-top:20px;">Cerrar</button>
+        <input type="text" id="nom" placeholder="Nombre Consultante">
+        <button onclick="descargar()">Descargar PDF</button>
+        <button onclick="location.reload()" style="background:transparent; color:red; border:1px solid red; margin-top:20px;">Salir</button>
     </div>
 </div>
 
 <script>
-    const _supabase = supabase.createClient(
+    const _sb = supabase.createClient(
         'https://iiukfhdbhiimeordekpyw.supabase.co', 
         'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M'
     );
 
     async function login() {
-        const u = document.getElementById('user-input').value.trim().toLowerCase();
-        const p = document.getElementById('pass-input').value.trim();
-        const btn = document.getElementById('btn-entrar');
+        const u = document.getElementById('user').value.trim().toLowerCase();
+        const p = document.getElementById('pass').value.trim();
+        const b = document.getElementById('btn');
 
-        btn.innerText = "Conectando...";
+        b.innerText = "Conectando...";
 
         try {
-            const { data, error } = await _supabase
+            const { data, error } = await _sb
                 .from('credenciales')
                 .select('*')
                 .eq('usuario', u)
@@ -59,23 +59,21 @@
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('app-box').classList.remove('hidden');
             } else {
-                alert("Datos incorrectos. Revisa el usuario y clave.");
-                btn.innerText = "Ingresar";
+                alert("Datos incorrectos");
+                b.innerText = "Ingresar";
             }
-        } catch (err) {
-            console.error(err);
-            alert("Bloqueo de red detectado. Por favor, prueba desde tu CELULAR con datos móviles.");
-            btn.innerText = "Ingresar";
+        } catch (e) {
+            alert("⚠️ BLOQUEO DE RED: Tu WiFi o Navegador impiden la conexión. USA DATOS MÓVILES.");
+            b.innerText = "Reintentar";
         }
     }
 
-    function generarPDF() {
-        const nom = document.getElementById('nombre-input').value;
-        if(!nom) return alert("Falta el nombre");
+    function descargar() {
+        const n = document.getElementById('nom').value;
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text("Estudio para: " + nom.toUpperCase(), 20, 20);
-        doc.save(`Estudio_${nom}.pdf`);
+        doc.text("Estudio: " + n.toUpperCase(), 20, 20);
+        doc.save(`Estudio_${n}.pdf`);
     }
 </script>
 </body>
