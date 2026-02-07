@@ -7,9 +7,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 300px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); }
-        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.2); color: white; outline: none; }
-        button { width: 100%; padding: 12px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 300px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); box-shadow: 0 0 20px rgba(0,210,255,0.2); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; box-sizing: border-box; background: rgba(255,255,255,0.2); color: white; outline: none; font-size: 16px; }
+        input::placeholder { color: #ccc; }
+        button { width: 100%; padding: 12px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; font-size: 16px; }
+        button:hover { background: #00b8e6; }
         .hidden { display: none; }
     </style>
 </head>
@@ -18,59 +20,49 @@
         <div id="login-box">
             <h2 style="color:#00d2ff">🚀 Acceso Nave</h2>
             <input type="text" id="u" placeholder="Usuario">
-            <input type="password" id="p" placeholder="Clave">
-            <button id="btn" onclick="validar()">Ingresar</button>
+            <input type="password" id="p" placeholder="Contraseña">
+            <button onclick="validarLocal()">Ingresar</button>
         </div>
+
         <div id="app-box" class="hidden">
             <h2 style="color:#00d2ff">✨ Bienvenida</h2>
-            <input type="text" id="nom" placeholder="Nombre Consultante">
-            <button onclick="generar()">Descargar PDF</button>
-            <button onclick="location.reload()" style="background:none; border:1px solid red; color:red; margin-top:15px;">Salir</button>
+            <p>Sistema Activo</p>
+            <input type="text" id="nom" placeholder="Nombre del Consultante">
+            <button onclick="generarPDF()">Descargar PDF</button>
+            <button onclick="location.reload()" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; margin-top:20px;">Cerrar Sesión</button>
         </div>
     </div>
 
     <script>
-        async function validar() {
+        // Definimos las credenciales aquí mismo para evitar bloqueos de red
+        const USUARIO_VALOR = "navearcturiana";
+        const CLAVE_VALOR = "nubilis2026_";
+
+        function validarLocal() {
             const user = document.getElementById('u').value.trim().toLowerCase();
             const pass = document.getElementById('p').value.trim();
-            const btn = document.getElementById('btn');
-            
-            btn.innerText = "Conectando...";
-            
-            // Usamos una llamada directa (fetch) para evitar bloqueos de la librería Supabase
-            const url = "https://iiukfhdbhiimeordekpyw.supabase.co/rest/v1/credenciales?usuario=eq." + user + "&clave=eq." + pass;
-            
-            try {
-                const res = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'apikey': 'sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M',
-                        'Authorization': 'Bearer sb_publishable_ezwDU6_Jq-EEUO6Z7CmnVQ_M',
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                const data = await res.json();
 
-                if (data && data.length > 0) {
-                    document.getElementById('login-box').classList.add('hidden');
-                    document.getElementById('app-box').classList.remove('hidden');
-                } else {
-                    alert("Usuario o clave incorrectos.");
-                    btn.innerText = "Ingresar";
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Error técnico de red. Intentá en modo INCÓGNITO.");
-                btn.innerText = "Reintentar";
+            if (user === USUARIO_VALOR && pass === CLAVE_VALOR) {
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('app-box').classList.remove('hidden');
+            } else {
+                alert("Usuario o clave incorrectos. Revisa los datos.");
             }
         }
 
-        function generar() {
-            const n = document.getElementById('nom').value;
+        function generarPDF() {
+            const n = document.getElementById('nom').value.trim();
+            if(!n) return alert("Por favor, ingresa el nombre del consultante.");
+            
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.text("Estudio: " + n.toUpperCase(), 20, 20);
+            
+            doc.setFontSize(22);
+            doc.text("ESTUDIO NUMEROLÓGICO", 20, 30);
+            doc.setFontSize(16);
+            doc.text("Consultante: " + n.toUpperCase(), 20, 50);
+            doc.text("Fecha: " + new Date().toLocaleDateString(), 20, 60);
+            
             doc.save(`Estudio_${n}.pdf`);
         }
     </script>
