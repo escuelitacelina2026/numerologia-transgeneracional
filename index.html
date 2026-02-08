@@ -42,7 +42,7 @@
             <input type="date" id="client_birth">
 
             <div style="margin: 15px 0; border: 1px dashed rgba(0,210,255,0.3); padding: 10px; border-radius: 10px;">
-                <label style="font-size: 0.8rem;">¿Querés conocer la vibración con otra persona?</label>
+                <label style="font-size: 0.8rem;">¿Vibración con otra persona?</label>
                 <select id="p_choice" onchange="document.getElementById('p_box').classList.toggle('hidden', this.value==='NO')">
                     <option value="NO">NO</option>
                     <option value="SI">SI</option>
@@ -52,7 +52,7 @@
                 </div>
             </div>
 
-            <button onclick="procesar()">Generar Estudio Místico</button>
+            <button onclick="procesar()">Generar Mapa Vibracional</button>
             <button onclick="location.reload()" class="btn-outline">Cerrar Sesión</button>
         </div>
         <div class="footer-copy">© Diseñado y Desarrollado por Nave Arcturiana</div>
@@ -72,7 +72,7 @@
                 6: "Alma nutricia y responsable. Tu vibración interna se centra en el amor familiar y el servicio armonioso.",
                 7: "Alma profunda e intuitiva. Traés la búsqueda de la verdad y el silencio reflexivo de vidas pasadas.",
                 8: "Esencia de poder y equilibrio. Tu alma busca dominar la materia con sabiduría y justicia personal.",
-                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y busca el servicio humanitario.",
+                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y hoy vibra en una entrega humanitaria total.",
                 11: "Alma Maestra. Portás una vibración elevada para inspirar y guiar a otros desde tu intuición.",
                 22: "Alma Constructora Galáctica. Traés el potencial de realizar grandes obras para el bien de la humanidad."
             },
@@ -90,15 +90,15 @@
                 22: "Te ven como alguien capaz de organizar grandes proyectos o movimientos sociales."
             },
             mision: {
-                1: "Venís a aprender a confiar en vos y a liderar tu propia vida sin dependencias.",
-                2: "Tu sendero es aprender la cooperación, el equilibrio y a trabajar en equipo.",
-                3: "Estás acá para desarrollar tu creatividad y aprender a comunicar tus verdades.",
+                1: "Tu sendero de vida te impulsa a vibrar en el número 1. Es hacia donde debés ir para integrar tus aprendizajes y liderar tu camino.",
+                2: "Tu sendero es aprender la cooperación, el equilibrio y a trabajar en equipo sanando vínculos.",
+                3: "Estás acá para desarrollar tu creatividad y aprender a comunicar tus verdades con alegría.",
                 4: "Tu camino de sanación es aprender el valor del esfuerzo, el orden y la estabilidad.",
-                5: "Venís a experimentar el cambio, la libertad y a aprender a adaptarte a lo nuevo.",
+                5: "Venís a experimentar el cambio, la libertad y a aprender a adaptarte a lo nuevo sin miedos.",
                 6: "Tu misión es el servicio a la familia y aprender el amor incondicional y la responsabilidad.",
                 7: "Tu sendero te invita a la introspección profunda y a descubrir tu sabiduría interior.",
                 8: "Venís a equilibrar el mundo espiritual con el material, manejando el poder con justicia.",
-                9: "Tu camino es la realización humanitaria y aprender a cerrar ciclos con amor.",
+                9: "Tu camino es la realización humanitaria y aprender a cerrar ciclos con amor universal.",
                 11: "Tu misión es ser un canal de luz y guía para los demás desde tu propia maestría.",
                 22: "Estás acá para construir realidades que beneficien a mucha gente a gran escala.",
                 13: "Karma 13/4: Venís a transformar la pereza en construcción. Sanás a través del orden y el trabajo.",
@@ -106,13 +106,18 @@
                 16: "Karma 16/7: Este sendero te propone trascender el orgullo para reconstruir tu vida desde la humildad.",
                 19: "Karma 19/1: Venís a aprender el uso justo del poder, liderando sin autoritarismo desde tu centro."
             },
-            pareja: {
-                1: "Unión de impulso y nuevos comienzos.", 2: "Unión basada en la ternura y apoyo mutuo.", 
-                3: "Relación expansiva y creativa.", 4: "Vínculo sólido y enfocado al hogar.",
-                5: "Pareja dinámica y libre.", 6: "Relación familiar y armoniosa.",
-                7: "Conforman un vínculo conocedor de los misterios del amor. Son una pareja discreta y reflexiva que necesita respetar sus espacios.",
-                8: "Unión de poder y éxito compartido.", 
-                9: "Su relación palpita con hiperactividad amorosa. Están llamados a vivir el presente y entregarse al servicio desde el amor romántico."
+            meta: {
+                1: "En tu madurez, activarás un potencial de liderazgo e independencia total.",
+                2: "Tu etapa de madurez te traerá paz, equilibrio y sabiduría en tus relaciones.",
+                3: "Activarás una gran capacidad de expansión creativa y disfrute en tus años de madurez.",
+                4: "Lograrás una estabilidad sólida y el reconocimiento a tu esfuerzo sostenido.",
+                5: "Tu madurez será una etapa de viajes, cambios positivos y gran vitalidad.",
+                6: "Activarás un potencial de armonía familiar y plenitud afectiva.",
+                7: "Llegarás a una madurez de profunda conexión espiritual y conocimiento.",
+                8: "Lograrás el equilibrio entre tus logros materiales y tu paz interior.",
+                9: "Tu madurez será de entrega humanitaria, sabiduría y plenitud absoluta.",
+                11: "En tu madurez te convertirás en un faro de luz y guía para las nuevas generaciones.",
+                22: "Lograrás concretar proyectos de gran envergadura que dejarán un legado."
             }
         };
 
@@ -128,11 +133,11 @@
 
         function reducir(n, esKarma = false) {
             const k = [13, 14, 16, 19];
-            if (n === 11 || n === 22) return { v: n, m: "(N. Maestro)" };
-            if (esKarma && k.includes(n)) return { v: n + "/" + (n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)), m: "(N. Kármico)", orig: n };
+            if (n === 11 || n === 22) return { v: n, m: "(Número Maestro)" };
+            if (esKarma && k.includes(n)) return { v: n + "/" + (n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)), m: "(Número Kármico)", orig: n };
             while (n > 9 && n !== 11 && n !== 22) {
                 n = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-                if (esKarma && k.includes(n)) return { v: n + "/" + (n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)), m: "(N. Kármico)", orig: n };
+                if (esKarma && k.includes(n)) return { v: n + "/" + (n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)), m: "(Número Kármico)", orig: n };
             }
             return { v: n, m: "" };
         }
@@ -148,55 +153,44 @@
 
             const rA = reducir(sA), rP = reducir(sP), rT = reducir(sA+sP);
             const sumK = fec.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-            const rK = reducir(sumK, true), rM = reducir((sA+sP)+sumK);
+            const rK = reducir(sumK, true);
+            const rM = reducir((sA+sP)+sumK, true); // Meta Final también puede ser kármica
 
-            let vP = "";
-            const ef = document.getElementById('p_birth').value;
-            if(ef) {
-                const sK2 = ef.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-                vP = reducir(parseInt(rK.v.toString().split('/')[0]) + sK2).v;
-            }
-
-            generarPDF(nom, rA, rP, rT, rK, rM, vP);
+            generarPDF(nom, rA, rP, rT, rK, rM);
         }
 
-        function generarPDF(nom, a, p, t, k, m, vp) {
+        function generarPDF(nom, a, p, t, k, m) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 45, 'F');
+            
+            // Header
+            doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
             doc.text("TU MAPA VIBRACIONAL", 105, 25, {align:"center"});
-            doc.setFontSize(10); doc.text("Sintonía Transgeneracional", 105, 35, {align:"center"});
-
-            let y = 65;
-            doc.setTextColor(40); doc.setFontSize(14); doc.text(`INFORME DE: ${nom}`, 20, y);
+            
+            let y = 55;
+            doc.setTextColor(40); doc.setFontSize(12); doc.text(`CONSULTANTE: ${nom}`, 20, y);
             y += 15;
 
             const items = [
-                {t: "ALMA (Vidas Pasadas)", v: a, d: DB.alma[a.v] || "Esencia interna espiritual."},
-                {t: "PERSONALIDAD (Esta Vida)", v: p, d: DB.personalidad[p.v] || "Máscara social y comunicación."},
-                {t: "TEMPERAMENTO (Ingreso)", v: t, d: "Carácter formado por tu esencia y tu personalidad."},
-                {t: "MISIÓN (Sanación)", v: k, d: DB.mision[k.orig || k.v] || "Tu sendero de vida y aprendizaje."},
-                {t: "META FINAL (Potencial)", v: m, d: "Energía que se activa en tu madurez para tu realización."}
+                {t: "TU ALMA (Esencia Eterna):", v: a, d: DB.alma[a.v.toString().split('/')[0]] || "Tu esencia pura y lo que traes de vidas pasadas."},
+                {t: "PERSONALIDAD (Vibración Externa):", v: p, d: DB.personalidad[p.v.toString().split('/')[0]] || "Tu máscara social y cómo te comunicas."},
+                {t: "TEMPERAMENTO (Vibración de Ingreso):", v: t, d: "El carácter formado por la unión de tu esencia y tu aprendizaje social."},
+                {t: "TU MISIÓN (Camino de Sanación):", v: k, d: DB.mision[k.orig || k.v.toString().split('/')[0]] || "El sendero que tu alma eligió para evolucionar."},
+                {t: "META FINAL (Potencial de Madurez):", v: m, d: (DB.mision[m.orig] ? DB.mision[m.orig] + " " : "") + (DB.meta[m.v.toString().split('/')[0]] || "Tu potencial sagrado que se activa en la madurez (50-55 años).")}
             ];
 
             items.forEach(it => {
                 doc.setFont(undefined, 'bold'); doc.setFontSize(11);
-                doc.text(`${it.t}: ${it.v.v} ${it.v.m}`, 20, y);
-                doc.setFont(undefined, 'normal'); doc.setFontSize(9);
+                doc.text(`${it.t} ${it.v.v} ${it.v.m}`, 20, y);
+                doc.setFont(undefined, 'normal'); doc.setFontSize(10);
                 let split = doc.splitTextToSize(it.d, 170);
-                doc.text(split, 20, y+5);
-                y += 15 + (split.length * 4);
+                doc.text(split, 20, y+6);
+                y += 15 + (split.length * 5);
+                if (y > 270) { doc.addPage(); y = 20; }
             });
 
-            if(vp) {
-                y += 5;
-                doc.setFillColor(240, 255, 255); doc.rect(15, y, 180, 25, 'F');
-                doc.setFont(undefined, 'bold'); doc.text("SINTONÍA DE VÍNCULO", 20, y+8);
-                doc.setFont(undefined, 'normal'); doc.setFontSize(9);
-                doc.text(doc.splitTextToSize(DB.pareja[vp] || `Su unión vibra en la frecuencia ${vp}.`, 170), 20, y+15);
-            }
-            doc.save(`Estudio_${nom}.pdf`);
+            doc.save(`Mapa_Vibracional_${nom}.pdf`);
         }
     </script>
 </body>
