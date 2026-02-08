@@ -84,7 +84,18 @@
                 11: "Año Maestro: Gran intuición. Mirás la realidad desde una conciencia elevada.",
                 22: "Año Maestro: Construcción de proyectos que impactan en lo colectivo."
             },
-            pareja: { 1: "Vínculo 1: Es una relación de impulso y comienzos. Indica una unión donde ambos se empujan a ser independientes y creativos. Es ideal para proyectos nuevos y emprendimientos.", 2: "Vínculo 2: Una vibración de acompañamiento y sensibilidad. Es el vínculo del 'nosotros', donde prima el apoyo mutuo, la diplomacia y el cuidado emocional. Excelente para la convivencia.", 3: "Vínculo 3: Relación de expansión y alegría. Se basa en la comunicación, el brillo social y la diversión. Es un vínculo muy creativo y dinámico, ideal para disfrutar la vida.", 4: "Vínculo 4: Es la unión constructora. Este vínculo busca la estabilidad, el orden y la seguridad material. Es una relación 'cimiento', muy buena para formar una familia sólida.", 5: "Vínculo 5: Una vibración de cambio y libertad. Es una relación inquieta, que necesita viajes, movimiento y nuevas experiencias. No soporta la rutina.", 6: "Vínculo 6: El vínculo del hogar y la armonía. Es una frecuencia muy nutricia, enfocada en la responsabilidad afectiva, la familia y el bienestar del entorno.", 7: "Vínculo 7: Unión intelectual y mística. Es una relación profunda que busca la verdad. Necesitan espacios de silencio respetado. Vínculo de almas que se estudian.", 8: "Vínculo 8: Vínculo de realización y poder. Están juntos para lograr metas grandes en el mundo material. Unión de autoridad y éxito compartido.", 9: "Vínculo 9: Relación de amor universal y entrega. Frecuencia elevada donde el vínculo busca ayudar a otros. Es una unión de sabiduría compartida.", 11: "Vínculo 11: Misión Maestra de pareja. Vienen a inspirar y elevar su conciencia conjunta, siendo un faro de guía para otros.", 22: "Vínculo 22: Misión Maestra de construcción. Llamados a materializar proyectos que beneficien a la comunidad o la humanidad." }
+            pareja: { 1: "Vínculo 1: Es una relación de impulso y comienzos. Indica una unión donde ambos se empujan a ser independientes y creativos. Es ideal para proyectos nuevos y emprendimientos.", 2: "Vínculo 2: Una vibración de acompañamiento y sensibilidad. Es el vínculo del 'nosotros', donde prima el apoyo mutuo, la diplomacia y el cuidado emocional. Excelente para la convivencia.", 3: "Vínculo 3: Relación de expansión y alegría. Se basa en la comunicación, el brillo social y la diversión. Es un vínculo muy creativo y dinámico, ideal para disfrutar la vida.", 4: "Vínculo 4: Es la unión constructora. Este vínculo busca la estabilidad, el orden y la seguridad material. Es una relación 'cimiento', muy buena para formar una familia sólida.", 5: "Vínculo 5: Una vibración de cambio y libertad. Es una relación inquieta, que necesita viajes, movimiento y nuevas experiencias. No soporta la rutina.", 6: "Vínculo 6: El vínculo del hogar y la armonía. Es una frecuencia muy nutricia, enfocada en la responsabilidad afectiva, la familia y el bienestar del entorno.", 7: "Vínculo 7: Unión intelectual y mística. Es una relación profunda que busca la verdad. Necesitan espacios de silencio respetado. Vínculo de almas que se estudian.", 8: "Vínculo 8: Vínculo de realización y poder. Están juntos para lograr metas grandes en el mundo material. Unión de autoridad y éxito compartido.", 9: "Vínculo 9: Relación de amor universal y entrega. Frecuencia elevada donde el vínculo busca ayudar a otros. Es una unión de sabiduría compartida.", 11: "Vínculo 11: Misión Maestra de pareja. Vienen a inspirar y elevar su conciencia conjunta, siendo un faro de guía para otros.", 22: "Vínculo 22: Misión Maestra de construcción. Llamados a materializar proyectos que beneficien a la comunidad o la humanidad." },
+            herencia: {
+                1: "Herencia del Clan 1: Tu linaje te transmite la fuerza de los pioneros. En tu árbol hubo personas que tuvieron que abrirse camino solas. Heredás la capacidad de liderazgo, pero también el mandato de 'no poder fallar' o ser siempre el primero.",
+                2: "Herencia del Clan 2: Tu linaje trae una historia de mediadores y alianzas, pero también de dependencias. Heredás la sensibilidad y el don de unir a la familia, trabajando la sanación de vínculos que quedaron fracturados.",
+                3: "Herencia del Clan 3: Tu apellido porta la energía de la comunicación y la creatividad. En tu árbol hubo necesidad de ser escuchado o de expresar alegría. Heredás el don de la palabra y la misión de brillar socialmente.",
+                4: "Herencia del Clan 4: Tu linaje es de constructores y gente de trabajo duro. Heredás la tenacidad y el orden, pero también la carga de estructuras muy rígidas que hoy te toca flexibilizar para materializar con más fluidez.",
+                5: "Herencia del Clan 5: Tu árbol está marcado por buscadores de libertad, inmigrantes o viajeros. Heredás la adaptabilidad y el movimiento, sanando en tu linaje el miedo al cambio o las memorias de desarraigo.",
+                6: "Herencia del Clan 6: La herencia de tu apellido es el amor y la responsabilidad familiar. Tu árbol se centró en el hogar. Heredás el don de cuidar a otros, pero debés cuidar de no cargar con culpas ajenas del clan.",
+                7: "Herencia del Clan 7: Tu linaje trae buscadores de respuestas, perfeccionistas o figuras solitarias. Heredás una gran profundidad intelectual y espiritual, viniendo a sanar silencios o secretos guardados en el árbol.",
+                8: "Herencia del Clan 8: Tu apellido hereda la fuerza del poder material y la justicia. En tu árbol hubo temas de herencias, dinero o mando. Heredás la capacidad de generar abundancia con equilibrio ético.",
+                9: "Herencia del Clan 9: Tu linaje porta una sabiduría de finales de ciclo y servicio. Heredás una sensibilidad humanitaria profunda, viniendo a cerrar historias de sacrificios inconclusos en tu árbol genealógico."
+            }
         };
 
         function login() {
@@ -128,19 +139,27 @@
         }
 
         function procesar() {
-            const nom = document.getElementById('client_name').value.toUpperCase();
+            const nom = document.getElementById('client_name').value.toUpperCase().trim();
             const fec = document.getElementById('client_birth').value;
             if(!nom || !fec) { alert("Faltan datos estelares."); return; }
 
             let sA = 0, sP = 0;
-            const lim = nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
-            for(let l of lim) { if(VALS[l]) VOCS.includes(l) ? sA += VALS[l] : sP += VALS[l]; }
+            const lim = nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z ]/g, "");
+            for(let l of lim.replace(/\s/g, "")) { if(VALS[l]) VOCS.includes(l) ? sA += VALS[l] : sP += VALS[l]; }
 
             const rA = reducir(sA), rP = reducir(sP), rT = reducir(sA+sP);
             const sumK = fec.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
             const rK = reducir(sumK, true);
             const rM = reducir((sA+sP)+sumK, true);
             const rAn = calcularAnual(fec);
+
+            // Cálculo Herencia (Apellido)
+            const partes = nom.split(" ");
+            const apellido = partes[partes.length - 1];
+            let sH = 0;
+            const limH = apellido.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
+            for(let l of limH) { if(VALS[l]) sH += VALS[l]; }
+            const rH = reducir(sH);
 
             let vP = null, nP = "";
             if(document.getElementById('p_choice').value === "SI") {
@@ -152,10 +171,10 @@
                     vP = reducir(k_base + sK2).v;
                 }
             }
-            generarPDF(nom, rA, rP, rT, rK, rM, rAn, vP, nP);
+            generarPDF(nom, rA, rP, rT, rK, rM, rAn, vP, nP, rH);
         }
 
-        function generarPDF(nom, a, p, t, k, m, an, vp, np) {
+        function generarPDF(nom, a, p, t, k, m, an, vp, np, rh) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             let curY = 55;
@@ -186,7 +205,8 @@
                 {t: "PERSONALIDAD (Máscara Social):", v: p, d: DB.personalidad[p.base]},
                 {t: "TEMPERAMENTO (Tu Carácter):", v: t, d: DB.temperamento[t.base]},
                 {t: "MISIÓN O KARMA (Camino de Sanación):", v: k, d: armarTxt(k, 'mision')},
-                {t: "META FINAL (Potencial Sagrado):", v: m, d: armarTxt(m, 'meta')}
+                {t: "META FINAL (Potencial Sagrado):", v: m, d: armarTxt(m, 'meta')},
+                {t: "HERENCIA TRANSGENERACIONAL (Apellido):", v: rh, d: DB.herencia[rh.base]}
             ];
 
             items.forEach(it => {
