@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -38,9 +39,11 @@
         </div>
 
         <div id="box-app" class="hidden">
-            <h2>✨ Numerolgía Transgeneracional</h2>
-            <p class="subheader">Bienvenidos a la Nave. Iniciando decodificación de luz para tu mapa estelar...</p>
-            <input type="text" id="client_name" placeholder="Nombre Completo">
+            <h2>✨ Numerología Transgeneracional</h2>
+            <p class="subheader">Bienvenidos a la Nave. Iniciando decodificación de luz...</p>
+            
+            <input type="text" id="client_name" placeholder="Nombres (según DNI)">
+            <input type="text" id="client_surname" placeholder="Apellido(s) Completo(s)">
             <input type="date" id="client_birth">
 
             <div class="pareja-section">
@@ -139,13 +142,18 @@
         }
 
         function procesar() {
-            const nom = document.getElementById('client_name').value.toUpperCase().trim();
+            const nombres = document.getElementById('client_name').value.toUpperCase().trim();
+            const apellido = document.getElementById('client_surname').value.toUpperCase().trim();
             const fec = document.getElementById('client_birth').value;
-            if(!nom || !fec) { alert("Faltan datos estelares."); return; }
+            
+            if(!nombres || !apellido || !fec) { alert("Faltan datos estelares."); return; }
+
+            // Nombre completo para cálculos personales
+            const nomCompleto = nombres + " " + apellido;
 
             let sA = 0, sP = 0;
-            const lim = nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z ]/g, "");
-            for(let l of lim.replace(/\s/g, "")) { if(VALS[l]) VOCS.includes(l) ? sA += VALS[l] : sP += VALS[l]; }
+            const lim = nomCompleto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
+            for(let l of lim) { if(VALS[l]) VOCS.includes(l) ? sA += VALS[l] : sP += VALS[l]; }
 
             const rA = reducir(sA), rP = reducir(sP), rT = reducir(sA+sP);
             const sumK = fec.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
@@ -153,9 +161,7 @@
             const rM = reducir((sA+sP)+sumK, true);
             const rAn = calcularAnual(fec);
 
-            // Cálculo Herencia (Apellido)
-            const partes = nom.split(" ");
-            const apellido = partes[partes.length - 1];
+            // Cálculo Herencia (Solo campo Apellido)
             let sH = 0;
             const limH = apellido.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
             for(let l of limH) { if(VALS[l]) sH += VALS[l]; }
@@ -171,7 +177,7 @@
                     vP = reducir(k_base + sK2).v;
                 }
             }
-            generarPDF(nom, rA, rP, rT, rK, rM, rAn, vP, nP, rH);
+            generarPDF(nomCompleto, rA, rP, rT, rK, rM, rAn, vP, nP, rH);
         }
 
         function generarPDF(nom, a, p, t, k, m, an, vp, np, rh) {
@@ -219,8 +225,28 @@
                 curY += 18 + (split.length * 5);
             });
 
+            // --- DEVOLUCIÓN Y REFLEXIÓN FINAL ---
             checkPage(60);
             curY += 5;
+            doc.setDrawColor(0, 210, 255); doc.setLineWidth(0.5);
+            doc.line(20, curY, 190, curY);
+            curY += 10;
+            doc.setFont(undefined, 'bold'); doc.setFontSize(13); doc.setTextColor(0, 150, 200);
+            doc.text("REFLEXIÓN DEL ORÁCULO ARCTURIANO", 105, curY, {align:"center"});
+            curY += 10;
+            doc.setFont(undefined, 'normal'); doc.setFontSize(10); doc.setTextColor(40);
+            
+            let refl = `Basado en tu frecuencia, ${nom.split(" ")[0]}, tu Alma (${a.v}) busca alinearse hoy con la fuerza de tu linaje (${rh.v}). `;
+            refl += `Para tus proyectos y vínculos, el secreto es aplicar tu Temperamento (${t.v}) para alcanzar tu Meta Final (${m.v}). `;
+            if(k.orig) refl += `Tu número kármico ${k.orig} es el portal de aprendizaje que te permite liberarte. `;
+            refl += `En este año ${an.anio}, vibras en sintonía ${an.res.v}, la energía clave para manifestar tu realidad.`;
+
+            let splitRef = doc.splitTextToSize(refl, 170);
+            doc.text(splitRef, 20, curY);
+            curY += 15 + (splitRef.length * 5);
+
+            // --- VIBRACIÓN ANUAL ---
+            checkPage(40);
             doc.setFillColor(0, 210, 255); doc.rect(15, curY, 180, 8, 'F');
             doc.setTextColor(15, 12, 41); doc.setFont(undefined, 'bold');
             doc.text(`VIBRACIÓN ANUAL (Año ${an.anio}): ${an.res.v}`, 20, curY+6);
