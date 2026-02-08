@@ -48,7 +48,7 @@
                 </select>
                 <div id="p_box" class="hidden">
                     <input type="text" id="p_name" placeholder="Nombre de la otra persona">
-                    <input type="date" id="p_birth" title="Fecha de nacimiento de la otra persona">
+                    <input type="date" id="p_birth">
                 </div>
             </div>
 
@@ -136,7 +136,7 @@
                 2: "Vínculo 2: Una vibración de acompañamiento y sensibilidad. Es el vínculo del 'nosotros', donde prima el apoyo mutuo, la diplomacia y el cuidado emocional. Excelente para la convivencia.",
                 3: "Vínculo 3: Relación de expansión y alegría. Se basa en la comunicación, el brillo social y la diversión. Es un vínculo muy creativo y dinámico, ideal para disfrutar la vida.",
                 4: "Vínculo 4: Es la unión constructora. Este vínculo busca la estabilidad, el orden y la seguridad material. Es una relación 'cimiento', muy buena para formar una familia sólida.",
-                5: "Vínculo 5: Una vibración de cambio y libertad. Es una relación inquieteta, que necesita viajes, movimiento y nuevas experiencias. No soporta la rutina.",
+                5: "Vínculo 5: Una vibración de cambio y libertad. Es una relación inquieta, que necesita viajes, movimiento y nuevas experiencias. No soporta la rutina.",
                 6: "Vínculo 6: El vínculo del hogar y la armonía. Es una frecuencia muy nutricia, enfocada en la responsabilidad afectiva, la familia y el bienestar del entorno.",
                 7: "Vínculo 7: Unión intelectual y mística. Es una relación profunda que busca la verdad. Necesitan espacios de silencio respetado. Vínculo de almas que se estudian.",
                 8: "Vínculo 8: Vínculo de realización y poder. Están juntos para lograr metas grandes en el mundo material. Unión de autoridad y éxito compartido.",
@@ -151,7 +151,7 @@
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
-                document.getElementById('error-text').innerText = "Acceso denegado 👽";
+                document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenés acceso a la nave, comunicate con el comandante 👽";
                 document.getElementById('error-msg').classList.remove('hidden');
             }
         }
@@ -159,12 +159,21 @@
         function reducir(n, esKarma = false) {
             const k = [13, 14, 16, 19];
             if (n === 11 || n === 22) return { v: n, m: "(N. Maestro)" };
-            if (esKarma && k.includes(n)) return { v: n + "/" + (n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)), m: "(N. Kármico)", orig: n };
+            
+            let original = n;
+            if (esKarma && k.includes(n)) {
+                let r = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+                return { v: n + "/" + r, m: "(N. Kármico)", orig: n, base: r };
+            }
+
             while (n > 9 && n !== 11 && n !== 22) {
                 n = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-                if (esKarma && k.includes(n)) return { v: n + "/" + (n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)), m: "(N. Kármico)", orig: n };
+                if (esKarma && k.includes(n)) {
+                    let r = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+                    return { v: n + "/" + r, m: "(N. Kármico)", orig: n, base: r };
+                }
             }
-            return { v: n, m: "" };
+            return { v: n, m: "", base: n };
         }
 
         function procesar() {
@@ -198,7 +207,6 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Encabezado
             doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
             doc.text("TU MAPA VIBRACIONAL", 105, 25, {align:"center"});
@@ -207,19 +215,27 @@
             doc.setTextColor(40); doc.setFontSize(12); doc.text(`CONSULTANTE: ${nom}`, 20, y);
             y += 15;
 
+            // Lógica de Meta para evitar el undefined
+            let descMeta = "";
+            if(m.orig) {
+                descMeta = DB.mision[m.orig] + " Además, " + DB.meta[m.base];
+            } else {
+                descMeta = DB.meta[m.base];
+            }
+
             const items = [
-                {t: "ALMA (Vibración Interna):", v: a, d: DB.alma[a.v.toString().split('/')[0]]},
-                {t: "PERSONALIDAD (Máscara Social):", v: p, d: DB.personalidad[p.v.toString().split('/')[0]]},
-                {t: "TEMPERAMENTO (Tu Carácter):", v: t, d: DB.temperamento[t.v.toString().split('/')[0]]},
-                {t: "MISIÓN O KARMA (Sanación):", v: k, d: DB.mision[k.orig || k.v.toString().split('/')[0]]},
-                {t: "META FINAL (Potencial Sagrado):", v: m, d: (m.orig ? DB.mision[m.orig] + " Además, " : "") + (DB.meta[m.v.toString().split('/')[0]])}
+                {t: "ALMA (Vibración Interna):", v: a, d: DB.alma[a.base]},
+                {t: "PERSONALIDAD (Máscara Social):", v: p, d: DB.personalidad[p.base]},
+                {t: "TEMPERAMENTO (Tu Carácter):", v: t, d: DB.temperamento[t.base]},
+                {t: "MISIÓN O KARMA (Sanación):", v: k, d: DB.mision[k.orig || k.base]},
+                {t: "META FINAL (Potencial Sagrado):", v: m, d: descMeta}
             ];
 
             items.forEach(it => {
                 doc.setFont(undefined, 'bold'); doc.setFontSize(11);
                 doc.text(`${it.t} RESULTADO: ${it.v.v} ${it.v.m}`, 20, y);
                 doc.setFont(undefined, 'normal'); doc.setFontSize(10);
-                let split = doc.splitTextToSize(it.d, 170);
+                let split = doc.splitTextToSize(it.d || "Descripción en proceso...", 170);
                 doc.text(split, 20, y+7);
                 y += 18 + (split.length * 5);
                 if (y > 270) { doc.addPage(); y = 20; }
@@ -238,7 +254,8 @@
                 doc.setFont(undefined, 'bold'); doc.setFontSize(11); doc.setTextColor(0, 100, 150);
                 doc.text(`Vibración del Vínculo: ${vp}`, 20, y+35);
                 doc.setFont(undefined, 'normal'); doc.setFontSize(10); doc.setTextColor(40);
-                let txtP = DB.pareja[vp.toString().split('/')[0]] || `Su unión vibra en la frecuencia ${vp}.`;
+                let baseP = vp.toString().split('/')[0];
+                let txtP = DB.pareja[baseP] || `Su unión vibra en la frecuencia ${vp}.`;
                 doc.text(doc.splitTextToSize(txtP, 170), 20, y+42);
             }
 
