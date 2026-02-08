@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nave Arcturiana - Sistema Transgeneracional</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
+        /* TU DISEÑO SE MANTIENE INTACTO */
         body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .card { background: rgba(255, 255, 255, 0.1); padding: 2rem; border-radius: 20px; width: 400px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0,210,255,0.2); position: relative; }
         h2 { color: #00d2ff; }
@@ -34,11 +34,8 @@
         </div>
 
         <div id="box-app" class="hidden">
-            <h2>✨ Bienvenido</h2>
-            <p style="font-size: 0.8rem; color: #00ffcc; margin-bottom: 15px;">Sistema Transgeneracional Activo</p>
-            
+            <h2>✨ Portal Arcturiano</h2>
             <input type="text" id="client_name" placeholder="Nombre y Apellido Completo">
-            <label style="font-size: 0.7rem; color: #00d2ff;">TU FECHA DE NACIMIENTO</label>
             <input type="date" id="client_birth">
 
             <div style="margin: 20px 0; border: 1px dashed rgba(0,210,255,0.3); padding: 10px; border-radius: 10px;">
@@ -48,24 +45,40 @@
                     <option value="SI">SI</option>
                 </select>
                 <div id="extra_input" class="hidden">
-                    <label style="font-size: 0.7rem; color: #ff00ff;">FECHA DE LA OTRA PERSONA</label>
                     <input type="date" id="extra_birth">
                 </div>
             </div>
 
-            <button onclick="procesarEstudio()">Generar Estudio Galáctico</button>
-            <button onclick="location.reload()" style="background:none; color:#ff4d4d; border:1px solid #ff4d4d; font-size: 11px;">Cerrar Sesión</button>
+            <button onclick="procesarEstudio()">Generar Estudio Místico</button>
+            <button onclick="location.reload()" style="background:none; color:#ff4d4d; border:1px solid #ff4d4d; font-size: 11px; margin-top: 15px;">Cerrar Sesión</button>
         </div>
-
         <div class="footer-copy">© Diseñado y Desarrollado por Nave Arcturiana</div>
     </div>
 
     <script>
+        // BIBLIOTECA DE SABIDURÍA (BASADA EN EL MANUAL)
+        const ANALISIS = {
+            alma: {
+                1: "Tu alma guarda la memoria de un líder. En tus vidas pasadas has cultivado la independencia y hoy tu esencia pulsa por brillar con luz propia, sin depender de otros.",
+                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y hoy vibra en una entrega humanitaria total, buscando servir a la luz.",
+                11: "Portás una vibración maestra. Tu alma ha despertado para ser un canal de guía espiritual, conectando los mundos para inspirar a quienes te rodean."
+            },
+            mision: {
+                7: "Tu sendero te invita a la introspección profunda. Estás acá para descubrir las verdades ocultas y conectar con tu sabiduría interior a través del silencio.",
+                "16/7": "Este número kármico nos habla de una deuda de orgullo en el pasado. Tu camino de sanación hoy es la humildad y la reconstrucción desde la verdad del ser.",
+                "13/4": "La energía kármica del 13 te propone transformar la pereza en construcción. Estás acá para aprender que el orden y el trabajo consciente liberan tu espíritu."
+            },
+            pareja: {
+                7: "Conforman un vínculo conocedor de los misterios del amor. Son una pareja discreta, integrada por el silencio reflexivo y las conversaciones intensas sobre la vida.",
+                9: "Su relación palpita con una dosis de hiperactividad amorosa. Están llamados a vivir el presente, cerrando ciclos y entregándose al servicio desde el amor romántico."
+            }
+        };
+
         const VALORES = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
         const VOCALES = ['A','E','I','O','U'];
 
         function checkAccess() {
-            if (document.getElementById('user_val').value.trim() === "navearcturiana" && document.getElementById('pass_val').value === "nubilis2026_") {
+            if (document.getElementById('user_val').value === "navearcturiana" && document.getElementById('pass_val').value === "nubilis2026_") {
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
@@ -75,36 +88,33 @@
         }
 
         function toggleExtra() {
-            const extra = document.getElementById('extra_choice').value;
-            document.getElementById('extra_input').classList.toggle('hidden', extra === 'NO');
+            document.getElementById('extra_input').classList.toggle('hidden', document.getElementById('extra_choice').value === 'NO');
         }
 
         function reducir(n) {
-            if (n === 11 || n === 22) return { v: n, m: "(Número Maestro)" };
+            if (n === 11 || n === 22) return { v: n, m: "(Número Maestro)", k: false };
             const karmicos = [13, 14, 16, 19];
             if (karmicos.includes(n)) {
                 let r = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-                return { v: n + "/" + r, m: "(Número Kármico: Deuda de vidas pasadas a trascender)" };
+                return { v: n + "/" + r, m: "(Número Kármico)", k: true, orig: n };
             }
             while (n > 9 && n !== 11 && n !== 22) {
                 n = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
                 if (karmicos.includes(n)) {
                     let r = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-                    return { v: n + "/" + r, m: "(Número Kármico: Deuda a trascender)" };
+                    return { v: n + "/" + r, m: "(Número Kármico)", k: true, orig: n };
                 }
             }
-            return { v: n, m: "" };
+            return { v: n, m: "", k: false };
         }
 
         function procesarEstudio() {
             const nom = document.getElementById('client_name').value.toUpperCase();
             const fec1 = document.getElementById('client_birth').value;
-            const choice = document.getElementById('extra_choice').value;
-            const fec2 = document.getElementById('extra_birth').value;
+            const extra = document.getElementById('extra_birth').value;
 
-            if(!nom || !fec1) return alert("Completa tus datos estelares.");
+            if(!nom || !fec1) return alert("Faltan datos estelares.");
 
-            // Lógica Numerológica Manual
             let sA = 0, sP = 0;
             const limpio = nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
             for(let l of limpio) {
@@ -114,67 +124,57 @@
                 }
             }
 
-            const rA = reducir(sA), rP = reducir(sP), rT = reducir(sA + sP);
-            const sumK1 = fec1.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-            const rK1 = reducir(sumK1);
-            const rMeta = reducir((sA+sP) + sumK1);
-
-            let compat = null;
-            if(choice === "SI" && fec2) {
-                const sumK2 = fec2.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
-                const rK2 = reducir(sumK2);
-                // Vibración de Pareja (pág 16): Suma de misiones de ambos
-                const vPareja = reducir(parseInt(rK1.v.toString().split('/')[0]) + parseInt(rK2.v.toString().split('/')[0]));
-                compat = vPareja.v;
+            const rA = reducir(sA), rK = reducir(fec1.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0));
+            
+            let parejaTxt = "";
+            if(extra) {
+                const rK2 = reducir(extra.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0));
+                const vP = reducir(parseInt(rK.v.toString().split('/')[0]) + parseInt(rK2.v.toString().split('/')[0]));
+                parejaTxt = ANALISIS.pareja[vP.v] || "Su unión vibra en la frecuencia " + vP.v + ". Están llamados a descubrir su propósito juntos.";
             }
 
-            generarPDF(nom, fec1, rA, rP, rT, rK1, rMeta, compat);
+            generarPDF(nom, rA, rK, parejaTxt);
         }
 
-        function generarPDF(nom, fec, a, p, t, k, m, comp) {
+        function generarPDF(nom, a, k, cp) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Estética
-            doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
+            doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 45, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
-            doc.text("INFORME NUMEROLÓGICO TRANSGENERACIONAL", 105, 25, {align:"center"});
+            doc.text("MAPA VIBRACIONAL ARCTURIANO", 105, 25, {align:"center"});
+            doc.setFontSize(10); doc.text("Conexión con tu sabiduría transgeneracional", 105, 35, {align:"center"});
 
-            doc.setTextColor(40); doc.setFontSize(11);
-            doc.text(`Consultante: ${nom}`, 20, 50);
-            doc.line(20, 52, 190, 52);
+            doc.setTextColor(40); doc.setFontSize(12);
+            doc.text(`Consultante: ${nom}`, 20, 55);
+            doc.line(20, 58, 190, 58);
 
-            let y = 65;
-            const info = [
-                {t: "ALMA (Vibración Interna)", d: "Es tu esencia pura, lo que traes de vidas pasadas y quién eres en la intimidad.", v: a},
-                {t: "PERSONALIDAD (Vibración Externa)", d: "La máscara social. Cómo te comunicas y cómo te criaron en esta vida.", v: p},
-                {t: "TEMPERAMENTO", d: "El carácter formado por la unión de tu esencia y tu aprendizaje social.", v: t},
-                {t: "MISIÓN O KARMA", d: "El sendero que tu alma eligió para sanar cargas de vidas pasadas en este plano.", v: k},
-                {t: "META FINAL", d: "Tu potencial sagrado que se activa en la madurez (50-55 años).", v: m}
-            ];
+            let y = 75;
+            // ALMA
+            doc.setFont(undefined, 'bold'); doc.text(`TU ALMA (Esencia Eterna): ${a.v}`, 20, y);
+            doc.setFont(undefined, 'normal'); doc.setFontSize(10);
+            let txtA = ANALISIS.alma[a.v] || "Tu alma posee una frecuencia única. Representa tu esencia interna y lo que has cultivado en el viaje de tus vidas pasadas.";
+            doc.text(doc.splitTextToSize(txtA, 170), 20, y+7);
+            
+            y += 30;
+            // MISIÓN
+            doc.setFontSize(12); doc.setFont(undefined, 'bold'); doc.text(`TU MISIÓN (Camino de Sanación): ${k.v}`, 20, y);
+            doc.setFont(undefined, 'normal'); doc.setFontSize(10);
+            let txtK = k.k ? ANALISIS.mision[k.v] : "Tu sendero de vida te impulsa a vibrar en el número " + k.v + ". Es hacia donde debés ir para integrar tus aprendizajes.";
+            doc.text(doc.splitTextToSize(txtK, 170), 20, y+7);
 
-            info.forEach(i => {
-                doc.setFont(undefined, 'bold'); doc.text(i.t, 20, y);
-                doc.setFont(undefined, 'normal'); doc.setFontSize(9);
-                doc.text(i.d, 20, y+5);
-                doc.setFontSize(11); doc.setTextColor(0, 100, 150);
-                doc.text(`RESULTADO: ${i.v.v} ${i.v.m}`, 20, y+11);
-                doc.setTextColor(40);
-                y += 22;
-            });
-
-            if(comp) {
-                y += 10;
-                doc.setFillColor(240, 240, 255); doc.rect(15, y, 180, 45, 'F');
-                doc.setFont(undefined, 'bold'); doc.text("ESTUDIO DE COMPATIBILIDAD (Vibración de Vínculo)", 20, y+10);
+            if(cp) {
+                y += 35;
+                doc.setFillColor(245, 245, 255); doc.rect(15, y, 180, 40, 'F');
+                doc.setFont(undefined, 'bold'); doc.text("SINTONÍA DE VÍNCULOS", 20, y+10);
                 doc.setFontSize(9); doc.setFont(undefined, 'normal');
-                let intro = "Si necesitas abrir una sociedad, saber como vibras con tu pareja, amigos o compañeros, esta es la llave de vuestra compatibilidad.";
-                doc.text(doc.splitTextToSize(intro, 170), 20, y+18);
-                doc.setFontSize(14); doc.setTextColor(200, 0, 200);
-                doc.text(`VIBRACIÓN DE VÍNCULO: ${comp}`, 105, y+35, {align:"center"});
+                let intro = "La numerología nos permite descubrir cómo vibrás con tus parejas, socios o amigos.";
+                doc.text(intro, 20, y+18);
+                doc.setFontSize(10); doc.setTextColor(0, 100, 150);
+                doc.text(doc.splitTextToSize(cp, 165), 20, y+28);
             }
 
-            doc.save(`Estudio_Nave_${nom.replace(/\s/g, '_')}.pdf`);
+            doc.save(`Estudio_Arcturiano_${nom}.pdf`);
         }
     </script>
 </body>
