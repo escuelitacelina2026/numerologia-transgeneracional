@@ -43,8 +43,8 @@
             <h2>✨ Numerología Transgeneracional</h2>
             <p class="subheader">Bienvenidos a la Nave. Iniciando decodificación de luz para tu mapa estelar...</p>
             
-            <input type="text" id="client_name" placeholder="Nombres (según DNI)">
-            <input type="text" id="client_surname" placeholder="Apellido(s) Completo(s)">
+            <input type="text" id="client_name" placeholder="Nombres">
+            <input type="text" id="client_surname" placeholder="Apellido(s)">
             <input type="date" id="client_birth">
 
             <div class="pareja-section">
@@ -78,7 +78,9 @@
                 6: "Tu alma ya transitó el amor incondicional y la familia. Traés una esencia nutricia y equilibrada que busca armonizar y embellecer todo ambiente en el que te encuentras.",
                 7: "En vidas pasadas fuiste un incansable buscador de la verdad mística. Tu alma ya conoce el silencio sagrado y hoy traés esa capacidad de introspectiva y sabiduría profunda.",
                 8: "Vienes de ejercer el poder y la justicia con equilibrio. Tu alma ya sabe manifestar abundancia en la materia y hoy traés esa autoridad natural y juicio justo para liderar.",
-                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego a través de muchas encarnaciones y hoy vibra en una entrega humanitaria total."
+                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego a través de muchas encarnaciones y hoy vibra en una entrega humanitaria total.",
+                11: "Alma Maestra: Traés una sintonía elevada. Tu alma ya transitó niveles de conciencia superiores que hoy te permiten ser un canal de luz para guiar a la humanidad.",
+                22: "Alma Maestra: Tu alma ya sabe construir para el bien común. Traés la memoria de realizar obras que trascienden el tiempo y benefician a miles de personas."
             },
             personalidad: {
                 1: "Los demás te perciben como una persona pionera e independiente. Tu máscara social proyecta liderazgo natural, decisión y una fuerza inicial que inspira confianza.",
@@ -89,7 +91,9 @@
                 6: "Tu máscara es protectora y estética. Los demás te perciben como alguien que cuida los detalles y busca constantemente la armonía afectiva.",
                 7: "Te perciben como alguien misterioso e intelectual. Das la imagen de una persona sabia que observa profundamente antes de hablar.",
                 8: "Proyectás éxito y autoridad. Los demás te ven como una persona poderosa, capaz de manejar grandes responsabilidades materiales.",
-                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso que siempre está dispuesto a sacrificarse por el bienestar común."
+                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso que siempre está dispuesto a sacrificarse por el bienestar común.",
+                11: "Irradiás una luz visionaria. Los demás ven en vos a alguien con una conexión superior, capaz de guiar desde ideales elevados.",
+                22: "Te ven como un realizador de grandes sueños. Tu imagen es la de alguien capaz de organizar estructuras complejas para impactar positivamente."
             },
             temperamento: {
                 1: "Tenés un carácter activo y decidido. Reaccionás ante los desafíos con iniciativa propia; no te agrada ser dirigido.",
@@ -100,32 +104,46 @@
                 6: "Carácter protector y responsable. Tu temperamento se inclina hacia la búsqueda de la armonía familiar.",
                 7: "Tenés un carácter analítico y reflexivo. Ante los desafíos, preferís retirarte al silencio para encontrar respuestas.",
                 8: "Tu temperamento es ambicioso y orientado al logro. Reaccionás con autoridad natural y buscás eficiencia.",
-                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades ajenas."
+                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades ajenas.",
+                11: "Temperamento intuitivo que capta las energías del entorno, actuando de forma inspirada ante las crisis.",
+                22: "Carácter práctico y visionario. Tu temperamento te empuja a construir realidades concretas."
             },
             mision: {
-                1: "Tu misión de vida es aprender a confiar en tu chispa divina, ser tu propio guía y liderar con valor.",
-                2: "Estás acá para aprender la cooperación. Venís a integrar el equilibrio absoluto en tus vínculos afectivos.",
-                3: "Venís a desarrollar tu expresión. Tu misión es aprender a comunicar tus verdades con alegría y brillo.",
-                4: "Aprendé el valor del orden y la disciplina. Tu camino es construir bases sólidas y seguras en este plano material.",
-                5: "Venís a experimentar la libertad del espíritu. Tu misión es fluir con los cambios y aprender de la versatilidad sin perder el eje.",
-                6: "Aprendé la responsabilidad afectiva. Tu misión es brindar amor y armonía sin condiciones en tu entorno.",
-                7: "Buscá tu propia sabiduría interior. Tu misión es conectar con lo sagrado a través del estudio y el silencio.",
-                8: "Equilibrá el poder material con la justicia. Aprendé a manejar la abundancia con una ética espiritual elevada.",
-                9: "Aprender el desapego y el servicio humanitario."
-            },
-            meta: {
-                3: "Expansión creativa y disfrute pleno."
+                1: "Aprender a confiar en tu chispa divina y liderar.",
+                2: "Integrar el equilibrio absoluto en tus vínculos.",
+                3: "Desarrollar tu expresión y comunicar con alegría.",
+                4: "Construir bases sólidas y seguras.",
+                5: "Fluir con los cambios y aprender de la versatilidad.",
+                6: "Brindar amor y armonía sin condiciones.",
+                7: "Buscá tu propia sabiduría a través del silencio.",
+                8: "Manejar la abundancia con ética espiritual.",
+                9: "Aprender el desapego y el servicio humanitario.",
+                11: "Inspirar y ser un faro de luz.",
+                22: "Materializar proyectos para el bien común."
             },
             herencia: {
-                1: "Linaje de pioneros. Heredás liderazgo pero debés sanar la presión de ser siempre el primero.",
-                2: "Linaje de mediadores. Heredás sensibilidad pero debés sanar dependencias afectivas.",
-                3: "Linaje de comunicadores. Heredás el don de la palabra para sanar silencios del pasado.",
-                4: "Linaje de constructores. Heredás tenacidad pero debés flexibilizar estructuras rígidas.",
-                5: "Linaje de viajeros. Heredás adaptabilidad para sanar memorias de desarraigo.",
-                6: "Linaje de amor familiar. Heredás el don de cuidar pero debés soltar culpas ajenas.",
-                7: "Linaje de sabios. Heredás profundidad para sanar secretos guardados.",
-                8: "Linaje de poder. Heredás capacidad de abundancia para sanar temas económicos.",
-                9: "Linaje de servicio. Heredás sabiduría para cerrar historias de sacrificios del clan."
+                1: "Tu linaje te transmite la fuerza de los pioneros. En tu árbol hubo personas que tuvieron que abrirse camino solas. Heredás la capacidad de liderazgo.",
+                2: "Tu linaje trae una historia de mediadores y alianzas. Heredás la sensibilidad y el don de unir a la familia.",
+                3: "Tu apellido porta la energía de la comunicación. Heredás el don de la palabra y la misión de brillar socialmente.",
+                4: "Tu linaje es de constructores y gente de trabajo duro. Heredás la tenacidad y el orden.",
+                5: "Tu árbol está marcado por buscadores de libertad. Heredás la adaptabilidad y el movimiento.",
+                6: "La herencia de tu apellido es el amor familiar. Heredás el don de cuidar a otros.",
+                7: "Tu linaje trae buscadores de respuestas y sabios. Heredás una gran profundidad intelectual.",
+                8: "Tu apellido hereda la fuerza del poder material. Heredás la capacidad de generar abundancia.",
+                9: "Tu linaje porta sabiduría de finales de ciclo. Heredás una sensibilidad humanitaria profunda."
+            },
+            pareja: {
+                1: "Vínculo de impulso y proyectos nuevos.",
+                2: "Vínculo de apoyo mutuo y convivencia.",
+                3: "Vínculo de alegría y brillo social.",
+                4: "Vínculo constructor de estabilidad.",
+                5: "Vínculo de aventura y libertad.",
+                6: "Vínculo de armonía y responsabilidad.",
+                7: "Vínculo místico de almas que estudian.",
+                8: "Vínculo de poder y éxito compartido.",
+                9: "Vínculo de amor universal y sabiduría.",
+                11: "Misión Maestra: Inspiración mutua.",
+                22: "Misión Maestra: Gran construcción."
             }
         };
 
@@ -169,13 +187,25 @@
             for(let l of limH) { if(VALS[l]) sH += VALS[l]; }
             const rH = reducir(sH);
 
-            generarPDF(completo, rA, rP, rT, rK, rH);
+            let vP = null, nP = "";
+            if(document.getElementById('p_choice').value === "SI") {
+                const pfec = document.getElementById('p_birth').value;
+                nP = document.getElementById('p_name').value.toUpperCase();
+                if(pfec) {
+                    const sumP = pfec.split('-').reduce((a,b)=>a+parseInt(b),0);
+                    vP = reducir(rK.base + sumP).v;
+                }
+            }
+
+            generarPDF(completo, rA, rP, rT, rK, rH, vP, nP);
         }
 
-        function generarPDF(nom, a, p, t, k, rh) {
+        function generarPDF(nom, a, p, t, k, rh, vp, np) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             let curY = 50;
+
+            const checkPage = (h) => { if (curY + h > 275) { doc.addPage(); curY = 30; } };
 
             doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
@@ -185,23 +215,33 @@
             curY += 15;
 
             const items = [
-                {t: "ALMA (Vibración Interna):", v: a, d: DB.alma[a.base]},
-                {t: "PERSONALIDAD (Máscara Social):", v: p, d: DB.personalidad[p.base]},
-                {t: "TEMPERAMENTO (Tu Carácter):", v: t, d: DB.temperamento[t.base]},
-                {t: "MISIÓN O KARMA (Camino de Sanación):", v: k, d: DB.mision[k.base]},
+                {t: "ALMA:", v: a, d: DB.alma[a.base]},
+                {t: "PERSONALIDAD:", v: p, d: DB.personalidad[p.base]},
+                {t: "TEMPERAMENTO:", v: t, d: DB.temperamento[t.base]},
+                {t: "MISIÓN / KARMA:", v: k, d: DB.mision[k.base]},
                 {t: "HERENCIA DEL CLAN:", v: rh, d: DB.herencia[rh.base]}
             ];
 
             items.forEach(it => {
-                doc.setFont(undefined, 'bold'); doc.text(`${it.t} RESULTADO: ${it.v.v}`, 20, curY);
+                checkPage(40);
+                doc.setFont(undefined, 'bold'); doc.text(`${it.t} ${it.v.v}`, 20, curY);
                 doc.setFont(undefined, 'normal'); doc.setFontSize(10);
-                let split = doc.splitTextToSize(it.d || "Información en decodificación...", 170);
+                let split = doc.splitTextToSize(it.d || "Analizando...", 170);
                 doc.text(split, 20, curY + 7);
                 curY += 15 + (split.length * 5);
             });
 
-            // --- REFLEXIÓN FINAL DEL ORÁCULO ---
-            if (curY > 220) { doc.addPage(); curY = 30; }
+            if(vp) {
+                checkPage(40);
+                doc.setFont(undefined, 'bold'); doc.text(`SINTONÍA CON ${np}: Vibración ${vp}`, 20, curY);
+                doc.setFont(undefined, 'normal');
+                let dP = DB.pareja[vp] || "Vínculo en evolución.";
+                doc.text(doc.splitTextToSize(dP, 170), 20, curY + 7);
+                curY += 25;
+            }
+
+            checkPage(80);
+            curY += 5;
             doc.setDrawColor(0, 210, 255); doc.setLineWidth(0.8); doc.line(20, curY, 190, curY);
             curY += 10;
             doc.setTextColor(0, 150, 200); doc.setFontSize(14); doc.setFont(undefined, 'bold');
@@ -209,11 +249,11 @@
             curY += 12;
 
             doc.setTextColor(40); doc.setFontSize(10); doc.setFont(undefined, 'normal');
-            let parrafo = `Tu Alma (vibración ${a.v}) ha elegido este momento para integrar la fuerza de tu linaje ${rh.v}. No es casualidad que lleves este apellido; vienes a honrar los talentos de tus ancestros pero también a liberar las estructuras que ya no sirven.
+            let parrafo = `Tu Alma (${a.v}) ha elegido este momento para integrar la fuerza de tu linaje (${rh.v}). vienes a honrar los talentos de tus ancestros pero también a liberar las estructuras que ya no sirven.
 
-PARA TUS PROYECTOS: Tu motor de éxito es tu Temperamento (${t.v}). Cuando emprendas algo nuevo, asegúrate de que esté alineado con tu Misión (${k.v}). Tu enfoque y voluntad serán las herramientas para alcanzar tu plenitud.
+PARA TUS PROYECTOS: Tu motor de éxito es tu Temperamento (${t.v}). Cuando emprendas algo nuevo, asegúrate de que esté alineado con tu Misión (${k.v}).
 
-PARA TUS VÍNCULOS: La clave para relaciones sanas está en equilibrar tu Personalidad (${p.v}) —lo que el mundo ve— con tu verdadera esencia interna. No permitas que la máscara social eclipse tu luz. Conecta desde la vulnerabilidad de tu Alma para atraer sintonías que sumen a tu destino.`;
+PARA TUS VÍNCULOS: La clave para relaciones sanas está en equilibrar tu Personalidad (${p.v}) con tu verdadera esencia interna. Conecta desde la vulnerabilidad de tu Alma para atraer sintonías que sumen a tu destino.`;
 
             let splitR = doc.splitTextToSize(parrafo, 170);
             doc.text(splitR, 20, curY);
