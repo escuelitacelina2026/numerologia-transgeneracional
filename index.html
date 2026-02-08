@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nave Arcturiana - Tu Mapa Vibracional</title>
+    <title>Tu Mapa Vibracional</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
@@ -12,6 +12,7 @@
         input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: none; background: rgba(255,255,255,0.15); color: white; outline: none; box-sizing: border-box; }
         button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; text-transform: uppercase; }
         .hidden { display: none; }
+        .pareja-section { margin: 15px 0; border: 1px dashed rgba(0,210,255,0.3); padding: 15px; border-radius: 10px; background: rgba(0,210,255,0.05); }
         #error-msg { background: rgba(0,0,0,0.9); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
     </style>
 </head>
@@ -33,8 +34,21 @@
 
         <div id="box-app" class="hidden">
             <h2>✨ Portal Arcturiano</h2>
-            <input type="text" id="client_name" placeholder="Nombre y Apellido Completo">
+            <input type="text" id="client_name" placeholder="Tu Nombre Completo">
             <input type="date" id="client_birth">
+
+            <div class="pareja-section">
+                <label style="font-size: 0.85rem; color: #00d2ff; display: block; margin-bottom: 5px;">¿Calcular Sintonía con otra persona?</label>
+                <select id="p_choice" onchange="document.getElementById('p_box').classList.toggle('hidden', this.value==='NO')">
+                    <option value="NO">No, solo mi mapa</option>
+                    <option value="SI">¡Sí! Agregar persona afín</option>
+                </select>
+                <div id="p_box" class="hidden">
+                    <input type="text" id="p_name" placeholder="Nombre de la otra persona">
+                    <input type="date" id="p_birth">
+                </div>
+            </div>
+
             <button onclick="procesar()">Generar Mapa Vibracional</button>
             <button onclick="location.reload()" style="background:none; border:1px solid #ff4d4d; color:#ff4d4d; font-size:10px; margin-top:15px;">Cerrar Sesión</button>
         </div>
@@ -46,74 +60,81 @@
 
         const DB = {
             alma: {
-                1: "En vidas pasadas cultivaste la valentía. Tu alma ya sabe abrir caminos sola; traés esa fuerza interna para no depender de otros.",
-                2: "Traés la maestría de la unión y la paz de otras vidas. Tu alma ya aprendió a colaborar y hoy vibra en sensibilidad profunda.",
-                3: "Tu alma ya experimentó el brillo y la expresión. Traés un tesoro de alegría y creatividad que hoy te ayuda a comunicar luz.",
-                4: "En otras vidas fuiste el cimiento de grandes estructuras. Tu alma ya conoce el orden y la disciplina constructiva.",
-                5: "Vienes de encarnaciones de libertad total. Tu alma ya sabe adaptarse a los cambios y hoy te regala una curiosidad infinita.",
-                6: "Tu alma ya transitó el amor incondicional y la familia. Traés una esencia nutricia que busca armonizar todo a su paso.",
-                7: "En vidas pasadas fuiste buscador de la verdad. Tu alma ya conoce el silencio y la introspección mística profunda.",
-                8: "Vienes de ejercer el poder con equilibrio. Tu alma ya sabe manifestar en la materia y hoy traés esa autoridad natural.",
-                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y hoy vibra en entrega humanitaria.",
-                11: "Alma Maestra: Traés una sintonía elevada. Tu alma ya transitó niveles de conciencia que hoy te permiten guiar a otros.",
-                22: "Alma Maestra: Tu alma ya sabe construir para la humanidad. Traés la memoria de realizar obras que trascienden el tiempo."
+                1: "En tus vidas pasadas cultivaste la valentía y la autonomía. Tu alma ya sabe lo que es abrir caminos sola; traés esa fuerza interna que te empuja a no depender de otros y a confiar en tu propia chispa divina.",
+                2: "Traés la maestría de la unión y la paz de otras vidas. Tu alma ya aprendió a colaborar y hoy vibra en una sensibilidad profunda que te permite entender el alma de los demás.",
+                3: "Tu alma ya experimentó el brillo y la expresión. Traés un tesoro de alegría y creatividad que hoy te ayuda a comunicar luz y a inspirar a tu entorno a través de la palabra.",
+                4: "En otras vidas fuiste el cimiento de grandes estructuras. Tu alma ya conoce el valor del orden y la disciplina constructiva; hoy traés la capacidad de materializar con firmeza.",
+                5: "Vienes de encarnaciones de libertad total y aventura. Tu alma ya sabe adaptarse a los cambios y hoy te regala una curiosidad infinita y el don de aprender de cada experiencia.",
+                6: "Tu alma ya transitó el amor incondicional y la familia. Traés una esencia nutricia y equilibrada que busca armonizar y embellecer todo ambiente en el que te encuentras.",
+                7: "En vidas pasadas fuiste un incansable buscador de la verdad mística. Tu alma ya conoce el silencio sagrado y hoy traés esa capacidad de introspección y sabiduría profunda.",
+                8: "Vienes de ejercer el poder y la justicia con equilibrio. Tu alma ya sabe manifestar abundancia en la materia y hoy traés esa autoridad natural y juicio justo para liderar.",
+                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego a través de muchas encarnaciones y hoy vibra en una entrega humanitaria total.",
+                11: "Alma Maestra: Traés una sintonía elevada. Tu alma ya transitó niveles de conciencia superiores que hoy te permiten ser un canal de luz para guiar a la humanidad.",
+                22: "Alma Maestra: Tu alma ya sabe construir para el bien común. Traés la memoria de realizar obras que trascienden el tiempo y benefician a miles de personas."
             },
             personalidad: {
-                1: "Los demás te ven como una persona pionera e independiente. Tu máscara proyecta liderazgo, decisión y mucha fuerza inicial.",
-                2: "Te perciben como alguien suave, diplomático y mediador. Los demás confían en tu capacidad para escuchar y acompañar.",
-                3: "Tu imagen social es brillante y optimista. Te ven como el alma de la fiesta, alguien creativo que siempre tiene algo que decir.",
-                4: "Los demás te ven como una roca: alguien serio, responsable y muy trabajador que genera confianza inmediata.",
-                5: "Proyectás una imagen inquieta y magnética. Te ven como alguien que ama la libertad, los viajes y las nuevas experiencias.",
-                6: "Tu máscara es maternal y protectora. Los demás te ven como alguien que cuida los detalles, la estética y la armonía del hogar.",
-                7: "Te perciben como alguien misterioso, intelectual y reservado. Das la imagen de una persona profunda que observa más de lo que habla.",
-                8: "Proyectás éxito y autoridad. Los demás te ven como alguien capaz de manejar grandes responsabilidades y lograr metas materiales.",
-                9: "Te ven como un idealista carismático. Tu imagen es la de alguien que siempre está dispuesto a sacrificarse por una causa noble.",
-                11: "Irradiás una luz inspiradora. Los demás ven en vos a alguien con una visión superior, casi mística o muy idealista.",
-                22: "Te ven como un realizador nato. Tu imagen es la de alguien capaz de organizar a muchos para lograr un objetivo común."
+                1: "Los demás te perciben como una persona pionera e independiente. Tu máscara social proyecta liderazgo natural, decisión y una fuerza inicial que inspira confianza.",
+                2: "Te perciben como alguien suave, diplomático y mediador. Los demás confían en vos porque irradias calma y una capacidad única para acompañar sin juzgar.",
+                3: "Tu imagen social es brillante y sumamente optimista. Te ven como una persona creativa que trae luz a las conversaciones y que posee un don especial para la comunicación.",
+                4: "Los demás te ven como una roca: alguien serio, responsable y trabajador. Generás una sensación de seguridad y estabilidad inmediata.",
+                5: "Proyectás una imagen inquieta y magnética. Te ven como alguien que ama la libertad y que siempre está listo para una nueva aventura.",
+                6: "Tu máscara es protectora y estética. Los demás te perciben como alguien que cuida los detalles y busca la armonía afectiva.",
+                7: "Te perciben como alguien misterioso e intelectual. Das la imagen de una persona sabia que observa profundamente antes de hablar.",
+                8: "Proyectás éxito y autoridad. Los demás te ven como una persona poderosa, capaz de manejar grandes responsabilidades materiales.",
+                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso que siempre está dispuesto a sacrificarse por el bienestar común.",
+                11: "Irradiás una luz visionaria. Los demás ven en vos a alguien con una conexión superior, capaz de guiar desde ideales elevados.",
+                22: "Te ven como un realizador de grandes sueños. Tu imagen es la de alguien capaz de organizar estructuras para impactar positivamente."
             },
             temperamento: {
-                1: "Tenés un carácter activo y decidido. Reaccionás ante la vida con iniciativa propia y no te gusta que te digan qué hacer.",
-                2: "Tu carácter es receptivo y sensible. Buscás el equilibrio en tus reacciones y preferís la calma antes que el conflicto.",
-                3: "Reaccionás con entusiasmo y expresividad. Tu temperamento es lúdico y buscás siempre el lado positivo de las cosas.",
-                4: "Tenés un carácter firme y perseverante. Tus reacciones son medidas, lógicas y siempre enfocadas en la seguridad.",
-                5: "Tu temperamento es adaptable y versátil. Reaccionás con rapidez ante los cambios y necesitás movimiento constante.",
-                6: "Carácter protector y afectuoso. Tu temperamento se inclina siempre hacia la búsqueda de la armonía y la paz grupal.",
-                7: "Tenés un carácter analítico y reflexivo. Ante los desafíos, preferís retirarte al silencio para encontrar la respuesta.",
-                8: "Tu temperamento es ambicioso y ejecutivo. Reaccionás con autoridad y buscás siempre tener el control de la situación.",
-                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante el dolor ajeno y buscás soluciones universales.",
-                11: "Temperamento intuitivo y vibrante. Reaccionás desde una sensibilidad muy alta, captando lo que otros no ven.",
-                22: "Carácter práctico pero visionario. Tu temperamento te empuja a actuar para construir algo que sea útil para todos."
+                1: "Tenés un carácter activo y decidido. Reaccionás ante los desafíos con iniciativa propia; no te agrada ser dirigido.",
+                2: "Tu carácter es receptivo y sensible. Buscás el equilibrio en tus reacciones y preferís la calma antes que el enfrentamiento.",
+                3: "Reaccionás con entusiasmo y alegría. Tu temperamento es lúdico y buscás siempre el lado positivo de las situaciones.",
+                4: "Tenés un carácter firme y metódico. Tus reacciones ante la vida son medidas y enfocadas en construir seguridad.",
+                5: "Tu temperamento es adaptable y versátil. Reaccionás con rapidez ante los imprevistos y necesitás el movimiento constante.",
+                6: "Carácter protector y responsable. Tu temperamento se inclina hacia la búsqueda de la armonía familiar.",
+                7: "Tenés un carácter analítico y reflexivo. Ante los desafíos, preferís retirarte al silencio para encontrar respuestas.",
+                8: "Tu temperamento es ambicioso y orientado al logro. Reaccionás con autoridad natural y buscás eficiencia.",
+                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades de los demás.",
+                11: "Temperamento intuitivo que capta las energías del entorno, actuando de forma inspirada ante las crisis.",
+                22: "Carácter práctico y visionario. Tu temperamento te empuja a construir realidades que sirvan al progreso común."
             },
             mision: {
-                1: "Venís a saldar deudas de inseguridad. Tu misión es aprender a ser tu propio guía y liderar tu vida con total independencia.",
-                2: "Estás acá para aprender la cooperación. Venís a sanar el egoísmo y a integrar el equilibrio en tus vínculos afectivos.",
-                3: "Venís a desarrollar tu expresión. Tu misión es aprender a comunicar tus verdades con alegría y a brillar sin miedos.",
-                4: "Estás para aprender el valor del orden. Venís a sanar la inestabilidad y a construir bases sólidas en este plano físico.",
-                5: "Venís a experimentar la verdadera libertad. Tu misión es aprender a fluir con el cambio sin perder tu eje interno.",
-                6: "Estás para aprender la responsabilidad afectiva. Venís a sanar vínculos familiares y a brindar amor sin condiciones.",
-                7: "Venís a buscar tu propia sabiduría. Tu misión es encontrar la conexión con lo divino a través del estudio y el silencio.",
-                8: "Estás acá para equilibrar el poder y la justicia. Venís a aprender a manejar la abundancia material con ética espiritual.",
-                9: "Venís a realizar el amor universal. Tu misión es aprender el desapego y servir a la humanidad desde tu sabiduría.",
-                11: "Misión Maestra: Venís a inspirar. Estás acá para ser un canal de luz y elevar la conciencia de quienes te rodean.",
-                22: "Misión Maestra: Venís a materializar sueños colectivos. Estás acá para construir realidades que beneficien a la humanidad.",
-                // Kármicos
-                13: "Karma 13/4: Venís a sanar deudas de pereza. Tu camino es el trabajo duro y el orden para transformar tu realidad.",
-                14: "Karma 14/5: Venís a sanar excesos del pasado. Tu misión es encontrar la templanza y el equilibrio en tu libertad.",
-                16: "Karma 16/7: Venís a sanar el orgullo. Tu camino es la humildad y reconstruir tu vida sobre bases espirituales reales.",
-                19: "Karma 19/1: Venís a sanar el autoritarismo. Tu misión es aprender a liderar desde el amor y la justicia."
+                1: "Venís a saldar deudas de inseguridad. Tu misión es aprender a confiar en tu chispa divina y liderar con valor.",
+                2: "Estás acá para aprender la cooperación. Venís a sanar el egoísmo e integrar el equilibrio en tus vínculos.",
+                3: "Venís a desarrollar tu expresión. Tu misión es comunicar tus verdades con alegría y brillar sin miedos.",
+                4: "Aprendé el valor del orden. Venís a sanar la inestabilidad y construir bases sólidas en este plano.",
+                5: "Venís a experimentar la libertad del espíritu. Aprendé a fluir con los cambios sin perder tu eje.",
+                6: "Aprendé la responsabilidad afectiva. Venís a sanar vínculos familiares brindando amor sin condiciones.",
+                7: "Buscá tu sabiduría interior. Tu misión es conectar con lo sagrado a través del estudio y el silencio.",
+                8: "Equilibrá el poder material con la justicia. Aprendé a manejar la abundancia con ética espiritual.",
+                9: "Realizá el amor universal. Tu misión es aprender el desapego y servir a la humanidad desde tu sabiduría.",
+                11: "Misión Maestra: Venís a inspirar. Sé un faro de luz que guíe a otros hacia su propia espiritualidad.",
+                22: "Misión Maestra: Construí para el colectivo. Materializá organizaciones que traigan un progreso duradero.",
+                13: "Karma 13/4: Saná deudas de pereza. Tu camino es el trabajo consciente y la disciplina transformadora.",
+                14: "Karma 14/5: Saná excesos de libertad. Tu misión es encontrar la templanza y el equilibrio con límites.",
+                16: "Karma 16/7: Saná el orgullo. Tu camino es la humildad y reconstruir tu vida sobre bases espirituales.",
+                19: "Karma 19/1: Saná el autoritarismo. Aprendé a liderar desde el amor y el respeto mutuo."
             },
             meta: {
-                1: "En tu madurez, activarás un potencial de liderazgo total.",
-                2: "Llegarás a una etapa de paz, equilibrio y sabiduría vincular.",
-                3: "Activarás una gran capacidad de expansión creativa y disfrute.",
-                4: "Lograrás una estabilidad sólida y el reconocimiento a tu esfuerzo.",
-                5: "Tu madurez será una etapa de viajes, cambios y gran vitalidad.",
-                6: "Activarás un potencial de armonía familiar y plenitud afectiva.",
-                7: "Llegarás a una madurez de profunda conexión espiritual.",
-                8: "Lograrás el equilibrio entre tus logros materiales y tu paz.",
-                9: "Tu madurez será de entrega humanitaria y plenitud absoluta.",
-                11: "Te convertirás en un faro de guía para nuevas generaciones.",
-                22: "Lograrás concretar proyectos que dejarán un legado eterno."
+                1: "Venís a una madurez de liderazgo total e independencia absoluta.",
+                2: "Tu madurez te traerá paz, equilibrio y sabiduría en la gestión de tus relaciones.",
+                3: "Activarás una expansión creativa y un disfrute pleno de tu propia expresión.",
+                4: "Lograrás una madurez de estabilidad sólida, viendo los frutos de tu esfuerzo.",
+                5: "Tu madurez será una etapa de vitalidad, viajes y cambios positivos constantes.",
+                6: "Activarás un potencial de armonía familiar, siendo el centro de unión de tu entorno.",
+                7: "Llegarás a una madurez de profunda conexión espiritual y respuestas internas.",
+                8: "Lograrás el equilibrio perfecto entre éxito material y paz interior.",
+                9: "Tu madurez será de entrega humanitaria, logrando una plenitud de alma absoluta.",
+                11: "Te convertirás en un maestro y guía espiritual para las nuevas generaciones.",
+                22: "Concretarás proyectos de gran envergadura dejando una huella imborrable."
+            },
+            pareja: {
+                1: "Unión de impulso y nuevos comienzos.", 2: "Unión basada en la ternura y el apoyo.", 
+                3: "Relación expansiva y creativa.", 4: "Vínculo sólido enfocado en el hogar.",
+                5: "Pareja dinámica y libre.", 6: "Relación familiar y armoniosa.",
+                7: "Vínculo místico y reflexivo que necesita espacios de silencio.",
+                8: "Unión de poder y éxito compartido.", 
+                9: "Relación de amor romántico y servicio humanitario conjunto."
             }
         };
 
@@ -122,14 +143,14 @@
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
-                document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenes acceso a la nave, comunícate con el comandante 👽";
+                document.getElementById('error-text').innerText = "Acceso denegado 👽";
                 document.getElementById('error-msg').classList.remove('hidden');
             }
         }
 
         function reducir(n, esKarma = false) {
             const k = [13, 14, 16, 19];
-            if (n === 11 || n === 22) return { v: n, m: "(Número Maestro)" };
+            if (n === 11 || n === 22) return { v: n, m: "(N. Maestro)" };
             if (esKarma && k.includes(n)) return { v: n + "/" + (n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0)), m: "(N. Kármico)", orig: n };
             while (n > 9 && n !== 11 && n !== 22) {
                 n = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
@@ -141,7 +162,7 @@
         function procesar() {
             const nom = document.getElementById('client_name').value.toUpperCase();
             const fec = document.getElementById('client_birth').value;
-            if(!nom || !fec) return alert("Faltan datos.");
+            if(!nom || !fec) return alert("Faltan datos básicos.");
 
             let sA = 0, sP = 0;
             const lim = nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
@@ -152,10 +173,21 @@
             const rK = reducir(sumK, true);
             const rM = reducir((sA+sP)+sumK, true);
 
-            generarPDF(nom, rA, rP, rT, rK, rM);
+            let vP = null, nP = "";
+            if(document.getElementById('p_choice').value === "SI") {
+                const pfec = document.getElementById('p_birth').value;
+                nP = document.getElementById('p_name').value.toUpperCase();
+                if(pfec) {
+                    const sK2 = pfec.split('-').join('').split('').reduce((a,b)=>parseInt(a)+parseInt(b),0);
+                    const sumaP = parseInt(rK.v.toString().split('/')[0]) + sK2;
+                    vP = reducir(sumaP).v;
+                }
+            }
+
+            generarPDF(nom, rA, rP, rT, rK, rM, vP, nP);
         }
 
-        function generarPDF(nom, a, p, t, k, m) {
+        function generarPDF(nom, a, p, t, k, m, vp, np) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
@@ -168,10 +200,10 @@
 
             const items = [
                 {t: "ALMA (Vibración Interna):", v: a, d: DB.alma[a.v.toString().split('/')[0]]},
-                {t: "PERSONALIDAD (Vibración Externa):", v: p, d: DB.personalidad[p.v.toString().split('/')[0]]},
+                {t: "PERSONALIDAD (Máscara Social):", v: p, d: DB.personalidad[p.v.toString().split('/')[0]]},
                 {t: "TEMPERAMENTO (Tu Carácter):", v: t, d: DB.temperamento[t.v.toString().split('/')[0]]},
-                {t: "MISIÓN O KARMA (Camino de Sanación):", v: k, d: DB.mision[k.orig || k.v.toString().split('/')[0]]},
-                {t: "META FINAL (Potencial Sagrado):", v: m, d: DB.meta[m.v.toString().split('/')[0]]}
+                {t: "MISIÓN O KARMA (Sanación):", v: k, d: DB.mision[k.orig || k.v.toString().split('/')[0]]},
+                {t: "META FINAL (Potencial Sagrado):", v: m, d: (m.orig ? DB.mision[m.orig] + " Además, " : "") + (DB.meta[m.v.toString().split('/')[0]])}
             ];
 
             items.forEach(it => {
@@ -180,8 +212,26 @@
                 doc.setFont(undefined, 'normal'); doc.setFontSize(10);
                 let split = doc.splitTextToSize(it.d, 170);
                 doc.text(split, 20, y+7);
-                y += 15 + (split.length * 5);
+                y += 18 + (split.length * 5);
+                if (y > 275) { doc.addPage(); y = 20; }
             });
+
+            if(vp) {
+                if(y > 230) { doc.addPage(); y = 20; }
+                y += 5;
+                doc.setFillColor(240, 255, 255); doc.rect(15, y, 180, 45, 'F');
+                doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
+                doc.text(`SINTONÍA DE VÍNCULO CON ${np || 'OTRA PERSONA'}`, 20, y+8);
+                doc.setFont(undefined, 'normal'); doc.setFontSize(9); doc.setTextColor(60);
+                let intro = "Los vínculos tienen una afinidad de acuerdo a la vibración energética. Podés utilizar esta información para relacionarte en tu trabajo, en el amor, con tus vínculos familiares y saber cómo vibrás con alguien para determinados proyectos.";
+                doc.text(doc.splitTextToSize(intro, 170), 20, y+16);
+                
+                doc.setFont(undefined, 'bold'); doc.setFontSize(11); doc.setTextColor(0, 100, 150);
+                doc.text(`Vibración del Vínculo: ${vp}`, 20, y+32);
+                doc.setFont(undefined, 'normal'); doc.setFontSize(10); doc.setTextColor(40);
+                let txtP = DB.pareja[vp] || `Su unión vibra en la frecuencia ${vp}, invitándolos a trabajar el equilibrio y la sintonía mutua.`;
+                doc.text(doc.splitTextToSize(txtP, 170), 20, y+38);
+            }
 
             doc.save(`Mapa_Vibracional_${nom}.pdf`);
         }
