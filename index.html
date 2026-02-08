@@ -14,7 +14,6 @@
         button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; text-transform: uppercase; transition: 0.3s; }
         button:hover { background: #00fff2; transform: translateY(-2px); }
         .hidden { display: none; }
-        .pareja-section { margin: 20px 0; border: 1px dashed rgba(0,210,255,0.4); padding: 15px; border-radius: 12px; background: rgba(0,210,255,0.05); }
         #error-msg { background: rgba(0,0,0,0.95); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
     </style>
 </head>
@@ -24,7 +23,7 @@
         <div style="text-align: center;">
             <div style="font-size: 40px;">👽</div>
             <p id="error-text" style="color: white; font-weight: bold; padding: 10px;"></p>
-            <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background:#ff4d4d; color:white; width:auto; padding:5px 15px;">Aceptar</button>
+            <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background:#ff4d4d; color:white; padding:5px 15px;">Aceptar</button>
         </div>
     </div>
 
@@ -44,13 +43,14 @@
             <input type="text" id="client_surname" placeholder="Apellido(s) de Herencia">
             <input type="date" id="client_birth">
 
-            <div class="pareja-section">
+            <div style="margin:15px 0; border: 1px dashed #00d2ff; padding:10px; border-radius:10px;">
+                <label style="font-size:12px; color:#00d2ff;">¿Sintonía de Pareja?</label>
                 <select id="p_choice" onchange="document.getElementById('p_box').classList.toggle('hidden', this.value==='NO')">
-                    <option value="NO">Mapa Individual</option>
-                    <option value="SI">¡Sí! Agregar persona afín</option>
+                    <option value="NO">No</option>
+                    <option value="SI">Sí</option>
                 </select>
                 <div id="p_box" class="hidden">
-                    <input type="text" id="p_name" placeholder="Nombre de la otra persona">
+                    <input type="text" id="p_name" placeholder="Nombre Pareja">
                     <input type="date" id="p_birth">
                 </div>
             </div>
@@ -61,7 +61,6 @@
 
     <script>
         const VALS = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
-        const VOCS = ['A','E','I','O','U'];
 
         function login() {
             if(document.getElementById('user_val').value === "navearcturiana" && document.getElementById('pass_val').value === "nubilis2026_") {
@@ -79,22 +78,22 @@
             return n;
         }
 
-        function calcularTexto(nombre) {
-            let total = 0;
-            for(let letra of nombre.toUpperCase()) { if(VALS[letra]) total += VALS[letra]; }
-            return reducir(total);
+        function calcularTexto(txt) {
+            let t = 0;
+            for(let l of txt.toUpperCase()) { if(VALS[l]) t += VALS[l]; }
+            return reducir(t);
         }
 
-        function calcularFecha(fecha) {
-            let n = fecha.replace(/-/g, '');
-            let total = 0;
-            for(let d of n) total += parseInt(d);
-            return reducir(total);
+        function calcularFecha(f) {
+            let n = f.replace(/-/g, '');
+            let t = 0;
+            for(let d of n) t += parseInt(d);
+            return reducir(t);
         }
 
         function procesar() {
-            const nom = document.getElementById('client_name').value.toUpperCase();
-            const ape = document.getElementById('client_surname').value.toUpperCase();
+            const nom = document.getElementById('client_name').value;
+            const ape = document.getElementById('client_surname').value;
             const fec = document.getElementById('client_birth').value;
             if(!nom || !ape || !fec) return alert("Faltan datos estelares.");
 
@@ -102,71 +101,49 @@
             const rMision = calcularFecha(fec);
             const rMeta = reducir(rAlma + rMision);
             const rHerencia = calcularTexto(ape);
-            const rAnual = reducir(calcularFecha(fec.substring(5)) + 2 + 0 + 2 + 6);
+            const rAnual = reducir(calcularFecha(fec.substring(5)) + 12); // Para 2026 (2+0+2+6=10->1 + 2 (mes) etc)
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
-            const paintBg = () => { doc.setFillColor(240, 250, 255); doc.rect(0, 0, 210, 297, 'F'); };
-            paintBg();
-
+            doc.setFillColor(240, 250, 255); doc.rect(0, 0, 210, 297, 'F');
             doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
             doc.text("MAPA VIBRACIONAL ESTELAR", 105, 25, {align:"center"});
-
             doc.setTextColor(40); doc.setFontSize(12);
-            doc.text(`CONSULTANTE: ${nom} ${ape}`, 20, 50);
+            doc.text(`CONSULTANTE: ${nom.toUpperCase()} ${ape.toUpperCase()}`, 20, 55);
 
-            let curY = 65;
-            const items = [
-                {t: "ALMA", r: rAlma, d: "Esencia interna y deseos profundos del ser."},
-                {t: "MISIÓN / KARMA", r: rMision, d: "El camino de aprendizaje en esta encarnación."},
-                {t: "META FINAL", r: rMeta, d: "El punto de llegada evolutivo de tu alma."},
-                {t: "HERENCIA DEL CLAN", r: rHerencia, d: "La energía que portas de tus ancestros y apellidos."}
-            ];
-
-            items.forEach(it => {
-                doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
-                doc.text(`${it.t}: RESULTADO: ${it.r}`, 20, curY);
-                doc.setFont(undefined, 'normal'); doc.setTextColor(40); doc.setFontSize(10);
-                doc.text(it.d, 20, curY + 7);
-                curY += 20;
+            let y = 70;
+            const res = [["ALMA", rAlma], ["MISIÓN", rMision], ["META FINAL", rMeta], ["HERENCIA", rHerencia]];
+            res.forEach(r => {
+                doc.setFont(undefined, 'bold'); doc.text(`${r[0]}: RESULTADO ${r[1]}`, 20, y);
+                y += 15;
             });
 
-            // ENERGÍA ANUAL 2026
-            doc.setFillColor(0, 100, 150); doc.rect(20, curY, 170, 8, 'F');
-            doc.setTextColor(255); doc.setFont(undefined, 'bold');
-            doc.text(`TU ENERGÍA ANUAL 2026: Vibración ${rAnual}`, 105, curY + 6, {align:"center"});
-            curY += 15;
-
-            // SINERGIA SI CORRESPONDE
             if(document.getElementById('p_choice').value === "SI") {
                 const pNom = document.getElementById('p_name').value;
                 const pFec = document.getElementById('p_birth').value;
                 if(pNom && pFec) {
-                    const rSinergia = reducir(rMision + calcularFecha(pFec));
-                    doc.setTextColor(0, 50, 100);
-                    doc.text(`SINTONÍA CON ${pNom.toUpperCase()}: Vibración ${rSinergia}`, 20, curY);
-                    curY += 10;
+                    const rSintonia = reducir(rMision + calcularFecha(pFec));
+                    doc.text(`SINTONÍA CON ${pNom.toUpperCase()}: ${rSintonia}`, 20, y);
+                    y += 15;
                 }
             }
 
-            // RESUMEN GENERAL
-            doc.setFontSize(12); doc.setTextColor(0, 50, 100);
-            doc.text("MENSAJE EVOLUTIVO DEL ORÁCULO", 20, curY + 10);
-            doc.setFontSize(10); doc.setTextColor(40); doc.setFont(undefined, 'normal');
-            let resumen = `Tu Alma (${rAlma}) ha encarnado para cumplir la Misión (${rMision}) y alcanzar tu Meta Final (${rMeta}). Este 2026 es el momento de integrar tu herencia (${rHerencia}) con tu propósito presente.`;
-            doc.text(doc.splitTextToSize(resumen, 170), 20, curY + 18);
+            // MENSAJE EVOLUTIVO
+            doc.setFontSize(14); doc.text("MENSAJE EVOLUTIVO DEL ORÁCULO", 105, y, {align:"center"});
+            doc.setFontSize(10); doc.setFont(undefined, 'normal');
+            let m = `Tu Alma (${rAlma}) ha encarnado para cumplir la Misión (${rMision}) y alcanzar tu Meta Final (${rMeta}). Este 2026 el universo te invita a brillar.`;
+            doc.text(doc.splitTextToSize(m, 170), 20, y + 10);
 
-            // FIRMA COMPLETA (TU BIO)
-            curY += 50;
-            doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
-            doc.text("Jacqueline Vanesa Pignatelli | Nave Arcturiana", 20, curY);
-            doc.setFontSize(8); doc.setFont(undefined, 'normal');
-            let bio = "Terapeuta Holistica Matriculada - Canalizadora de Cirugía Astral Cristal Arcturiano - Reiki Sandalfon - Comunicación Mediumnica - Instructora de Chikung - Registros Akashicos - Mesa Cuántica - Yoga de la Música - Maestra de Reiki - Terapeuta Floral y Vibracional - Especialista en Transgeneracional.";
-            doc.text(doc.splitTextToSize(bio, 170), 20, curY + 7);
+            // FIRMA COMPLETA
+            doc.addPage();
+            doc.setFillColor(240, 250, 255); doc.rect(0, 0, 210, 297, 'F');
+            doc.setFont(undefined, 'bold'); doc.text("Jacqueline Vanesa Pignatelli | Nave Arcturiana", 20, 30);
+            doc.setFontSize(9); doc.setFont(undefined, 'normal');
+            let bio = "Terapeuta Holística Matriculada\n- Cirugía Astral Arcturiana\n- Reiki Sandalfon\n- Comunicación Mediumnica\n- Chikung, Registros Akáshicos, Mesa Cuántica\n- Profesora de Yoga de la Música\n- Diseño App Numerología 2026";
+            doc.text(bio, 20, 40);
 
-            doc.save(`Mapa_Estelar_${nom}.pdf`);
+            doc.save(`Mapa_${nom}.pdf`);
         }
     </script>
 </body>
