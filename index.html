@@ -81,7 +81,7 @@
                 11: "Año Maestro: Gran intuición. Mirás la realidad desde una conciencia elevada.",
                 22: "Año Maestro: Construcción de proyectos que impactan en lo colectivo."
             },
-            pareja: { 1: "Vínculo 1: Impulso e independencia.", 2: "Vínculo 2: Apoyo y sensibilidad.", 3: "Vínculo 3: Alegría y expansión.", 4: "Vínculo 4: Estabilidad y cimiento.", 5: "Vínculo 5: Libertad y aventura.", 6: "Vínculo 6: Hogar y armonía.", 7: "Vínculo 7: Almas místicas.", 8: "Vínculo 8: Poder y éxito.", 9: "Vínculo 9: Amor universal.", 11: "Vínculo 11: Misión Maestra.", 22: "Vínculo 22: Construcción." }
+            pareja: { 1: "Vínculo 1: Es una relación de impulso y comienzos. Indica una unión donde ambos se empujan a ser independientes y creativos. Es ideal para proyectos nuevos y emprendimientos.", 2: "Vínculo 2: Una vibración de acompañamiento y sensibilidad. Es el vínculo del 'nosotros', donde prima el apoyo mutuo, la diplomacia y el cuidado emocional. Excelente para la convivencia.", 3: "Vínculo 3: Relación de expansión y alegría. Se basa en la comunicación, el brillo social y la diversión. Es un vínculo muy creativo y dinámico, ideal para disfrutar la vida.", 4: "Vínculo 4: Es la unión constructora. Este vínculo busca la estabilidad, el orden y la seguridad material. Es una relación 'cimiento', muy buena para formar una familia sólida.", 5: "Vínculo 5: Una vibración de cambio y libertad. Es una relación inquieta, que necesita viajes, movimiento y nuevas experiencias. No soporta la rutina.", 6: "Vínculo 6: El vínculo del hogar y la armonía. Es una frecuencia muy nutricia, enfocada en la responsabilidad afectiva, la familia y el bienestar del entorno.", 7: "Vínculo 7: Unión intelectual y mística. Es una relación profunda que busca la verdad. Necesitan espacios de silencio respetado. Vínculo de almas que se estudian.", 8: "Vínculo 8: Vínculo de realización y poder. Están juntos para lograr metas grandes en el mundo material. Unión de autoridad y éxito compartido.", 9: "Vínculo 9: Relación de amor universal y entrega. Frecuencia elevada donde el vínculo busca ayudar a otros. Es una unión de sabiduría compartida.", 11: "Vínculo 11: Misión Maestra de pareja. Vienen a inspirar y elevar su conciencia conjunta, siendo un faro de guía para otros.", 22: "Vínculo 22: Misión Maestra de construcción. Llamados a materializar proyectos que beneficien a la comunidad o la humanidad." }
         };
 
         function login() {
@@ -172,7 +172,9 @@
             curY += 15;
 
             const armarTxt = (obj, tipo) => {
-                if(obj.orig) return DB.karma_explicacion[obj.orig] + " En esta encarnación, tu trabajo es transmutar esa energía para alcanzar tu " + (tipo === 'mision' ? "misión: " : "meta: ") + DB[tipo][obj.base];
+                if(obj.orig) {
+                    return DB.karma_explicacion[obj.orig] + " En esta encarnación, tu trabajo es transmutar esa energía para alcanzar tu " + (tipo === 'mision' ? "misión: " : "meta: ") + DB[tipo][obj.base];
+                }
                 return DB[tipo][obj.base];
             };
 
@@ -208,13 +210,14 @@
             if(vp) {
                 checkPage(60);
                 curY += 10;
-                doc.setFillColor(240, 255, 255); doc.rect(15, curY, 180, 45, 'F');
+                doc.setFillColor(240, 255, 255); doc.rect(15, curY, 180, 50, 'F');
                 doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
                 doc.text(`SINTONÍA CON ${np}`, 20, curY+8);
                 doc.setFontSize(10); doc.setFont(undefined, 'normal');
-                doc.text(`Vibración del Vínculo: ${vp}`, 20, curY+25);
-                let txtP = DB.pareja[vp.toString().split('/')[0]] || "";
-                doc.text(doc.splitTextToSize(txtP, 170), 20, curY+32);
+                doc.text(`Vibración del Vínculo: ${vp}`, 20, curY+20);
+                let keyP = vp.toString().split('/')[0];
+                let txtP = DB.pareja[keyP] || "";
+                doc.text(doc.splitTextToSize(txtP, 170), 20, curY+28);
             }
 
             doc.save(`Mapa_Vibracional_${nom}.pdf`);
