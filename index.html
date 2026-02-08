@@ -281,8 +281,21 @@
                 curY += 15 + (splitP.length * 5);
             }
 
+            // --- BLOQUE AGREGADO: CONCLUSIÓN FINAL / MENSAJE DEL ORÁCULO ---
+            checkPage(60);
+            curY += 5;
+            doc.setFillColor(15, 12, 41); doc.rect(20, curY, 170, 10, 'F');
+            doc.setTextColor(0, 210, 255); doc.setFont(undefined, 'bold'); doc.setFontSize(12);
+            doc.text("MENSAJE EVOLUTIVO DEL ORÁCULO", 105, curY + 7, {align:"center"});
+            curY += 18;
+            doc.setTextColor(40); doc.setFontSize(10); doc.setFont(undefined, 'normal');
+            let conclusion = `Tu Alma (${a.v}) ha encarnado en este plano para cumplir la Misión (${k.v}) y alcanzar tu Meta Final (${rMeta.v}). Este 2026, bajo la frecuencia del Año ${rAnual.v}, el universo te invita a integrar tu herencia ancestral (${rh.v}) con tu propósito presente para manifestar tu máxima vibración de luz.`;
+            let splitConc = doc.splitTextToSize(conclusion, 170);
+            doc.text(splitConc, 20, curY);
+            curY += (splitConc.length * 5) + 15;
+            // ----------------------------------------------------------------
+
             checkPage(90);
-            curY += 10;
             doc.setDrawColor(0, 100, 150); doc.setLineWidth(0.5); doc.line(20, curY, 190, curY);
             curY += 10;
             doc.setFont(undefined, 'bold'); doc.text("Gracias por esta conexión! Te dejo información sobre mi...", 20, curY);
