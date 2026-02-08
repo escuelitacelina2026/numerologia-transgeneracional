@@ -68,7 +68,6 @@
         const VALS = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
         const VOCS = ['A','E','I','O','U'];
 
-        // BASE DE DATOS CON TEXTOS LARGOS Y COMPLETOS
         const DB = {
             alma: {
                 1: "En tus vidas pasadas cultivaste la valentía y la autonomía. Tu alma ya sabe lo que es abrir caminos sola; traés esa fuerza interna que te empuja a no depender de otros y a confiar en tu propia chispa divina para liderar tu destino actual.",
@@ -77,37 +76,37 @@
                 4: "En otras vidas fuiste el cimiento de grandes estructuras. Tu alma ya conoce el valor del orden y la disciplina constructiva; hoy traés la capacidad de materializar con firmeza y crear seguridad donde antes había caos.",
                 5: "Vienes de encarnaciones de libertad total y aventura. Tu alma ya sabe adaptarse a los cambios y hoy te regala una curiosidad infinita y el don de aprender de cada experiencia, sin miedo a romper las estructuras limitantes.",
                 6: "Tu alma ya transitó el amor incondicional y la familia. Traés una esencia nutricia y equilibrada que busca armonizar y embellecer todo ambiente en el que te encuentras, asumiendo la responsabilidad del cuidado amoroso.",
-                7: "En vidas pasadas fuiste un incansable buscador de la verdad mística. Tu alma ya conoce el silencio sagrado y hoy traés esa capacidad de introspección y sabiduría profunda para conectar con los planos superiores de conciencia.",
-                8: "Vienes de ejercer el poder y la justicia con equilibrio. Tu alma ya sabe manifestar abundancia en la materia y hoy traés esa autoridad natural y juicio justo para liderar proyectos que transformen la realidad económica.",
-                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego a través de muchas encarnaciones y hoy vibra en una entrega humanitaria total, buscando el bienestar de toda la humanidad.",
+                7: "En vidas pasadas fuiste un buscador de la verdad mística. Tu alma ya conoce el silencio sagrado y hoy traés esa capacidad de introspección y sabiduría profunda para conectar con los planos superiores.",
+                8: "Vienes de ejercer el poder y la justicia con equilibrio. Tu alma ya sabe manifestar abundancia en la materia y hoy traés esa autoridad natural y juicio justo para liderar proyectos con integridad.",
+                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y hoy vibra en una entrega humanitaria total, buscando el bienestar de toda la humanidad.",
                 11: "Alma Maestra: Traés una sintonía elevada. Tu alma ya transitó niveles de conciencia superiores que hoy te permiten ser un canal de luz para guiar a otros, actuando como un puente entre lo humano y lo divino.",
-                22: "Alma Maestra: Tu alma ya sabe construir para el bien común. Traés la memoria de realizar obras que trascienden el tiempo y hoy tienes el poder de materializar sueños colectivos que beneficien a miles de personas."
+                22: "Alma Maestra: Tu alma ya sabe construir para el bien común. Traés la memoria de realizar obras que trascienden el tiempo y hoy tienes el poder de materializar sueños colectivos."
             },
             personalidad: {
                 1: "Los demás te perciben como una persona pionera e independiente. Tu máscara social proyecta liderazgo natural, decisión y una fuerza inicial que inspira confianza instantánea en quienes buscan a alguien que tome las riendas.",
-                2: "Te perciben como alguien suave, diplomático y mediador. Los demás confían en vos porque irradias calma y una capacidad única para escuchar, acompañar y encontrar el punto medio en cualquier conflicto o situación.",
-                3: "Tu imagen social es brillante y sumamente optimista. Te ven como una persona creativa que trae luz a las conversaciones y que posee un don especial para la comunicación y el magnetismo personal que alegra los ambientes.",
+                2: "Te perciben como alguien suave, diplomático y mediador. Los demás confían en vos porque irradias calma y una capacidad única para escuchar, acompañar y encontrar el punto medio en cualquier conflicto.",
+                3: "Tu imagen social es brillante y sumamente optimista. Te ven como una persona creativa que trae luz a las conversaciones y que posee un magnetismo personal que alegra los ambientes.",
                 4: "Los demás te ven como una roca: alguien serio, responsable y trabajador. Generás una sensación de seguridad inmediata y los otros saben que pueden contar con tu palabra y compromiso absoluto.",
-                5: "Proyectás una imagen inquieta y magnética. Te ven como alguien que ama la libertad, que se adapta con rapidez a lo nuevo y que siempre está listo para una aventura o para romper la rutina con inteligencia y audacia.",
-                6: "Tu máscara es protectora y estética. Los demás te perciben como alguien que cuida los detalles, que busca constantemente la armonía afectiva y que tiene un talento natural para crear belleza a su alrededor.",
-                7: "Te perciben como alguien misterioso e intelectual. Das la imagen de una persona sabia, profunda y algo reservada que observa la vida con una lente analítica, buscando siempre la verdad oculta detrás de las formas.",
-                8: "Proyectás éxito y autoridad natural. Los demás te ven como una persona poderosa, eficiente y capaz de manejar grandes responsabilidades materiales, inspirando respeto por tu capacidad de organización.",
-                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso, con una visión cosmopolita de la vida, que siempre está dispuesto a ayudar y que posee una sensibilidad humanitaria que trasciende fronteras.",
-                11: "Irradiás una luz visionaria que no pasa desapercibida. Los demás ven en vos a alguien con una conexión superior, capaz de inspirar a través de ideales elevados y de captar verdades espirituales con gran intuición.",
-                22: "Te ven como un realizador de grandes sueños a nivel global. Tu imagen es la de alguien capaz de organizar estructuras complejas y de trabajar incansablemente por metas que impacten positivamente."
+                5: "Proyectás una imagen inquieta y magnética. Te ven como alguien que ama la libertad, que se adapta con rapidez a lo nuevo y que siempre está listo para una aventura o para romper la rutina.",
+                6: "Tu máscara es protectora y estética. Los demás te perciben como alguien que cuida los detalles, que busca constantemente la armonía afectiva y que tiene un talento natural para crear belleza.",
+                7: "Te perciben como alguien misterioso e intelectual. Das la imagen de una persona sabia, profunda y algo reservada que observa la vida con una lente analítica, buscando siempre la verdad oculta.",
+                8: "Proyectás éxito y autoridad natural. Los demás te ven como una persona poderosa, eficiente y capaz de manejar grandes responsabilidades materiales, inspirando respeto.",
+                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso, con una visión cosmopolita de la vida, que siempre está dispuesto a ayudar y que posee una sensibilidad humanitaria.",
+                11: "Irradiás una luz visionaria que no pasa desapercibida. Los demás ven en vos a alguien con una conexión superior, capaz de inspirar a través de ideales elevados y de captar verdades espirituales.",
+                22: "Te ven como un realizador de sueños globales. Tu imagen es la de alguien capaz de organizar estructuras complejas y de trabajar incansablemente por metas que impacten positivamente."
             },
             temperamento: {
-                1: "Tenés un carácter activo y decidido. Reaccionás ante los desafíos con iniciativa propia; no te agrada ser dirigido y tu respuesta natural ante la crisis es tomar el mando de manera independiente y rápida.",
+                1: "Tenés un carácter activo y decidido. Reaccionás ante los desafíos con iniciativa propia; no te agrada ser dirigido y tu respuesta natural es tomar el mando de manera independiente y rápida.",
                 2: "Tu carácter es receptivo y sensible. Buscás el equilibrio en tus reacciones y preferís la calma y la diplomacia; ante la tensión, tu temperamento te empuja a mediar y a buscar soluciones pacíficas.",
                 3: "Reaccionás con entusiasmo y alegría. Tu temperamento es lúdico y buscás siempre el lado positivo de las situaciones; ante los problemas, tu mente creativa busca salidas brillantes que alivien la carga.",
-                4: "Tenés un carácter firme y metódico. Tus reacciones ante la vida son medidas, lógicas y siempre enfocadas en construir seguridad; no te gustan los riesgos innecesarios y preferís actuar bajo estructuras sólidas.",
+                4: "Tenés un carácter firme y metódico. Tus reacciones ante la vida son medidas, lógicas y siempre enfocadas en construir seguridad; no te gustan los riesgos innecesarios.",
                 5: "Tu temperamento es adaptable y versátil. Reaccionás con rapidez ante los imprevistos y necesitás el movimiento constante; ante la rutina, tu carácter se inquieta y busca nuevas formas de experimentar.",
                 6: "Carácter protector y responsable. Tu temperamento se inclina hacia la búsqueda de la armonía familiar y afectiva; reaccionás ante los conflictos intentando nutrir y cuidar el bienestar de los que amás.",
-                7: "Tenés un carácter analítico y reflexivo. Ante los desafíos, tu respuesta natural es retirarte al silencio para encontrar respuestas internas; preferís la observación profunda antes de emitir cualquier juicio.",
-                8: "Tu temperamento es ambicioso y orientado al logro. Reaccionás con autoridad natural y buscás la eficiencia en todo lo que hacés; tu carácter te empuja a controlar las situaciones para asegurar el éxito.",
-                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades ajenas; tu temperamento te lleva a ayudarte de forma natural por causas nobles o por el bienestar del prójimo.",
+                7: "Tenés un carácter analítico y reflexivo. Ante los desafíos, tu respuesta natural es retirarte al silencio para encontrar respuestas internas; preferís la observación profunda antes de actuar.",
+                8: "Tu temperamento es ambicioso y orientado al logro. Reaccionás con autoridad natural y buscás la eficiencia en todo lo que hacés; tu carácter te empuja a asegurar el éxito material.",
+                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades ajenas; tu temperamento te lleva a ayudarte de forma natural por causas nobles.",
                 11: "Temperamento intuitivo y eléctrico que capta las energías del entorno. Reaccionás de forma inspirada ante las crisis, actuando muchas veces como un canal de soluciones elevadas.",
-                22: "Carácter práctico y visionario al mismo tiempo. Tu temperamento te empuja a construir realidades concretas sobre ideales elevados; reaccionás organizando grandes cambios con pies de plomo."
+                22: "Carácter práctico y visionario. Tu temperamento te empuja a construir realidades concretas sobre ideales elevados; reaccionás organizando grandes cambios con pies de plomo."
             },
             mision: {
                 1: "Tu misión es aprender a confiar en tu propia chispa divina, ser tu propio guía y liderar con valor tu propio camino.",
@@ -134,17 +133,17 @@
                 9: "Herencia del Clan 9: Tu linaje porta una sabiduría de finales de ciclo. Heredás sensibilidad profunda, viniendo a cerrar historias de sacrificios inconclusos."
             },
             pareja: {
-                1: "Vínculo Vibración 1: Es una relación de impulso, comienzos y mucha fuerza creativa. Indica una unión donde ambos se empujan mutuamente a ser independientes y valientes. Es ideal para proyectos nuevos y emprendimientos donde la chispa inicial nunca debe apagarse. Están juntos para aprender a liderar su propia realidad compartida.",
-                2: "Vínculo Vibración 2: Una vibración de acompañamiento, ternura y sensibilidad absoluta. Es el vínculo del 'nosotros', donde prima el apoyo mutuo, la diplomacia y el cuidado emocional constante. Es una frecuencia excelente para la convivencia armoniosa y para crear un refugio de paz mutua donde ambos se sienten contenidos.",
-                3: "Vínculo Vibración 3: Relación de expansión, alegría y mucha vida social. Se basa en la comunicación fluida, el brillo y la diversión compartida. Es un vínculo muy creativo y dinámico, ideal para disfrutar la vida, viajar y sanar a través de la risa. Juntos son luz para los demás y para su propia relación.",
-                4: "Vínculo Vibración 4: Es la unión constructora por excelencia. Este vínculo busca la estabilidad, el orden y la seguridad en todos los planos. Es una relación 'cimiento', sumamente buena para formar una familia sólida, comprar bienes y lograr metas materiales concretas a largo plazo con mucho esfuerzo compartido.",
-                5: "Vínculo Vibración 5: Una vibración de cambio, libertad y aventura constante. Es una relación inquieta que necesita movimiento, viajes y nuevas experiencias para no estancarse. Se nutren de la curiosidad mutua y de la capacidad de adaptarse a lo nuevo; es un vínculo que enseña a soltar el control y disfrutar el hoy.",
-                6: "Vínculo Vibración 6: El vínculo del hogar, la familia y la armonía total. Es una frecuencia nutricia enfocada en la responsabilidad afectiva y el bienestar del entorno. Están juntos para cuidarse, embellecer su espacio y ser el centro de unión de sus seres queridos, vibrando en un amor protector y estable.",
-                7: "Vínculo Vibración 7: Unión intelectual, mística y profunda. Es una relación de almas que buscan la verdad detrás de las formas. Necesitan espacios de silencio respetado y estudio compartido para no agobiarse. Es un vínculo sagrado donde la conexión espiritual es el motor que los mantiene unidos y evolucionando.",
-                8: "Vínculo Vibración 8: Vínculo de realización, éxito y poder material. Están juntos para lograr metas grandes y ambiciosas en el mundo tangible. Es una unión de autoridad donde el manejo eficiente de la abundancia y la justicia mutua son claves. Juntos pueden construir un imperio si mantienen el equilibrio ético.",
-                9: "Vínculo Vibración 9: Relación de amor universal, sabiduría y entrega generosa. Es una frecuencia elevada donde el vínculo trasciende lo personal para buscar el bien común o ayudar a otros. Es una unión de almas viejas que se encuentran para cerrar ciclos kármicos y servirse mutuamente con una compasión infinita.",
-                11: "Sintonía Maestra 11: Vienen a inspirar y elevar su conciencia conjunta de manera extraordinaria. Es una relación que actúa como un faro de guía para otros, basada en ideales espirituales elevados y una intuición compartida muy poderosa.",
-                22: "Sintonía Maestra 22: Unión destinada a las grandes obras y construcciones colectivas. Están llamados a materializar proyectos que beneficien a la comunidad, uniendo sus fuerzas para dejar un legado poderoso y tangible."
+                1: "Vínculo Vibración 1: Relación de impulso, comienzos y fuerza creativa. Ambos se empujan a ser independientes y valientes. Ideal para proyectos nuevos donde la chispa inicial nunca debe apagarse.",
+                2: "Vínculo Vibración 2: Acompañamiento, ternura y sensibilidad absoluta. Es el vínculo del 'nosotros', donde prima el apoyo mutuo y el cuidado emocional constante para crear un refugio de paz.",
+                3: "Vínculo Vibración 3: Expansión, alegría y vida social. Se basa en la comunicación fluida, el brillo y la diversión. Ideal para disfrutar la vida y sanar a través de la risa y el compartir.",
+                4: "Vínculo Vibración 4: Unión constructora. Busca estabilidad, orden y seguridad. Es una relación 'cimiento', buena para formar familia y lograr metas materiales sólidas a largo plazo.",
+                5: "Vínculo Vibración 5: Cambio, libertad y aventura. Relación inquieta que necesita viajes y nuevas experiencias. Enseña a soltar el control y a disfrutar la curiosidad mutua día a día.",
+                6: "Vínculo Vibración 6: Hogar, familia y armonía total. Frecuencia nutricia enfocada en la responsabilidad afectiva. Están juntos para cuidarse y ser el centro de unión de sus seres queridos.",
+                7: "Vínculo Vibración 7: Unión intelectual y mística. Almas que buscan la verdad. Necesitan espacios de silencio respetado y estudio compartido; la conexión espiritual es su gran motor.",
+                8: "Vínculo Vibración 8: Realización y poder material. Juntos para lograr metas ambiciosas en el mundo tangible con eficiencia y justicia mutua. Pueden construir un legado poderoso.",
+                9: "Vínculo Vibración 9: Amor universal y entrega generosa. Frecuencia elevada que trasciende lo personal para servir a otros. Almas viejas cerrando ciclos con compasión infinita.",
+                11: "Sintonía Maestra 11: Vienen a inspirar y elevar la conciencia conjunta. Actúan como un faro de guía para otros, basada en ideales elevados y una intuición compartida muy poderosa.",
+                22: "Sintonía Maestra 22: Unión destinada a las grandes obras colectivas. Materializan proyectos que benefician a la comunidad, uniendo fuerzas prácticas para dejar un legado tangible."
             }
         };
 
@@ -155,7 +154,6 @@
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
-                // ACCESO DENEGADO (SIN MODIFICAR)
                 document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenés acceso a la nave, comunicate con el comandante 👽";
                 document.getElementById('error-msg').classList.remove('hidden');
             }
@@ -216,16 +214,16 @@
             curY += 15;
 
             const items = [
-                {t: "ALMA (Vibración Interna):", v: a, d: DB.alma[a.base]},
-                {t: "PERSONALIDAD (Máscara Social):", v: p, d: DB.personalidad[p.base]},
-                {t: "TEMPERAMENTO (Tu Carácter):", v: t, d: DB.temperamento[t.base]},
-                {t: "MISIÓN / KARMA (Camino):", v: k, d: DB.mision[k.base]},
-                {t: "HERENCIA DEL CLAN (Apellido):", v: rh, d: DB.herencia[rh.base]}
+                {t: "ALMA:", v: a, d: DB.alma[a.base]},
+                {t: "PERSONALIDAD:", v: p, d: DB.personalidad[p.base]},
+                {t: "TEMPERAMENTO:", v: t, d: DB.temperamento[t.base]},
+                {t: "MISIÓN / KARMA:", v: k, d: DB.mision[k.base]},
+                {t: "HERENCIA DEL CLAN:", v: rh, d: DB.herencia[rh.base]}
             ];
 
             items.forEach(it => {
                 checkPage(45);
-                doc.setFont(undefined, 'bold'); doc.text(`${it.t} RESULTADO: ${it.v.v}`, 20, curY);
+                doc.setFont(undefined, 'bold'); doc.text(`${it.t} ${it.v.v}`, 20, curY);
                 doc.setFont(undefined, 'normal'); doc.setFontSize(10);
                 let split = doc.splitTextToSize(it.d, 170);
                 doc.text(split, 20, curY + 7);
@@ -243,7 +241,7 @@
                 curY += 15 + (splitP.length * 5);
             }
 
-            checkPage(75);
+            checkPage(70);
             curY += 10;
             doc.setDrawColor(0, 210, 255); doc.setLineWidth(0.8); doc.line(20, curY, 190, curY);
             curY += 10;
@@ -252,14 +250,34 @@
             curY += 12;
 
             doc.setTextColor(40); doc.setFontSize(10); doc.setFont(undefined, 'normal');
-            let parrafo = `Tu Alma (${a.v}) ha encarnado en este linaje (${rh.v}) para integrar la fuerza de tus ancestros con tu propósito individual. Vienes a honrar los talentos de tu clan pero también a liberar las estructuras que ya no sirven a tu evolución.
-
-PARA TUS PROYECTOS: Tu éxito depende de usar tu Temperamento (${t.v}) —tu forma de reaccionar ante la vida— para alcanzar tu Misión (${k.v}). Tu voluntad enfocada es tu mayor herramienta de manifestación.
-
-PARA TUS VÍNCULOS: La clave para relaciones sanas está en equilibrar tu Personalidad (${p.v}) con tu verdadera esencia interna. No permitas que la máscara social eclipse tu luz; conecta desde la vulnerabilidad de tu Alma para atraer sintonías que realmente sumen a tu destino estelar.`;
-
+            let parrafo = `Tu Alma (${a.v}) ha encarnado en este linaje (${rh.v}) para integrar la fuerza de tus ancestros con tu propósito individual. Vienes a honrar los talentos de tu clan pero también a liberar las estructuras que ya no sirven a tu evolución.\n\nPARA TUS PROYECTOS: Tu éxito depende de usar tu Temperamento (${t.v}) para alcanzar tu Misión (${k.v}).\n\nPARA TUS VÍNCULOS: No permitas que la máscara social (${p.v}) eclipse tu esencia interna.`;
             let splitR = doc.splitTextToSize(parrafo, 170);
             doc.text(splitR, 20, curY);
+            curY += (splitR.length * 5) + 15;
+
+            // FIRMA DE JACQUELINE
+            checkPage(80);
+            doc.setFillColor(240, 250, 255); doc.rect(15, curY, 180, 85, 'F');
+            doc.setTextColor(15, 12, 41); doc.setFont(undefined, 'bold'); doc.setFontSize(11);
+            doc.text("Gracias por esta conexión! Te dejo información sobre mi...", 20, curY + 10);
+            
+            doc.setTextColor(0, 100, 150); doc.text("Nave Arcturiana | Instagram: @nave.arcturiana", 20, curY + 17);
+            
+            doc.setTextColor(40); doc.setFontSize(9); doc.setFont(undefined, 'normal');
+            let bio = "Jacqueline Vanesa Pignatelli | Terapeuta Holística Matriculada.\n" +
+            "- Canalizadora de Cirugía Astral Cristal Arcturiano.\n" +
+            "- Canalizadora de Técnica Reiki Sandalfon (Sanación del Niño interior).\n" +
+            "- Comunicación Mediumnica / Enlazadora de mundos.\n" +
+            "- Instructora de Chikung.\n" +
+            "- Lectora de Registros Akashicos.\n" +
+            "- Operadora de Mesa Cuántica Energética.\n" +
+            "- Profesora de Yoga de la Música.\n" +
+            "- Maestra de Reiki (Usui, Karuna, Jin Kei Do, Chamánico).\n" +
+            "- Terapeuta Floral, Auriculoterapeuta, del Sonido y Vibracional.\n" +
+            "- Terapeuta de Técnicas Arcturianas, Pleyadianas y Transgeneracional.\n" +
+            "- Diseño y desarrollo de aplicación Numerología Transgeneracional 2026.";
+            
+            doc.text(doc.splitTextToSize(bio, 170), 20, curY + 25);
             
             doc.save(`Mapa_Estelar_${nom}.pdf`);
         }
