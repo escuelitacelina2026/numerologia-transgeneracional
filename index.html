@@ -9,6 +9,7 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         .card { background: rgba(255, 255, 255, 0.1); padding: 2.5rem; border-radius: 20px; width: 450px; text-align: center; border: 1px solid #00d2ff; backdrop-filter: blur(10px); box-shadow: 0 0 30px rgba(0,210,255,0.2); position: relative; }
         h2 { color: #00d2ff; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; }
+        p.subheader { font-size: 0.85rem; color: #a0f0ff; margin-bottom: 20px; font-style: italic; }
         input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: none; background: rgba(255,255,255,0.15); color: white; outline: none; box-sizing: border-box; font-size: 14px; }
         input::placeholder { color: rgba(255,255,255,0.5); }
         button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; text-transform: uppercase; transition: 0.3s; }
@@ -30,6 +31,7 @@
 
         <div id="box-login">
             <h2>🚀 Acceso Nave</h2>
+            <p class="subheader">Conectando con la frecuencia Arcturiana...</p>
             <input type="text" id="user_val" placeholder="Usuario de la Nave">
             <input type="password" id="pass_val" placeholder="Código de Acceso">
             <button onclick="login()">Entrar al Sistema</button>
@@ -37,6 +39,7 @@
 
         <div id="box-app" class="hidden">
             <h2>✨ Portal Arcturiano</h2>
+            <p class="subheader">Bienvenido a la Nave. Iniciando decodificación de luz para tu mapa estelar...</p>
             <input type="text" id="client_name" placeholder="Nombre Completo">
             <input type="date" id="client_birth">
 
@@ -91,7 +94,7 @@
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
-                document.getElementById('error-text').innerText = "Acceso denegado, comandante 👽";
+                document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenés acceso a la nave, comunicate con el comandante 👽";
                 document.getElementById('error-msg').classList.remove('hidden');
             }
         }
@@ -127,7 +130,7 @@
         function procesar() {
             const nom = document.getElementById('client_name').value.toUpperCase();
             const fec = document.getElementById('client_birth').value;
-            if(!nom || !fec) { alert("Faltan datos."); return; }
+            if(!nom || !fec) { alert("Faltan datos estelares."); return; }
 
             let sA = 0, sP = 0;
             const lim = nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
