@@ -22,7 +22,7 @@
     <div id="error-msg" class="hidden">
         <div style="text-align: center;">
             <div style="font-size: 40px;">👽</div>
-            <p id="error-text" style="color: white; font-weight: bold; padding: 10px;"></p>
+            <p id="error-text">Algo ingresaste mal o no tenés acceso a la nave, comunicate con el comandante 👽</p>
             <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background:#ff4d4d; color:white; padding:5px 15px;">Aceptar</button>
         </div>
     </div>
@@ -62,14 +62,21 @@
     <script>
         const VALS = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
 
+        const TEXTOS = {
+            [cite_start]alma: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y hoy vibra en una entrega humanitaria total, buscando el bienestar de toda la humanidad. [cite: 4]",
+            personalidad: "Te ven como un idealista carismático. [cite_start]Tu imagen es la de alguien generoso, con una visión cosmopolita de la vida, que siempre está dispuesto a ayudar y que posee una sensibilidad humanitaria. [cite: 6]",
+            temperamento: "Carácter abnegado y compasivo. [cite_start]Reaccionás con gran sensibilidad ante las necesidades ajenas; tu temperamento te lleva a ayudarte de forma natural por causas nobles. [cite: 8, 9]",
+            mision: "Realizá el amor universal. [cite_start]Tu misión es aprender el desapego y servir a la humanidad desde tu sabiduría y compasión infinita. [cite: 11]",
+            meta: "Meta: Trascendencia Universal. [cite_start]Vienes a cerrar un ciclo evolutivo enorme, logrando el amor incondicional y la entrega total a la humanidad. [cite: 13]",
+            herencia: "Herencia del Clan 3: Tu apellido porta la energía de la comunicación. [cite_start]Heredás el don de la palabra y la misión de brillar socialmente sanando los silencios del pasado ancestral. [cite: 15, 16]",
+            anual: "AÑO 4 - ORDEN Y TRABAJO: Es momento de construir cimientos. Año de mucho esfuerzo, disciplina y organización. [cite_start]Excelente para concretar trámites, compras de inmuebles y estabilizar tu economía. [cite: 18, 19]"
+        };
+
         function login() {
             if(document.getElementById('user_val').value === "navearcturiana" && document.getElementById('pass_val').value === "nubilis2026_") {
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
-            } else {
-                document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenés acceso a la nave, comunicate con el comandante 👽";
-                document.getElementById('error-msg').classList.remove('hidden');
-            }
+            } else { document.getElementById('error-msg').classList.remove('hidden'); }
         }
 
         function reducir(n) {
@@ -101,7 +108,6 @@
             const rMision = calcularFecha(fec);
             const rMeta = reducir(rAlma + rMision);
             const rHerencia = calcularTexto(ape);
-            const rAnual = reducir(calcularFecha(fec.substring(5)) + 12); // Para 2026 (2+0+2+6=10->1 + 2 (mes) etc)
 
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -109,41 +115,58 @@
             doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
             doc.setTextColor(0, 210, 255); doc.setFontSize(22);
             doc.text("MAPA VIBRACIONAL ESTELAR", 105, 25, {align:"center"});
-            doc.setTextColor(40); doc.setFontSize(12);
-            doc.text(`CONSULTANTE: ${nom.toUpperCase()} ${ape.toUpperCase()}`, 20, 55);
 
-            let y = 70;
-            const res = [["ALMA", rAlma], ["MISIÓN", rMision], ["META FINAL", rMeta], ["HERENCIA", rHerencia]];
-            res.forEach(r => {
-                doc.setFont(undefined, 'bold'); doc.text(`${r[0]}: RESULTADO ${r[1]}`, 20, y);
-                y += 15;
+            doc.setTextColor(40); doc.setFontSize(12);
+            doc.text(`CONSULTANTE: ${nom.toUpperCase()} ${ape.toUpperCase()}`, 20, 50);
+
+            let y = 65;
+            const items = [
+                ["ALMA", rAlma, TEXTOS.alma],
+                ["PERSONALIDAD", rAlma, TEXTOS.personalidad],
+                ["TEMPERAMENTO", rAlma, TEXTOS.temperamento],
+                ["MISIÓN / KARMA", rMision, TEXTOS.mision],
+                ["META FINAL", rMeta, TEXTOS.meta],
+                ["HERENCIA DEL CLAN", rHerencia, TEXTOS.herencia]
+            ];
+
+            items.forEach(it => {
+                doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
+                doc.text(`${it[0]}: RESULTADO ${it[1]}`, 20, y);
+                doc.setFont(undefined, 'normal'); doc.setTextColor(40); doc.setFontSize(10);
+                let split = doc.splitTextToSize(it[2], 170);
+                doc.text(split, 20, y + 7);
+                y += 15 + (split.length * 5);
             });
 
+            // ENERGÍA ANUAL
+            doc.setFillColor(0, 100, 150); doc.rect(20, y, 170, 8, 'F');
+            doc.setTextColor(255); doc.setFont(undefined, 'bold');
+            doc.text("TU ENERGÍA ANUAL PARA ESTE 2026: Vibración 4", 105, y + 6, {align:"center"});
+            y += 15; doc.setTextColor(40); doc.setFont(undefined, 'normal');
+            doc.text(doc.splitTextToSize(TEXTOS.anual, 170), 20, y);
+
+            // SINERGIA
             if(document.getElementById('p_choice').value === "SI") {
-                const pNom = document.getElementById('p_name').value;
-                const pFec = document.getElementById('p_birth').value;
-                if(pNom && pFec) {
-                    const rSintonia = reducir(rMision + calcularFecha(pFec));
-                    doc.text(`SINTONÍA CON ${pNom.toUpperCase()}: ${rSintonia}`, 20, y);
-                    y += 15;
-                }
+                y += 20;
+                const rSint = reducir(rMision + calcularFecha(document.getElementById('p_birth').value));
+                doc.setFont(undefined, 'bold'); doc.text(`SINTONÍA CON ${document.getElementById('p_name').value.toUpperCase()}: ${rSint}`, 20, y);
             }
 
-            // MENSAJE EVOLUTIVO
-            doc.setFontSize(14); doc.text("MENSAJE EVOLUTIVO DEL ORÁCULO", 105, y, {align:"center"});
+            // MENSAJE ORÁCULO
+            y += 20; doc.setFontSize(14); doc.text("MENSAJE EVOLUTIVO DEL ORÁCULO", 105, y, {align:"center"});
             doc.setFontSize(10); doc.setFont(undefined, 'normal');
-            let m = `Tu Alma (${rAlma}) ha encarnado para cumplir la Misión (${rMision}) y alcanzar tu Meta Final (${rMeta}). Este 2026 el universo te invita a brillar.`;
-            doc.text(doc.splitTextToSize(m, 170), 20, y + 10);
+            let msj = `Tu Alma (${rAlma}) ha encarnado en este plano para cumplir la Misión (${rMision}) y alcanzar tu Meta Final (${rMeta}). Este 2026, bajo la frecuencia del Año 4, el universo te invita a integrar tu herencia ancestral con tu propósito presente para manifestar tu máxima vibración de luz.`;
+            doc.text(doc.splitTextToSize(msj, 170), 20, y + 10);
 
             // FIRMA COMPLETA
-            doc.addPage();
-            doc.setFillColor(240, 250, 255); doc.rect(0, 0, 210, 297, 'F');
-            doc.setFont(undefined, 'bold'); doc.text("Jacqueline Vanesa Pignatelli | Nave Arcturiana", 20, 30);
-            doc.setFontSize(9); doc.setFont(undefined, 'normal');
-            let bio = "Terapeuta Holística Matriculada\n- Cirugía Astral Arcturiana\n- Reiki Sandalfon\n- Comunicación Mediumnica\n- Chikung, Registros Akáshicos, Mesa Cuántica\n- Profesora de Yoga de la Música\n- Diseño App Numerología 2026";
+            doc.addPage(); doc.setFillColor(240, 250, 255); doc.rect(0, 0, 210, 297, 'F');
+            doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
+            doc.text("Jacqueline Vanesa Pignatelli | Nave Arcturiana", 20, 30);
+            doc.setFontSize(9); doc.setFont(undefined, 'normal'); doc.setTextColor(40);
+            let bio = "Terapeuta Holística Matriculada.\n- Canalizadora de Cirugía Astral Cristal Arcturiano.\n- Canalizadora de Reiki Sandalfon (Sanación del Niño interior).\n- Comunicación Mediumnica / Enlazadora de mundos.\n- Instructora de Chikung.\n- Lectora de Registros Akashicos / Operadora de Mesa Cuántica.\n- Profesora de Yoga de la Música.\n- Maestra de Reiki (Usui, Karuna, Jin Kei Do, Chamánico).\n- Terapeuta Floral, Auriculoterapeuta, del Sonido y Vibracional.\n- Terapeuta de Técnicas Arcturianas, Pleyadianas y Transgeneracional.\n- Diseño y desarrollo de aplicación Numerología Transgeneracional 2026.";
             doc.text(bio, 20, 40);
 
-            doc.save(`Mapa_${nom}.pdf`);
+            doc.save(`Mapa_Estelar_${nom}.pdf`);
         }
     </script>
 </body>
