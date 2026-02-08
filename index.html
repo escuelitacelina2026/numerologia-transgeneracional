@@ -25,7 +25,7 @@
     <div id="error-msg" class="hidden">
         <div style="text-align: center;">
             <div style="font-size: 40px;">👽</div>
-            <p id="error-text"></p>
+            <p id="error-text" style="color: white; font-weight: bold;"></p>
             <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background:#ff4d4d; color:white; width:auto; padding:5px 15px;">Aceptar</button>
         </div>
     </div>
@@ -44,7 +44,7 @@
             <p class="subheader">Bienvenidos a la Nave. Iniciando decodificación de luz para tu mapa estelar...</p>
             
             <input type="text" id="client_name" placeholder="Nombres">
-            <input type="text" id="client_surname" placeholder="Apellido(s)">
+            <input type="text" id="client_surname" placeholder="Apellido(s) de Herencia">
             <input type="date" id="client_birth">
 
             <div class="pareja-section">
@@ -71,79 +71,79 @@
         const DB = {
             alma: {
                 1: "En tus vidas pasadas cultivaste la valentía y la autonomía. Tu alma ya sabe lo que es abrir caminos sola; traés esa fuerza interna que te empuja a no depender de otros y a confiar en tu propia chispa divina.",
-                2: "Traés la maestría de la unión y la paz de otras vidas. Tu alma ya aprendió a colaborar y hoy vibra en una sensibilidad profunda que te permite entender el alma de los demás.",
-                3: "Tu alma ya experimentó el brillo y la expresión. Traés un tesoro de alegría y creatividad que hoy te ayuda a comunicar luz y a inspirar a tu entorno a través de la palabra.",
-                4: "En otras vidas fuiste el cimiento de grandes estructuras. Tu alma ya conoce el valor del orden y la disciplina constructiva; hoy traés la capacidad de materializar con firmeza.",
-                5: "Vienes de encarnaciones de libertad total y aventura. Tu alma ya sabe adaptarse a los cambios y hoy te regala una curiosidad infinita y el don de aprender de cada experiencia.",
-                6: "Tu alma ya transitó el amor incondicional y la familia. Traés una esencia nutricia y equilibrada que busca armonizar y embellecer todo ambiente en el que te encuentras.",
-                7: "En vidas pasadas fuiste un incansable buscador de la verdad mística. Tu alma ya conoce el silencio sagrado y hoy traés esa capacidad de introspectiva y sabiduría profunda.",
-                8: "Vienes de ejercer el poder y la justicia con equilibrio. Tu alma ya sabe manifestar abundancia en la materia y hoy traés esa autoridad natural y juicio justo para liderar.",
-                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego a través de muchas encarnaciones y hoy vibra en una entrega humanitaria total.",
-                11: "Alma Maestra: Traés una sintonía elevada. Tu alma ya transitó niveles de conciencia superiores que hoy te permiten ser un canal de luz para guiar a la humanidad.",
-                22: "Alma Maestra: Tu alma ya sabe construir para el bien común. Traés la memoria de realizar obras que trascienden el tiempo y benefician a miles de personas."
+                2: "Traés la maestría de la unión y la paz de otras vidas. Tu alma ya aprendió a colaborar y hoy vibra en una sensibilidad profunda que te permite entender el alma de los demás y trabajar en equipo desde el corazón.",
+                3: "Tu alma ya experimentó el brillo y la expresión. Traés un tesoro de alegría y creatividad que hoy te ayuda a comunicar luz y a inspirar a tu entorno a través de la palabra, el arte y el optimismo.",
+                4: "En otras vidas fuiste el cimiento de grandes estructuras. Tu alma ya conoce el valor del orden y la disciplina constructiva; hoy traés la capacidad de materializar con firmeza y crear seguridad para vos y los tuyos.",
+                5: "Vienes de encarnaciones de libertad total y aventura. Tu alma ya sabe adaptarse a los cambios y hoy te regala una curiosidad infinita y el don de aprender de cada experiencia sin miedo a lo desconocido.",
+                6: "Tu alma ya transitó el amor incondicional y la familia. Traés una esencia nutricia y equilibrada que busca armonizar y embellecer todo ambiente en el que te encuentras, siendo un pilar afectivo.",
+                7: "En vidas pasadas fuiste un buscador de la verdad mística. Tu alma ya conoce el silencio sagrado y hoy traés esa capacidad de introspección y sabiduría profunda que te permite ver más allá de lo evidente.",
+                8: "Vienes de ejercer el poder y la justicia con equilibrio. Tu alma ya sabe manifestar abundancia en la materia y hoy traés esa autoridad natural para liderar proyectos con integridad y éxito.",
+                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego a través de muchas encarnaciones y hoy vibra en una entrega humanitaria total, buscando el bien del mundo.",
+                11: "Alma Maestra: Traés una sintonía elevada. Tu alma ya transitó niveles de conciencia superiores que hoy te permiten ser un canal de luz para guiar a la humanidad hacia una nueva evolución.",
+                22: "Alma Maestra: Tu alma ya sabe construir para el bien común. Traés la memoria de realizar obras que trascienden el tiempo y que están destinadas a cambiar la realidad material de muchos."
             },
             personalidad: {
-                1: "Los demás te perciben como una persona pionera e independiente. Tu máscara social proyecta liderazgo natural, decisión y una fuerza inicial que inspira confianza.",
-                2: "Te perciben como alguien suave, diplomático y mediador. Los demás confían en vos porque irradias calma y una capacidad única para escuchar y acompañar.",
-                3: "Tu imagen social es brillante y sumamente optimista. Te ven como una persona creativa que trae luz a las conversaciones y que posee un don especial para la comunicación.",
-                4: "Los demás te ven como una roca: alguien serio, responsable y trabajador. Generás una sensación de seguridad inmediata en quienes te rodean.",
-                5: "Proyectás una imagen inquieta y magnética. Te ven como alguien que ama la libertad y que siempre está listo para una nueva aventura o aprendizaje.",
-                6: "Tu máscara es protectora y estética. Los demás te perciben como alguien que cuida los detalles y busca constantemente la armonía afectiva.",
-                7: "Te perciben como alguien misterioso e intelectual. Das la imagen de una persona sabia que observa profundamente antes de hablar.",
-                8: "Proyectás éxito y autoridad. Los demás te ven como una persona poderosa, capaz de manejar grandes responsabilidades materiales.",
-                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso que siempre está dispuesto a sacrificarse por el bienestar común.",
-                11: "Irradiás una luz visionaria. Los demás ven en vos a alguien con una conexión superior, capaz de guiar desde ideales elevados.",
-                22: "Te ven como un realizador de grandes sueños. Tu imagen es la de alguien capaz de organizar estructuras complejas para impactar positivamente."
+                1: "Los demás te perciben como una persona pionera e independiente. Tu máscara social proyecta liderazgo natural, decisión y una fuerza inicial que inspira confianza en quienes buscan un guía.",
+                2: "Te perciben como alguien suave, diplomático y mediador. Los demás confían en vos porque irradias calma y una capacidad única para escuchar, acompañar y suavizar cualquier conflicto.",
+                3: "Tu imagen social es brillante y sumamente optimista. Te ven como una persona creativa que trae luz a las conversaciones y que posee un magnetismo especial que alegra el entorno.",
+                4: "Los demás te ven como una roca: alguien serio, responsable y trabajador. Generás una sensación de seguridad inmediata y los otros saben que pueden contar con tu palabra y compromiso.",
+                5: "Proyectás una imagen inquieta y magnética. Te ven como alguien que ama la libertad, que se adapta a todo y que siempre tiene algo interesante o nuevo que compartir.",
+                6: "Tu máscara es protectora y estética. Los demás te perciben como alguien que cuida los detalles, que busca constantemente la armonía afectiva y que tiene un gusto refinado.",
+                7: "Te perciben como alguien misterioso e intelectual. Das la imagen de una persona sabia, profunda y algo reservada que observa la vida con una lente analítica y mística.",
+                8: "Proyectás éxito y autoridad. Los demás te ven como una persona poderosa y eficiente, capaz de manejar grandes responsabilidades materiales y de tomar el mando cuando es necesario.",
+                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso, con un gran corazón, que siempre está dispuesto a ayudar y que posee una visión amplia de la vida.",
+                11: "Irradiás una luz visionaria y especial. Los demás ven en vos a alguien con una conexión superior, capaz de ver verdades que otros ignoran y de inspirar cambios profundos.",
+                22: "Te ven como un realizador de grandes sueños. Tu imagen es la de alguien capaz de organizar estructuras complejas y de trabajar por metas que parecen imposibles para el resto."
             },
             temperamento: {
-                1: "Tenés un carácter activo y decidido. Reaccionás ante los desafíos con iniciativa propia; no te agrada ser dirigido.",
-                2: "Tu carácter es receptivo y sensible. Buscás el equilibrio en tus reacciones y preferís la calma y la diplomacia.",
-                3: "Reaccionás con entusiasmo y alegría. Tu temperamento es lúdico y buscás siempre el lado positivo de las situaciones.",
-                4: "Tenés un carácter firme y metódico. Tus reacciones ante la vida son medidas, lógicas y siempre enfocadas en construir seguridad.",
-                5: "Tu temperamento es adaptable y versátil. Reaccionás con rapidez ante los imprevistos y necesitás el movimiento constante.",
-                6: "Carácter protector y responsable. Tu temperamento se inclina hacia la búsqueda de la armonía familiar.",
-                7: "Tenés un carácter analítico y reflexivo. Ante los desafíos, preferís retirarte al silencio para encontrar respuestas.",
-                8: "Tu temperamento es ambicioso y orientado al logro. Reaccionás con autoridad natural y buscás eficiencia.",
-                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades ajenas.",
-                11: "Temperamento intuitivo que capta las energías del entorno, actuando de forma inspirada ante las crisis.",
-                22: "Carácter práctico y visionario. Tu temperamento te empuja a construir realidades concretas."
+                1: "Carácter activo y decidido. Reaccionás ante los desafíos con iniciativa propia; no te agrada recibir órdenes y necesitás el espacio para ejecutar tus propias ideas de inmediato.",
+                2: "Tu carácter es receptivo y sensible. Buscás el equilibrio en tus reacciones, preferís la calma y solés meditar antes de actuar para no romper la armonía del ambiente.",
+                3: "Reaccionás con entusiasmo. Tu temperamento es lúdico y buscás siempre el lado positivo; ante la tensión, solés usar el humor o la creatividad para descomprimir.",
+                4: "Tenés un carácter firme y metódico. Tus reacciones son medidas y lógicas; ante un problema, tu mente busca la solución más práctica y segura para construir estabilidad.",
+                5: "Temperamento adaptable y versátil. Reaccionás con rapidez extrema ante los imprevistos y necesitás el cambio constante para no sentirte estancado o aburrido.",
+                6: "Carácter protector y responsable. Tu temperamento se inclina hacia la búsqueda de la paz familiar; reaccionás cuidando a los demás y buscando el consenso.",
+                7: "Temperamento analítico y reflexivo. Ante los desafíos o el ruido del mundo, tu reacción natural es retirarte al silencio para procesar la información y encontrar la verdad.",
+                8: "Carácter ambicioso y orientado al logro. Reaccionás con una autoridad natural; ante los problemas, tomás el control y buscás la eficiencia económica o material.",
+                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante el dolor ajeno y solés poner las necesidades de los demás por encima de las tuyas con naturalidad.",
+                11: "Temperamento intuitivo y captador de energías. Reaccionás de forma inspirada, a veces con una intensidad que otros no comprenden pero que busca elevar la frecuencia.",
+                22: "Carácter práctico y visionario a la vez. Reaccionás construyendo; no te quedás en la idea, sino que necesitás ver resultados concretos que beneficien a un grupo grande."
             },
             mision: {
-                1: "Aprender a confiar en tu chispa divina y liderar.",
-                2: "Integrar el equilibrio absoluto en tus vínculos.",
-                3: "Desarrollar tu expresión y comunicar con alegría.",
-                4: "Construir bases sólidas y seguras.",
-                5: "Fluir con los cambios y aprender de la versatilidad.",
-                6: "Brindar amor y armonía sin condiciones.",
-                7: "Buscá tu propia sabiduría a través del silencio.",
-                8: "Manejar la abundancia con ética espiritual.",
-                9: "Aprender el desapego y el servicio humanitario.",
-                11: "Inspirar y ser un faro de luz.",
-                22: "Materializar proyectos para el bien común."
+                1: "Tu misión es aprender a confiar en tu propia fuerza y liderar tu vida con independencia.",
+                2: "Vienes a integrar la paz y la colaboración en todos tus vínculos afectivos.",
+                3: "Tu camino es desarrollar la comunicación creativa y repartir alegría en el mundo.",
+                4: "Estás aquí para construir bases sólidas y aprender el valor de la constancia material.",
+                5: "Tu misión es experimentar la libertad y enseñar a otros a fluir con el cambio.",
+                6: "Vienes a cultivar la armonía familiar y el servicio amoroso incondicional.",
+                7: "Tu camino es la búsqueda de la sabiduría interna y la conexión con lo sagrado.",
+                8: "Vienes a manejar el poder y la abundancia con una ética espiritual superior.",
+                9: "Tu misión es el amor universal y aprender el desapego para servir a la humanidad.",
+                11: "Misión Maestra: Ser un faro de inspiración y elevar la conciencia de quienes te rodean.",
+                22: "Misión Maestra: Materializar proyectos de gran escala que traigan progreso real a la sociedad."
             },
             herencia: {
-                1: "Tu linaje te transmite la fuerza de los pioneros. En tu árbol hubo personas que tuvieron que abrirse camino solas. Heredás la capacidad de liderazgo.",
-                2: "Tu linaje trae una historia de mediadores y alianzas. Heredás la sensibilidad y el don de unir a la familia.",
-                3: "Tu apellido porta la energía de la comunicación. Heredás el don de la palabra y la misión de brillar socialmente.",
-                4: "Tu linaje es de constructores y gente de trabajo duro. Heredás la tenacidad y el orden.",
-                5: "Tu árbol está marcado por buscadores de libertad. Heredás la adaptabilidad y el movimiento.",
-                6: "La herencia de tu apellido es el amor familiar. Heredás el don de cuidar a otros.",
-                7: "Tu linaje trae buscadores de respuestas y sabios. Heredás una gran profundidad intelectual.",
-                8: "Tu apellido hereda la fuerza del poder material. Heredás la capacidad de generar abundancia.",
-                9: "Tu linaje porta sabiduría de finales de ciclo. Heredás una sensibilidad humanitaria profunda."
+                1: "Linaje de pioneros y guerreros. Heredás la fuerza para iniciar, pero debés sanar la soledad de tus ancestros.",
+                2: "Linaje de mediadores. Heredás la sensibilidad, sanando historias de dependencia o sumisión en el clan.",
+                3: "Linaje de comunicadores. Heredás el don de la palabra para sanar silencios o secretos familiares.",
+                4: "Linaje de constructores. Heredás la tenacidad, sanando la rigidez y el exceso de sacrificio de tus abuelos.",
+                5: "Linaje de buscadores de libertad. Heredás la adaptabilidad, sanando memorias de desarraigo o exilio.",
+                6: "Linaje de pilares familiares. Heredás el amor, sanando culpas y mandatos de sacrificio excesivo.",
+                7: "Linaje de intelectuales o místicos. Heredás la profundidad, sanando la frialdad emocional del árbol.",
+                8: "Linaje de poder y mando. Heredás la abundancia, sanando injusticias económicas o abusos de autoridad.",
+                9: "Linaje de sabios humanitarios. Heredás la entrega, cerrando ciclos de sacrificios dolorosos en tu apellido."
             },
             pareja: {
-                1: "Vínculo de impulso y proyectos nuevos.",
-                2: "Vínculo de apoyo mutuo y convivencia.",
-                3: "Vínculo de alegría y brillo social.",
-                4: "Vínculo constructor de estabilidad.",
-                5: "Vínculo de aventura y libertad.",
-                6: "Vínculo de armonía y responsabilidad.",
-                7: "Vínculo místico de almas que estudian.",
-                8: "Vínculo de poder y éxito compartido.",
-                9: "Vínculo de amor universal y sabiduría.",
-                11: "Misión Maestra: Inspiración mutua.",
-                22: "Misión Maestra: Gran construcción."
+                1: "Vínculo de impulso: Juntos inician proyectos y se motivan a ser independientes.",
+                2: "Vínculo de paz: Relación basada en la escucha, el apoyo mutuo y la ternura constante.",
+                3: "Vínculo de brillo: Una unión alegre, comunicativa y llena de vida social y creativa.",
+                4: "Vínculo cimiento: Juntos construyen seguridad económica y una familia con bases muy firmes.",
+                5: "Vínculo aventura: Una relación dinámica, que ama viajar y detesta la rutina o el control.",
+                6: "Vínculo nido: Priorizan el hogar, la armonía familiar y el cuidado de los seres queridos.",
+                7: "Vínculo espiritual: Una unión profunda de almas que buscan la verdad y respetan sus silencios.",
+                8: "Vínculo de éxito: Juntos logran grandes metas materiales y manejan el poder con eficiencia.",
+                9: "Vínculo humanitario: Una relación de entrega a los demás, con mucha sabiduría y desapego.",
+                11: "Sintonía Maestra: Están juntos para inspirar a otros y vivir una relación de alta frecuencia.",
+                22: "Sintonía Maestra: Unión destinada a crear algo grande que trascienda su propia pareja."
             }
         };
 
@@ -196,7 +196,6 @@
                     vP = reducir(rK.base + sumP).v;
                 }
             }
-
             generarPDF(completo, rA, rP, rT, rK, rH, vP, nP);
         }
 
@@ -215,18 +214,18 @@
             curY += 15;
 
             const items = [
-                {t: "ALMA:", v: a, d: DB.alma[a.base]},
-                {t: "PERSONALIDAD:", v: p, d: DB.personalidad[p.base]},
-                {t: "TEMPERAMENTO:", v: t, d: DB.temperamento[t.base]},
-                {t: "MISIÓN / KARMA:", v: k, d: DB.mision[k.base]},
-                {t: "HERENCIA DEL CLAN:", v: rh, d: DB.herencia[rh.base]}
+                {t: "ALMA (Vibración Interna):", v: a, d: DB.alma[a.base]},
+                {t: "PERSONALIDAD (Máscara Social):", v: p, d: DB.personalidad[p.base]},
+                {t: "TEMPERAMENTO (Tu Carácter):", v: t, d: DB.temperamento[t.base]},
+                {t: "MISIÓN / KARMA (Camino):", v: k, d: DB.mision[k.base]},
+                {t: "HERENCIA DEL CLAN (Apellido):", v: rh, d: DB.herencia[rh.base]}
             ];
 
             items.forEach(it => {
-                checkPage(40);
-                doc.setFont(undefined, 'bold'); doc.text(`${it.t} ${it.v.v}`, 20, curY);
+                checkPage(45);
+                doc.setFont(undefined, 'bold'); doc.text(`${it.t} RESULTADO: ${it.v.v}`, 20, curY);
                 doc.setFont(undefined, 'normal'); doc.setFontSize(10);
-                let split = doc.splitTextToSize(it.d || "Analizando...", 170);
+                let split = doc.splitTextToSize(it.d, 170);
                 doc.text(split, 20, curY + 7);
                 curY += 15 + (split.length * 5);
             });
@@ -235,12 +234,12 @@
                 checkPage(40);
                 doc.setFont(undefined, 'bold'); doc.text(`SINTONÍA CON ${np}: Vibración ${vp}`, 20, curY);
                 doc.setFont(undefined, 'normal');
-                let dP = DB.pareja[vp] || "Vínculo en evolución.";
-                doc.text(doc.splitTextToSize(dP, 170), 20, curY + 7);
-                curY += 25;
+                let splitP = doc.splitTextToSize(DB.pareja[vp] || "Vínculo en evolución estelar.", 170);
+                doc.text(splitP, 20, curY + 7);
+                curY += 15 + (splitP.length * 5);
             }
 
-            checkPage(80);
+            checkPage(70);
             curY += 5;
             doc.setDrawColor(0, 210, 255); doc.setLineWidth(0.8); doc.line(20, curY, 190, curY);
             curY += 10;
@@ -249,11 +248,11 @@
             curY += 12;
 
             doc.setTextColor(40); doc.setFontSize(10); doc.setFont(undefined, 'normal');
-            let parrafo = `Tu Alma (${a.v}) ha elegido este momento para integrar la fuerza de tu linaje (${rh.v}). vienes a honrar los talentos de tus ancestros pero también a liberar las estructuras que ya no sirven.
+            let parrafo = `Tu Alma (${a.v}) ha elegido este momento para integrar la fuerza de tu linaje (${rh.v}). No es casualidad que lleves este apellido; vienes a honrar los talentos de tus ancestros pero también a liberar las estructuras que ya no sirven.
 
-PARA TUS PROYECTOS: Tu motor de éxito es tu Temperamento (${t.v}). Cuando emprendas algo nuevo, asegúrate de que esté alineado con tu Misión (${k.v}).
+PARA TUS PROYECTOS: Tu éxito depende de usar tu Temperamento (${t.v}) para alcanzar tu Misión (${k.v}). Tu voluntad es la clave para materializar lo que tu Alma desea.
 
-PARA TUS VÍNCULOS: La clave para relaciones sanas está en equilibrar tu Personalidad (${p.v}) con tu verdadera esencia interna. Conecta desde la vulnerabilidad de tu Alma para atraer sintonías que sumen a tu destino.`;
+PARA TUS VÍNCULOS: No permitas que tu Personalidad (${p.v}) eclipse tu esencia interna. Conecta desde la vulnerabilidad para atraer relaciones que resuenen con tu nivel de luz actual.`;
 
             let splitR = doc.splitTextToSize(parrafo, 170);
             doc.text(splitR, 20, curY);
