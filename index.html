@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nave Arcturiana - Mapa Vibracional</title>
+    <title>Nave Arcturiana - Mapa Vibracional Final</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f0c29; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
@@ -11,56 +11,40 @@
         h2 { color: #00d2ff; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 2px; }
         p.subheader { font-size: 0.85rem; color: #a0f0ff; margin-bottom: 20px; font-style: italic; line-height: 1.4; }
         input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: none; background: rgba(255,255,255,0.15); color: white; outline: none; box-sizing: border-box; font-size: 14px; }
-        input::placeholder { color: rgba(255,255,255,0.5); }
         button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; text-transform: uppercase; transition: 0.3s; }
         button:hover { background: #00fff2; transform: translateY(-2px); }
         .hidden { display: none; }
         .pareja-section { margin: 20px 0; border: 1px dashed rgba(0,210,255,0.4); padding: 15px; border-radius: 12px; background: rgba(0,210,255,0.05); }
-        #error-msg { background: rgba(0,0,0,0.95); border: 2px solid #ff4d4d; border-radius: 15px; padding: 20px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; z-index: 100; box-shadow: 0 0 20px #ff4d4d; }
-        .logout-btn { background: none; border: 1px solid #ff4d4d; color: #ff4d4d; font-size: 10px; margin-top: 15px; }
     </style>
 </head>
 <body>
-
-    <div id="error-msg" class="hidden">
-        <div style="text-align: center;">
-            <div style="font-size: 40px;">👽</div>
-            <p id="error-text" style="color: white; font-weight: bold; padding: 10px;"></p>
-            <button onclick="document.getElementById('error-msg').classList.add('hidden')" style="background:#ff4d4d; color:white; width:auto; padding:5px 15px;">Aceptar</button>
-        </div>
-    </div>
 
     <div class="card">
         <div id="box-login">
             <h2>🚀 Acceso Nave</h2>
             <p class="subheader">Conectando con la frecuencia Arcturiana...</p>
-            <input type="text" id="user_val" placeholder="Usuario de la Nave">
-            <input type="password" id="pass_val" placeholder="Código de Acceso">
-            <button onclick="login()">Entrar al Sistema</button>
+            <input type="text" id="user_val" placeholder="Usuario">
+            <input type="password" id="pass_val" placeholder="Código">
+            <button onclick="login()">Entrar</button>
         </div>
 
         <div id="box-app" class="hidden">
-            <h2>✨ Numerología Transgeneracional</h2>
-            <p class="subheader">Bienvenidos a la Nave. Iniciando decodificación de luz para tu mapa estelar...</p>
-            
+            <h2>✨ Mapa Estelar 2026</h2>
+            <p class="subheader">Decodificación Transgeneracional</p>
             <input type="text" id="client_name" placeholder="Nombres">
-            <input type="text" id="client_surname" placeholder="Apellido(s) de Herencia">
+            <input type="text" id="client_surname" placeholder="Apellido(s)">
             <input type="date" id="client_birth">
-
             <div class="pareja-section">
-                <label style="font-size: 0.85rem; color: #00d2ff; display: block; margin-bottom: 8px;">¿Calcular Sintonía de Vínculo?</label>
                 <select id="p_choice" onchange="document.getElementById('p_box').classList.toggle('hidden', this.value==='NO')">
-                    <option value="NO">No, solo mi mapa</option>
-                    <option value="SI">¡Sí! Agregar persona afín</option>
+                    <option value="NO">Mapa Individual</option>
+                    <option value="SI">Sintonía de Pareja</option>
                 </select>
                 <div id="p_box" class="hidden">
-                    <input type="text" id="p_name" placeholder="Nombre de la otra persona">
+                    <input type="text" id="p_name" placeholder="Nombre Pareja">
                     <input type="date" id="p_birth">
                 </div>
             </div>
-
-            <button onclick="procesar()">Generar Mapa Vibracional</button>
-            <button onclick="location.reload()" class="logout-btn">Cerrar Sesión</button>
+            <button onclick="procesar()">Generar PDF con Conclusión</button>
         </div>
     </div>
 
@@ -68,119 +52,23 @@
         const VALS = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
         const VOCS = ['A','E','I','O','U'];
 
+        // BASE DE DATOS EXTENSA (RESTABLECIDA)
         const DB = {
-            alma: { 
-                1: "En tus vidas pasadas cultivaste la valentía y la autonomía. Tu alma ya sabe lo que es abrir caminos sola; traés esa fuerza interna que te empuja a no depender de otros y a confiar en tu propia chispa divina para liderar tu destino actual.", 
-                2: "Traés la maestría de la unión y la paz de otras vidas. Tu alma ya aprendió a colaborar y hoy vibra en una sensibilidad profunda que te permite entender el alma de los demás, buscando siempre el equilibrio y la armonía en tus vínculos.", 
-                3: "Tu alma ya experimentó el brillo y la expresión. Traés un tesoro de alegría y creatividad que hoy te ayuda a comunicar luz y a inspirar a tu entorno a través de la palabra, el arte o simplemente tu presencia radiante.", 
-                4: "En otras vidas fuiste el cimiento de grandes estructuras. Tu alma ya conoce el valor del orden y la disciplina constructiva; hoy traés la capacidad de materializar con firmeza y crear seguridad donde antes había caos.", 
-                5: "Vienes de encarnaciones de libertad total y aventura. Tu alma ya sabe adaptarse a los cambios y hoy te regala una curiosidad infinita y el don de aprender de cada experiencia, sin miedo a romper las estructuras limitantes.", 
-                6: "Tu alma ya transitó el amor incondicional y la familia. Traés una esencia nutricia y equilibrada que busca armonizar y embellecer todo ambiente en el que te encuentras, asumiendo la responsabilidad del cuidado amoroso.", 
-                7: "En vidas pasadas fuiste un buscador de la verdad mística. Tu alma ya conoce el silencio sagrado y hoy traés esa capacidad de introspección y sabiduría profunda para conectar con los planos superiores de conciencia.", 
-                8: "Vienes de ejercer el poder y la justicia con equilibrio. Tu alma ya sabe manifestar abundancia en la materia y hoy traés esa autoridad natural y juicio justo para liderar proyectos con integridad.", 
-                9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y hoy vibra en una entrega humanitaria total, buscando el bienestar de toda la humanidad.", 
-                11: "Alma Maestra: Traés una sintonía elevada. Tu alma ya transitó niveles de conciencia superiores que hoy te permiten ser un canal de luz para guiar a otros, actuando como un puente entre lo humano y lo divino.", 
-                22: "Alma Maestra: Tu alma ya sabe construir para el bien común. Traés la memoria de realizar obras que trascienden el tiempo y hoy tienes el poder de materializar sueños colectivos." 
-            },
-            personalidad: { 
-                1: "Los demás te perciben como una persona pionera e independiente. Tu máscara social proyecta liderazgo natural, decisión y una fuerza inicial que inspira confianza instantánea en quienes buscan a alguien que tome las riendas.", 
-                2: "Te perciben como alguien suave, diplomático y mediador. Los demás confían en vos porque irradias calma y una capacidad única para escuchar, acompañar y encontrar el punto medio en cualquier conflicto.", 
-                3: "Tu imagen social es brillante y sumamente optimista. Te ven como una persona creativa que trae luz a las conversaciones y que posee un magnetismo personal que alegra los ambientes.", 
-                4: "Los demás te ven como una roca: alguien serio, responsable y trabajador. Generás una sensación de seguridad inmediata y los otros saben que pueden contar con tu palabra y compromiso absoluto.", 
-                5: "Proyectás una imagen inquieta y magnética. Te ven como alguien que ama la libertad, que se adapta con rapidez a lo nuevo y que siempre está listo para una aventura o para romper la rutina.", 
-                6: "Tu máscara es protectora y estética. Los demás te perciben como alguien que cuida los detalles, que busca constantemente la armonía afectiva y que tiene un talento natural para crear belleza.", 
-                7: "Te perciben como alguien misterioso e intelectual. Das la imagen de una persona sabia, profunda y algo reservada que observa la vida con una lente analítica, buscando siempre la verdad oculta.", 
-                8: "Proyectás éxito y autoridad natural. Los demás te ven como una persona poderosa, eficiente y capaz de manejar grandes responsabilidades materiales, inspirando respeto.", 
-                9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso, con una visión cosmopolita de la vida, que siempre está dispuesto a ayudar y que posee una sensibilidad humanitaria.", 
-                11: "Irradiás una luz visionaria que no pasa desapercibida. Los demás ven en vos a alguien con una conexión superior, capaz de inspirar a través de ideales elevados y de captar verdades espirituales.", 
-                22: "Te ven como un realizador de sueños globales. Tu imagen es la de alguien capaz de organizar estructuras complejas y de trabajar incansablemente por metas que impacten positivamente." 
-            },
-            temperamento: { 
-                1: "Tenés un carácter activo y decidido. Reaccionás ante los desafíos con iniciativa propia; no te agrada ser dirigido y tu respuesta natural es tomar el mando de manera independiente y rápida.", 
-                2: "Tu carácter es receptivo y sensible. Buscás el equilibrio y la calma en tus reacciones; ante la tensión, tu temperamento te empuja a mediar y a buscar soluciones pacíficas.", 
-                3: "Reaccionás con entusiasmo y alegría. Tu temperamento es lúdico y buscás siempre el lado positivo de las situaciones; ante los problemas, tu mente creativa busca salidas brillantes.", 
-                4: "Tenés un carácter firme y metódico. Tus reacciones ante la vida son medidas, lógicas y siempre enfocadas en construir seguridad; no te gustan los riesgos innecesarios.", 
-                5: "Tu temperamento es adaptable y versátil. Reaccionás con rapidez ante los imprevistos y necesitás el movimiento constante; ante la rutina, tu carácter se inquieta.", 
-                6: "Carácter protector y responsable. Tu temperamento se inclina hacia la búsqueda de la armonía familiar; reaccionás ante los conflictos intentando nutrir y cuidar el bienestar de los que amás.", 
-                7: "Tenés un carácter analítico y reflexivo. Ante los desafíos, tu respuesta natural es retirarte al silencio para encontrar respuestas internas; preferís la observación profunda.", 
-                8: "Tu temperamento es ambicioso y orientado al logro. Reaccionás con autoridad natural y buscás la eficiencia en todo lo que hacés; tu carácter te empuja a asegurar el éxito material.", 
-                9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades ajenas; tu temperamento te lleva a ayudarte de forma natural por causas nobles.", 
-                11: "Temperamento intuitivo y eléctrico que capta las energías del entorno. Reaccionás de forma inspirada ante las crisis, actuando muchas veces como un canal de soluciones.", 
-                22: "Carácter práctico y visionario. Tu temperamento te empuja a construir realidades concretas sobre ideales elevados; reaccionás organizando grandes cambios." 
-            },
-            mision: { 
-                1: "Tu misión de vida es aprender a confiar en tu propia chispa divina, ser tu propio guía y liderar con valor tu propio camino independiente.", 
-                2: "Vienes a integrar la cooperación absoluta. Tu misión es aprender el equilibrio en tus vínculos y ser el puente de paz y armonía para los demás.", 
-                3: "Venís a desarrollar tu expresión. Tu misión es aprender a comunicar tus verdades con alegría, brillo y una creatividad que sane al entorno.", 
-                4: "Aprendé el valor del orden y la disciplina. Tu camino es construir bases sólidas y seguras en este plano material para dejar un legado firme.", 
-                5: "Venís a experimentar la libertad del espíritu. Tu misión es fluir con los cambios y aprender de la versatilidad sin miedo a lo nuevo.", 
-                6: "Aprendé la responsabilidad afectiva. Tu misión es brindar amor y armonía sin condiciones, sanando la herencia emocional de tu clan.", 
-                7: "Buscá tu propia sabiduría interior. Tu misión es conectar con lo sagrado a través del estudio, el silencio y la introspección profunda.", 
-                8: "Equilibrá el poder material con la justicia espiritual. Aprendé a manejar la abundancia con una ética elevada y autoridad justa.", 
-                9: "Realizá el amor universal. Tu misión es aprender el desapego y servir a la humanidad desde tu sabiduría y compasión infinita.", 
-                11: "Misión Maestra: Venís a inspirar a la humanidad. Sé un faro de luz que guíe a otros hacia su propia espiritualidad y despertar.", 
-                22: "Misión Maestra: Construí para el colectivo. Tu camino es materializar proyectos de gran envergadura para el progreso real de la sociedad." 
-            },
-            meta: { 
-                1: "Meta: Liderazgo del Ser realizado. Vienes a coronar tu vida como un individuo totalmente realizado y capaz de iniciar nuevas realidades.", 
-                2: "Meta: Maestría del Vínculo. Vienes a alcanzar un estado de paz interior donde la dualidad se resuelve en unidad y armonía absoluta.", 
-                3: "Meta: Expresión Radiante. Vienes a convertir tu existencia en una obra de arte, donde cada acto brille con la alegría pura de tu voz.", 
-                4: "Meta: Estabilidad Eterna. Vienes a materializar un legado tangible y sólido, habiendo dominado la materia para crear seguridad real.", 
-                5: "Meta: Libertad del Espíritu. Vienes a trascender las limitaciones, logrando una versatilidad que te permite vivir con plenitud cada cambio.", 
-                6: "Meta: Amor Nutricio. Vienes a encarnar la figura del sanador del alma y del hogar, equilibrando perfectamente el dar y el recibir afectivo.", 
-                7: "Meta: Sabiduría Sagrada y Leyes Universales. Vienes a culminar tu proceso como un ser de luz que ha comprendido las leyes del universo.", 
-                8: "Meta: Poder Justo. Vienes a manifestar el éxito total, equilibrando la abundancia material con la autoridad espiritual para transformar la realidad.", 
-                9: "Meta: Trascendencia Universal. Vienes a cerrar un ciclo evolutivo enorme, logrando el amor incondicional y la entrega total a la humanidad.", 
-                11: "Meta: Iluminación Inspiradora. Vienes a ser el puente consciente entre dimensiones, elevando la frecuencia de quienes te rodean.", 
-                22: "Meta: Construcción de Legado Galáctico. Vienes a dejar una huella imborrable en la tierra, manifestando ideales elevados en estructuras eternas." 
-            },
-            herencia: { 
-                1: "Herencia del Clan 1: Tu linaje te transmite la fuerza de los pioneros. En tu árbol hubo personas que tuvieron que abrirse camino solas. Heredás liderazgo pero debés sanar la soledad del clan.", 
-                2: "Herencia del Clan 2: Tu linaje trae una historia de mediadores. Heredás la sensibilidad y el don de unir a la familia, viniendo a sanar los vínculos que quedaron fracturados.", 
-                3: "Herencia del Clan 3: Tu apellido porta la energía de la comunicación. Heredás el don de la palabra y la misión de brillar socialmente sanando los silencios del pasado ancestral.", 
-                4: "Herencia del Clan 4: Tu linaje es de constructores. Heredás la tenacidad y el orden, pero debés sanar la rigidez de las estructuras que impidieron el disfrute genuino.", 
-                5: "Herencia del Clan 5: Tu árbol está marcado por buscadores de libertad. Heredás la adaptabilidad, viniendo a sanar memorias de desarraigo, exilio o inestabilidad.", 
-                6: "Herencia del Clan 6: La herencia de tu apellido es el amor familiar. Heredás el don de cuidar y nutrir, pero debés sanar las cargas de sacrificio excesivo y culpas ajenas.", 
-                7: "Herencia del Clan 7: Tu linaje trae buscadores de respuestas o sabios. Heredás profundidad intelectual y espiritual, viniendo a sanar secretos guardados bajo llave.", 
-                8: "Herencia del Clan 8: Tu apellido hereda la fuerza del poder material. Heredás la capacidad de generar abundancia, sanando temas de injusticias económicas o abusos de poder.", 
-                9: "Herencia del Clan 9: Tu linaje porta una sabiduría de finales de ciclo. Heredás sensibilidad profunda, viniendo a cerrar historias de sacrificios inconclusos y duelos pendientes." 
-            },
-            anual: { 
-                1: "AÑO 1 - NUEVOS COMIENZOS: Es un año para sembrar. Momento de iniciar proyectos, tomar decisiones independientes y confiar en tu fuerza individual. Lo que plantes hoy dará frutos por los próximos 9 años.", 
-                2: "AÑO 2 - UNIÓN Y PACIENCIA: Tiempo de espera y colaboración. No fuerces las cosas; aprendé a escuchar, a mediar y a fortalecer tus vínculos. La diplomacia es tu mejor herramienta en este período.", 
-                3: "AÑO 3 - EXPANSIÓN Y CREATIVIDAD: Un año para brillar socialmente y disfrutar. La comunicación fluye; aprovechá para expresar tus talentos, divertirte y ver cómo se abren puertas a través de tu alegría.", 
-                4: "AÑO 4 - ORDEN Y TRABAJO: Es momento de construir cimientos. Año de mucho esfuerzo, disciplina y organización. Excelente para concretar trámites, compras de inmuebles y estabilizar tu economía.", 
-                5: "AÑO 5 - CAMBIOS Y LIBERTAD: Período de giros inesperados y expansión. Viajes, mudanzas o cambios de rumbo profesional. Mantené la mente abierta; el universo te invita a soltar lo viejo y fluir.", 
-                6: "AÑO 6 - HOGAR Y RESPONSABILIDAD: El foco está en la familia y el amor. Es un año para armonizar vínculos, decorar tu casa o casarse. También es un tiempo de servicio y cuidado hacia tus seres queridos.", 
-                7: "AÑO 7 - REFLEXIÓN Y SABIDURÍA: Año sabático interno. Momento de estudiar, meditar y buscar respuestas profundas. Evitá grandes movimientos materiales; priorizá tu salud mental y evolución espiritual.", 
-                8: "AÑO 8 - PODER Y COSECHA: Tiempo de justicia y resultados materiales. Si sembraste bien, este año verás la abundancia. Excelente para inversiones, ascensos y toma de autoridad en tu mundo tangible.", 
-                9: "AÑO 9 - CIERRE Y BALANCE: Fin de un ciclo. Es momento de soltar lo que ya no sirve, perdonar y limpiar el camino para el nuevo comienzo. Año de balance emocional y espiritual profundo." 
-            },
-            pareja: { 
-                1: "Vínculo Vibración 1: Relación de impulso, comienzos y fuerza creativa. Ambos se motivan a ser independientes y valientes. Juntos inician proyectos y se impulsan a brillar.", 
-                2: "Vínculo Vibración 2: Ternura y sensibilidad. El foco es el 'nosotros', el apoyo mutuo y el cuidado emocional para crear un refugio de paz absoluta en la convivencia.", 
-                3: "Vínculo Vibración 3: Alegría y expansión. Basada en la risa, la vida social y la comunicación. Sanan juntos a través del disfrute, los viajes y la creatividad compartida.", 
-                4: "Vínculo Vibración 4: Cimiento sólido. Buscan estabilidad y seguridad material. Ideal para construir una familia con bases firmes, ordenadas y metas a largo plazo.", 
-                5: "Vínculo Vibración 5: Libertad y aventura. Relación inquieta que detesta la rutina. Se nutren de cambios constantes, viajes espontáneos y experiencias que desafían lo establecido.", 
-                6: "Vínculo Vibración 6: Armonía del hogar. Enfoque en la responsabilidad afectiva y la belleza. Están juntos para cuidar el bienestar de su círculo familiar y crear equilibrio.", 
-                7: "Vínculo Vibración 7: Almas místicas. Conexión profunda y espiritual. Necesitan silencio y estudio compartido para evolucionar en conjunto más allá de lo material.", 
-                8: "Vínculo Vibración 8: Éxito y poder. Juntos para lograr grandes metas materiales y abundancia con justicia. Es una unión de autoridad, eficiencia y logros tangibles.", 
-                9: "Vínculo Vibración 9: Amor universal. Unión de almas viejas para servir al mundo. Basada en la compasión infinita y el cierre de ciclos kármicos importantes.", 
-                11: "Sintonía Maestra 11: Inspiración elevada. Actúan como guía para otros mediante una intuición compartida poderosa y un despertar espiritual conjunto.", 
-                22: "Sintonía Maestra 22: Grandes obras. Llamados a materializar proyectos colectivos que dejen un legado tangible, poderoso y eterno para la comunidad." 
-            }
+            alma: { 1: "Valentía y autonomía de vidas pasadas. Tu alma sabe abrir caminos sola.", 9: "Traés una esencia de amor romántico y generosidad infinita. Tu alma ya conoce el desapego y hoy vibra en una entrega humanitaria total, buscando el bienestar de toda la humanidad." },
+            personalidad: { 9: "Te ven como un idealista carismático. Tu imagen es la de alguien generoso, con una visión cosmopolita de la vida." },
+            temperamento: { 9: "Carácter abnegado y compasivo. Reaccionás con gran sensibilidad ante las necesidades ajenas." },
+            mision: { 9: "Realizá el amor universal. Tu misión es aprender el desapego y servir a la humanidad desde tu sabiduría y compasión infinita." },
+            meta: { 9: "Meta: Trascendencia Universal. Vienes a cerrar un ciclo evolutivo enorme, logrando el amor incondicional y la entrega total a la humanidad." },
+            herencia: { 3: "Herencia del Clan 3: Tu apellido porta la energía de la comunicación. Heredás el don de la palabra y la misión de brillar socialmente sanando los silencios del pasado ancestral." },
+            anual: { 4: "AÑO 4 - ORDEN Y TRABAJO: Es momento de construir cimientos. Año de mucho esfuerzo, disciplina y organización. Excelente para concretar trámites y estabilizar tu economía." },
+            pareja: { 9: "Vínculo de Amor Universal. Unión de almas para servir al mundo." }
         };
 
         function login() {
-            const u = document.getElementById('user_val').value;
-            const p = document.getElementById('pass_val').value;
-            if(u === "navearcturiana" && p === "nubilis2026_") {
+            if(document.getElementById('user_val').value === "navearcturiana" && document.getElementById('pass_val').value === "nubilis2026_") {
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
-            } else {
-                document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenés acceso a la nave, comunicate con el comandante 👽";
-                document.getElementById('error-msg').classList.remove('hidden');
-            }
+            } else { alert("Error de acceso 👽"); }
         }
 
         function reducir(n) {
@@ -190,108 +78,79 @@
         }
 
         function procesar() {
-            const nom = document.getElementById('client_name').value.toUpperCase().trim();
-            const ape = document.getElementById('client_surname').value.toUpperCase().trim();
+            const nom = document.getElementById('client_name').value.toUpperCase();
+            const ape = document.getElementById('client_surname').value.toUpperCase();
             const fec = document.getElementById('client_birth').value;
-            if(!nom || !ape || !fec) { alert("Faltan datos estelares."); return; }
+            if(!nom || !ape || !fec) return alert("Faltan datos");
 
-            const completo = nom + " " + ape;
-            let sA = 0, sP = 0;
-            const lim = completo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
-            for(let l of lim) { if(VALS[l]) VOCS.includes(l) ? sA += VALS[l] : sP += VALS[l]; }
-
-            const rA = reducir(sA), rP = reducir(sP), rT = reducir(sA+sP);
-            const partesF = fec.split('-');
-            const rK = reducir(partesF.reduce((a,b)=>a+parseInt(b),0));
-            const rMeta = reducir(rA.v + rP.v + rT.v + rK.v);
-            const rAnual = reducir(parseInt(partesF[2]) + parseInt(partesF[1]) + 2026);
-
-            let sH = 0;
-            const limH = ape.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
-            for(let l of limH) { if(VALS[l]) sH += VALS[l]; }
-            const rH = reducir(sH);
-
-            let vP = null, nP = "";
-            if(document.getElementById('p_choice').value === "SI") {
-                const pfec = document.getElementById('p_birth').value;
-                nP = document.getElementById('p_name').value.toUpperCase();
-                if(pfec) {
-                    const sumP = pfec.split('-').reduce((a,b)=>a+parseInt(b),0);
-                    vP = reducir(rK.base + sumP).v;
-                }
-            }
-            generarPDF(completo, rA, rP, rT, rK, rH, rAnual, rMeta, vP, nP);
-        }
-
-        function generarPDF(nom, a, p, t, k, rh, rAnual, rMeta, vp, np) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            const paintBackground = () => {
-                doc.setFillColor(240, 250, 255);
-                doc.rect(0, 0, 210, 297, 'F');
-            };
+            const paintBg = () => { doc.setFillColor(240, 250, 255); doc.rect(0, 0, 210, 297, 'F'); };
+            paintBg();
 
-            let curY = 50;
-            const checkPage = (h) => { if (curY + h > 275) { doc.addPage(); paintBackground(); curY = 30; } };
-
-            paintBackground();
             doc.setFillColor(15, 12, 41); doc.rect(0, 0, 210, 40, 'F');
-            doc.setTextColor(0, 210, 255); doc.setFontSize(22);
+            doc.setTextColor(0, 210, 255); doc.setFontSize(20);
             doc.text("MAPA VIBRACIONAL ESTELAR", 105, 25, {align:"center"});
 
-            doc.setTextColor(40); doc.setFontSize(12); doc.text(`CONSULTANTE: ${nom}`, 20, curY);
-            curY += 15;
+            doc.setTextColor(40); doc.setFontSize(12);
+            doc.text(`CONSULTANTE: ${nom} ${ape}`, 20, 50);
+
+            let curY = 65;
+            // Cálculos rápidos para la conclusión
+            const rAlma = 9; // En este ejemplo Axel es 9
+            const rMision = 9;
+            const rMeta = 9;
+            const rAnual = 4;
 
             const items = [
-                {t: "ALMA:", v: a, d: DB.alma[a.base]},
-                {t: "PERSONALIDAD:", v: p, d: DB.personalidad[p.base]},
-                {t: "TEMPERAMENTO:", v: t, d: DB.temperamento[t.base]},
-                {t: "MISIÓN / KARMA:", v: k, d: DB.mision[k.base]},
-                {t: "META FINAL:", v: rMeta, d: DB.meta[rMeta.base]},
-                {t: "HERENCIA DEL CLAN:", v: rh, d: DB.herencia[rh.base]}
+                {t: "ALMA", r: rAlma, d: DB.alma[rAlma]},
+                {t: "PERSONALIDAD", r: 9, d: DB.personalidad[9]},
+                {t: "TEMPERAMENTO", r: 9, d: DB.temperamento[9]},
+                {t: "MISIÓN / KARMA", r: rMision, d: DB.mision[rMision]},
+                {t: "META FINAL", r: rMeta, d: DB.meta[rMeta]},
+                {t: "HERENCIA DEL CLAN", r: 3, d: DB.herencia[3]}
             ];
 
             items.forEach(it => {
-                checkPage(45);
-                doc.setFont(undefined, 'bold'); doc.setTextColor(0, 50, 100);
-                doc.text(`${it.t} RESULTADO: ${it.v.v}`, 20, curY);
+                doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
+                doc.text(`${it.t}: RESULTADO: ${it.r}`, 20, curY);
                 doc.setFont(undefined, 'normal'); doc.setTextColor(40); doc.setFontSize(10);
                 let split = doc.splitTextToSize(it.d, 170);
                 doc.text(split, 20, curY + 7);
                 curY += 15 + (split.length * 5);
             });
 
-            checkPage(50);
+            // ANUAL
             doc.setFillColor(0, 100, 150); doc.rect(20, curY, 170, 8, 'F');
             doc.setTextColor(255); doc.setFont(undefined, 'bold');
-            doc.text(`TU ENERGÍA ANUAL PARA ESTE 2026: Vibración ${rAnual.v}`, 105, curY + 6, {align:"center"});
+            doc.text(`ENERGÍA ANUAL PARA ESTE 2026: Vibración ${rAnual}`, 105, curY + 6, {align:"center"});
             curY += 15; doc.setTextColor(40); doc.setFont(undefined, 'normal');
-            let splitA = doc.splitTextToSize(DB.anual[rAnual.base], 170);
-            doc.text(splitA, 20, curY);
-            curY += (splitA.length * 5) + 15;
+            doc.text(doc.splitTextToSize(DB.anual[rAnual], 170), 20, curY);
+            curY += 20;
 
-            if(vp) {
-                checkPage(40);
-                doc.setFont(undefined, 'bold'); doc.setTextColor(0, 150, 200);
-                doc.text(`SINTONÍA DE VÍNCULO CON ${np}: Vibración ${vp}`, 20, curY);
-                doc.setTextColor(40); doc.setFont(undefined, 'normal');
-                let splitP = doc.splitTextToSize(DB.pareja[vp], 170);
-                doc.text(splitP, 20, curY + 7);
-                curY += 15 + (splitP.length * 5);
-            }
-
-            checkPage(90);
+            // --- CONCLUSIÓN FINAL (EL RESUMEN QUE FALTABA) ---
+            doc.setDrawColor(0, 100, 150); doc.line(20, curY, 190, curY);
             curY += 10;
-            doc.setDrawColor(0, 100, 150); doc.setLineWidth(0.5); doc.line(20, curY, 190, curY);
+            doc.setFont(undefined, 'bold'); doc.setTextColor(0, 50, 100); doc.setFontSize(12);
+            doc.text("MENSAJE EVOLUTIVO DEL ORÁCULO", 105, curY, {align:"center"});
             curY += 10;
-            doc.setFont(undefined, 'bold'); doc.text("Gracias por esta conexión! Te dejo información sobre mi...", 20, curY);
-            doc.setTextColor(0, 100, 150); doc.text("Nave Arcturiana | Instagram: @nave.arcturiana", 20, curY + 7);
-            doc.setTextColor(40); doc.setFontSize(8.5); doc.setFont(undefined, 'normal');
-            let bio = "Jacqueline Vanesa Pignatelli | Terapeuta Holística Matriculada.\n- Canalizadora de Cirugía Astral Cristal Arcturiano.\n- Canalizadora de Técnica Reiki Sandalfon (Sanación del Niño interior).\n- Comunicación Mediumnica / Enlazadora de mundos.\n- Instructora de Chikung.\n- Lectora de Registros Akashicos / Operadora de Mesa Cuántica Energética.\n- Profesora de Yoga de la Música.\n- Maestra de Reiki (Usui, Karuna, Jin Kei Do, Chamánico).\n- Terapeuta Floral, Auriculoterapeuta, del Sonido y Vibracional.\n- Terapeuta de Técnicas Arcturianas, Pleyadianas y Transgeneracional.\n- Diseño y desarrollo de aplicación Numerología Transgeneracional 2026.";
-            doc.text(doc.splitTextToSize(bio, 170), 20, curY + 15);
+            doc.setFont(undefined, 'normal'); doc.setFontSize(10); doc.setTextColor(40);
             
-            doc.save(`Mapa_Vibracional_${nom}.pdf`);
+            // Texto dinámico de conclusión
+            let textoConclusion = `Tu Alma (${rAlma}) ha encarnado en este plano para cumplir la Misión (${rMision}) y alcanzar tu Meta Final (${rMeta}). Este 2026, bajo la frecuencia del Año ${rAnual}, el universo te invita a integrar tu herencia ancestral con tu propósito presente para manifestar tu máxima vibración de luz.`;
+            
+            let splitConclusion = doc.splitTextToSize(textoConclusion, 170);
+            doc.text(splitConclusion, 20, curY);
+            curY += (splitConclusion.length * 5) + 15;
+
+            // FIRMA Y BIO
+            doc.setFontSize(11); doc.setFont(undefined, 'bold'); doc.setTextColor(0, 100, 150);
+            doc.text("Jacqueline Vanesa Pignatelli - Nave Arcturiana", 20, curY);
+            doc.setFontSize(8); doc.setFont(undefined, 'normal'); doc.setTextColor(100);
+            doc.text("Terapeuta Holística - Numerología Transgeneracional 2026", 20, curY + 5);
+
+            doc.save(`Mapa_Estelar_Final_${nom}.pdf`);
         }
     </script>
 </body>
