@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,6 +12,7 @@
         p.subheader { font-size: 0.85rem; color: #a0f0ff; margin-bottom: 20px; font-style: italic; line-height: 1.4; }
         input, select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; border: none; background: rgba(255,255,255,0.15); color: white; outline: none; box-sizing: border-box; font-size: 14px; }
         input::placeholder { color: rgba(255,255,255,0.5); }
+        label { display: block; text-align: left; font-size: 0.85rem; color: #00d2ff; margin-top: 10px; }
         button { width: 100%; padding: 14px; background: #00d2ff; color: #0f0c29; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-top: 10px; text-transform: uppercase; transition: 0.3s; }
         button:hover { background: #00fff2; transform: translateY(-2px); }
         .hidden { display: none; }
@@ -46,10 +46,12 @@
             
             <input type="text" id="client_name" placeholder="Nombres">
             <input type="text" id="client_surname" placeholder="Apellido(s) de Herencia">
+            
+            <label for="client_birth">Ingresa tu fecha de nacimiento:</label>
             <input type="date" id="client_birth">
 
             <div class="pareja-section">
-                <label style="font-size: 0.85rem; color: #00d2ff; display: block; margin-bottom: 8px;">¿Calcular Sintonía de Vínculo?</label>
+                <label style="font-size: 0.85rem; color: #00d2ff; display: block; margin-bottom: 8px; text-align: center;">¿Calcular Sintonía de Vínculo?</label>
                 <select id="p_choice" onchange="document.getElementById('p_box').classList.toggle('hidden', this.value==='NO')">
                     <option value="NO">No, solo mi mapa</option>
                     <option value="SI">¡Sí! Agregar persona afín</option>
@@ -69,7 +71,6 @@
         const VALS = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
         const VOCS = ['A','E','I','O','U'];
 
-        // Traducciones para que el resumen no tenga números "robóticos"
         const TRAD = {
             alma: { 1:"Valentía", 2:"Unión", 3:"Brillo", 4:"Orden", 5:"Libertad", 6:"Amor Incondicional", 7:"Sabiduría Mística", 8:"Poder", 9:"Amor Universal", 11:"Sintonía Elevada", 22:"Construcción" },
             mision: { 1:"Liderazgo", 2:"Cooperación", 3:"Expresión", 4:"Disciplina", 5:"Libertad", 6:"Responsabilidad", 7:"Sabiduría", 8:"Poder Material", 9:"Amor Universal", 11:"Inspiración", 22:"Construcción Colectiva" },
@@ -152,7 +153,7 @@
                 5: "Herencia del Clan 5: Tu árbol está marcado por buscadores de libertad. Heredás la adaptabilidad, viniendo a sanar memorias de desarraigo, exilio o inestabilidad.", 
                 6: "Herencia del Clan 6: La herencia de tu apellido es el amor familiar. Heredás el don de cuidar y nutrir, pero debés sanar las cargas de sacrificio excesivo y culpas ajenas.", 
                 7: "Herencia del Clan 7: Tu linaje trae buscadores de respuestas o sabios. Heredás profundidad intelectual y espiritual, viniendo a sanar secretos guardados bajo llave.", 
-                8: "Herencia del Clan 8: Tu apellido hereda la fuerza del poder material. Heredás la capacidad de generar abundancia, sanando temas de injusticias económicas o abusos de poder.", 
+                8: "Herencia del Clan 8: Tu apellido hereda la fuerza del poder material. Heredás la capacidad de generar abundancia, sanando temas de insignicias económicas o abusos de poder.", 
                 9: "Herencia del Clan 9: Tu linaje porta una sabiduría de finales de ciclo. Heredás sensibilidad profunda, viniendo a cerrar historias de sacrificios inconclusos y duelos pendientes." 
             },
             anual: { 
@@ -291,6 +292,7 @@
                 curY += 15 + (splitP.length * 5);
             }
 
+            // --- MENSAJE DEL ORÁCULO EN LENGUAJE HUMANO ---
             checkPage(60);
             curY += 5;
             doc.setFillColor(15, 12, 41); doc.rect(20, curY, 170, 10, 'F');
@@ -299,13 +301,13 @@
             curY += 18;
             doc.setTextColor(40); doc.setFontSize(10); doc.setFont(undefined, 'normal');
             
-            // LENGUAJE HUMANO: Reemplazamos los números por las descripciones del objeto TRAD
             let conclusion = `Tu Alma, que es un alma en ${TRAD.alma[a.v]}, ha encarnado en este plano para cumplir la Misión de ${TRAD.mision[k.v]} y alcanzar tu Meta Final de ${TRAD.meta[rMeta.v]}. Este 2026, bajo la frecuencia del Año ${TRAD.anual[rAnual.v]}, el universo te invita a integrar tu herencia ancestral de ${TRAD.herencia[rh.v]} con tu propósito presente para manifestar tu máxima vibración de luz.`;
             
             let splitConc = doc.splitTextToSize(conclusion, 170);
             doc.text(splitConc, 20, curY);
             curY += (splitConc.length * 5) + 15;
 
+            // --- BIOGRAFÍA COMPLETA ---
             checkPage(90);
             doc.setDrawColor(0, 100, 150); doc.setLineWidth(0.5); doc.line(20, curY, 190, curY);
             curY += 10;
