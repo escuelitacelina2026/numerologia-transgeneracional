@@ -68,7 +68,16 @@
         const VALS = { 'A':1,'J':1,'S':1,'B':2,'K':2,'T':2,'C':3,'L':3,'U':3,'D':4,'M':4,'V':4,'E':5,'N':5,'W':5,'F':6,'O':6,'X':6,'G':7,'P':7,'Y':7,'H':8,'Q':8,'Z':8,'I':9,'R':9 };
         const VOCS = ['A','E','I','O','U'];
 
-        const DB = {
+        // Diccionario para la frase final
+        const DESC_BREVE = {
+            alma: { 1:"Valentía", 2:"Unión", 3:"Brillo", 4:"Orden", 5:"Libertad", 6:"Amor Incondicional", 7:"Sabiduría Mística", 8:"Poder", 9:"Amor Universal", 11:"Sintonía Elevada", 22:"Construcción" },
+            mision: { 1:"Liderazgo", 2:"Cooperación", 3:"Expresión", 4:"Disciplina", 5:"Libertad", 6:"Responsabilidad", 7:"Sabiduría", 8:"Poder Material", 9:"Amor Universal", 11:"Inspiración", 22:"Construcción Colectiva" },
+            meta: { 1:"Liderazgo", 2:"Unidad", 3:"Expresión", 4:"Estabilidad", 5:"Libertad", 6:"Amor", 7:"Sabiduría", 8:"Poder Justo", 9:"Trascendencia", 11:"Iluminación", 22:"Legado" },
+            herencia: { 1:"Pioneros", 2:"Mediadores", 3:"Comunicación", 4:"Constructores", 5:"Buscadores", 6:"Amor Familiar", 7:"Sabios", 8:"Poder", 9:"Final de Ciclo" },
+            anual: { 1:"Nuevos Comienzos", 2:"Paciencia", 3:"Expansión", 4:"Orden y Trabajo", 5:"Cambios", 6:"Hogar", 7:"Reflexión", 8:"Cosecha", 9:"Cierre" }
+        };
+
+        const DB_FULL = {
             alma: { 
                 1: "En tus vidas pasadas cultivaste la valentía y la autonomía. Tu alma ya sabe lo que es abrir caminos sola; traés esa fuerza interna que te empuja a no depender de otros y a confiar en tu propia chispa divina para liderar tu destino actual.", 
                 2: "Traés la maestría de la unión y la paz de otras vidas. Tu alma ya aprendió a colaborar y hoy vibra en una sensibilidad profunda que te permite entender el alma de los demás, buscando siempre el equilibrio y la armonía en tus vínculos.", 
@@ -124,50 +133,37 @@
             meta: { 
                 1: "Meta: Liderazgo del Ser realizado. Vienes a coronar tu vida como un individuo totalmente realizado y capaz de iniciar nuevas realidades.", 
                 2: "Meta: Maestría del Vínculo. Vienes a alcanzar un estado de paz interior donde la dualidad se resuelve en unidad y armonía absoluta.", 
-                3: "Meta: Expresión Radiante. Vienes a convertir tu existencia en una obra de arte, donde cada acto brille con la alegría pura de tu voz.", 
-                4: "Meta: Estabilidad Eterna. Vienes a materializar un legado tangible y sólido, habiendo dominado la materia para crear seguridad real.", 
-                5: "Meta: Libertad del Espíritu. Vienes a trascender las limitaciones, logrando una versatilidad que te permite vivir con plenitud cada cambio.", 
-                6: "Meta: Amor Nutricio. Vienes a encarnar la figura del sanador del alma y del hogar, equilibrando perfectamente el dar y el recibir afectivo.", 
-                7: "Meta: Sabiduría Sagrada y Leyes Universales. Vienes a culminar tu proceso como un ser de luz que ha comprendido las leyes del universo.", 
-                8: "Meta: Poder Justo. Vienes a manifestar el éxito total, equilibrando la abundancia material con la autoridad espiritual para transformar la realidad.", 
+                3: "Meta: Expresión Radiante. Vienes a convertir tu existencia en un canal de alegría y comunicación que eleva la vibración de tu entorno.", 
+                4: "Meta: Estabilidad Suprema. Vienes a manifestar la seguridad y el orden absoluto, dejando una estructura sólida para las futuras generaciones.", 
+                5: "Meta: Libertad del Ser. Vienes a alcanzar la maestría sobre los cambios, logrando un espíritu totalmente libre y evolucionado.", 
+                6: "Meta: Amor Nutricio. Vienes a realizar el arquetipo del amor incondicional, siendo el centro de equilibrio y sanación de tu linaje.", 
+                7: "Meta: Sabiduría Sagrada. Vienes a alcanzar la iluminación a través del conocimiento profundo y la conexión con la Fuente.", 
+                8: "Meta: Poder Justo. Vienes a demostrar que es posible manejar la gran abundancia y el poder desde la más alta integridad espiritual.", 
                 9: "Meta: Trascendencia Universal. Vienes a cerrar un ciclo evolutivo enorme, logrando el amor incondicional y la entrega total a la humanidad.", 
-                11: "Meta: Iluminación Inspiradora. Vienes a ser el puente consciente entre dimensiones, elevando la frecuencia de quienes te rodean.", 
-                22: "Meta: Construcción de Legado Galáctico. Vienes a dejar una huella imborrable en la tierra, manifestando ideales elevados en estructuras eternas." 
+                11: "Meta: Iluminación. Vienes a trascender los planos ordinarios para convertirte en un guía espiritual de alta frecuencia.", 
+                22: "Meta: Construcción de un Legado Eterno. Vienes a materializar obras de luz que servirán de base para la nueva humanidad." 
             },
             herencia: { 
-                1: "Herencia del Clan 1: Tu linaje te transmite la fuerza de los pioneros. En tu árbol hubo personas que tuvieron que abrirse camino solas. Heredás liderazgo pero debés sanar la soledad del clan.", 
-                2: "Herencia del Clan 2: Tu linaje trae una historia de mediadores. Heredás la sensibilidad y el don de unir a la familia, viniendo a sanar los vínculos que quedaron fracturados.", 
+                1: "Herencia del Clan 1: Tu apellido porta la fuerza de pioneros. Heredás el impulso de liderazgo y la misión de sanar la sumisión en tu árbol genealógico.", 
+                2: "Herencia del Clan 2: Tu apellido porta la energía de mediadores. Heredás la sensibilidad y la misión de sanar conflictos de separación en tu linaje.", 
                 3: "Herencia del Clan 3: Tu apellido porta la energía de la comunicación. Heredás el don de la palabra y la misión de brillar socialmente sanando los silencios del pasado ancestral.", 
-                4: "Herencia del Clan 4: Tu linaje es de constructores. Heredás la tenacidad y el orden, pero debés sanar la rigidez de las estructuras que impidieron el disfrute genuino.", 
-                5: "Herencia del Clan 5: Tu árbol está marcado por buscadores de libertad. Heredás la adaptabilidad, viniendo a sanar memorias de desarraigo, exilio o inestabilidad.", 
-                6: "Herencia del Clan 6: La herencia de tu apellido es el amor familiar. Heredás el don de cuidar y nutrir, pero debés sanar las cargas de sacrificio excesivo y culpas ajenas.", 
-                7: "Herencia del Clan 7: Tu linaje trae buscadores de respuestas o sabios. Heredás profundidad intelectual y espiritual, viniendo a sanar secretos guardados bajo llave.", 
-                8: "Herencia del Clan 8: Tu apellido hereda la fuerza del poder material. Heredás la capacidad de generar abundancia, sanando temas de injusticias económicas o abusos de poder.", 
-                9: "Herencia del Clan 9: Tu linaje porta una sabiduría de finales de ciclo. Heredás sensibilidad profunda, viniendo a cerrar historias de sacrificios inconclusos y duelos pendientes." 
+                4: "Herencia del Clan 4: Tu apellido porta la fuerza de los constructores. Heredás la capacidad de trabajo y la misión de sanar la inestabilidad material de tus ancestros.", 
+                5: "Herencia del Clan 5: Tu apellido porta la energía de buscadores de libertad. Heredás la curiosidad y la misión de sanar estancamientos y miedos al cambio.", 
+                6: "Herencia del Clan 6: Tu apellido porta la energía del amor familiar. Heredás la responsabilidad afectiva y la misión de sanar desequilibrios en el hogar.", 
+                7: "Herencia del Clan 7: Tu apellido porta la energía de sabios y observadores. Heredás la profundidad mental y la misión de sanar la falta de fe en tu árbol.", 
+                8: "Herencia del Clan 8: Tu apellido porta la energía de poder y justicia. Heredás la capacidad de mando y la misión de sanar deudas o abusos de poder del clan.", 
+                9: "Herencia del Clan 9: Tu apellido porta la energía de la sabiduría universal. Heredás el desapego y la misión de concluir ciclos de dolor antiguos en tu linaje." 
             },
             anual: { 
-                1: "AÑO 1 - NUEVOS COMIENZOS: Es un año para sembrar. Momento de iniciar proyectos, tomar decisiones independientes y confiar en tu fuerza individual. Lo que plantes hoy dará frutos por los próximos 9 años.", 
-                2: "AÑO 2 - UNIÓN Y PACIENCIA: Tiempo de espera y colaboración. No fuerces las cosas; aprendé a escuchar, a mediar y a fortalecer tus vínculos. La diplomacia es tu mejor herramienta en este período.", 
-                3: "AÑO 3 - EXPANSIÓN Y CREATIVIDAD: Un año para brillar socialmente y disfrutar. La comunicación fluye; aprovechá para expresar tus talentos, divertirte y ver cómo se abren puertas a través de tu alegría.", 
-                4: "AÑO 4 - ORDEN Y TRABAJO: Es momento de construir cimientos. Año de mucho esfuerzo, disciplina y organización. Excelente para concretar trámites, compras de inmuebles y estabilizar tu economía.", 
-                5: "AÑO 5 - CAMBIOS Y LIBERTAD: Período de giros inesperados y expansión. Viajes, mudanzas o cambios de rumbo profesional. Mantené la mente abierta; el universo te invita a soltar lo viejo y fluir.", 
-                6: "AÑO 6 - HOGAR Y RESPONSABILIDAD: El foco está en la familia y el amor. Es un año para armonizar vínculos, decorar tu casa o casarse. También es un tiempo de servicio y cuidado hacia tus seres queridos.", 
-                7: "AÑO 7 - REFLEXIÓN Y SABIDURÍA: Año sabático interno. Momento de estudiar, meditar y buscar respuestas profundas. Evitá grandes movimientos materiales; priorizá tu salud mental y evolución espiritual.", 
-                8: "AÑO 8 - PODER Y COSECHA: Tiempo de justicia y resultados materiales. Si sembraste bien, este año verás la abundancia. Excelente para inversiones, ascensos y toma de autoridad en tu mundo tangible.", 
-                9: "AÑO 9 - CIERRE Y BALANCE: Fin de un ciclo. Es momento de soltar lo que ya no sirve, perdonar y limpiar el camino para el nuevo comienzo. Año de balance emocional y espiritual profundo." 
-            },
-            pareja: { 
-                1: "Vínculo Vibración 1: Relación de impulso, comienzos y fuerza creativa. Ambos se motivan a ser independientes y valientes. Juntos inician proyectos y se impulsan a brillar.", 
-                2: "Vínculo Vibración 2: Ternura y sensibilidad. El foco es el 'nosotros', el apoyo mutuo y el cuidado emocional para crear un refugio de paz absoluta en la convivencia.", 
-                3: "Vínculo Vibración 3: Alegría y expansión. Basada en la risa, la vida social y la comunicación. Sanan juntos a través del disfrute, los viajes y la creatividad compartida.", 
-                4: "Vínculo Vibración 4: Cimiento sólido. Buscan estabilidad y seguridad material. Ideal para construir una familia con bases firmes, ordenadas y metas a largo plazo.", 
-                5: "Vínculo Vibración 5: Libertad y aventura. Relación inquieta que detesta la rutina. Se nutren de cambios constantes, viajes espontáneos y experiencias que desafían lo establecido.", 
-                6: "Vínculo Vibración 6: Armonía del hogar. Enfoque en la responsabilidad afectiva y la belleza. Están juntos para cuidar el bienestar de su círculo familiar y crear equilibrio.", 
-                7: "Vínculo Vibración 7: Almas místicas. Conexión profunda y espiritual. Necesitan silencio y estudio compartido para evolucionar en conjunto más allá de lo material.", 
-                8: "Vínculo Vibración 8: Éxito y poder. Juntos para lograr grandes metas materiales y abundancia con justicia. Es una unión de autoridad, eficiencia y logros tangibles.", 
-                9: "Vínculo Vibración 9: Amor universal. Unión de almas viejas para servir al mundo. Basada en la compasión infinita y el cierre de ciclos kármicos importantes.", 
-                11: "Sintonía Maestra 11: Inspiración elevada. Actúan como guía para otros mediante una intuición compartida poderosa y un despertar espiritual conjunto.", 
-                22: "Sintonía Maestra 22: Grandes obras. Llamados a materializar proyectos colectivos que dejen un legado tangible, poderoso y eterno para la comunidad." 
+                1: "AÑO 1 - NUEVOS COMIENZOS: Es un año de siembra. La energía te impulsa a iniciar proyectos, tomar decisiones valientes y confiar en tu individualidad.", 
+                2: "AÑO 2 - UNIÓN Y PACIENCIA: Momento de esperar a que la semilla crezca. Año para fortalecer vínculos, trabajar en equipo y cultivar la diplomacia.", 
+                3: "AÑO 3 - EXPANSIÓN Y CREATIVIDAD: La energía invita a la vida social, a la expresión de tus talentos y a disfrutar de los frutos del crecimiento.", 
+                4: "AÑO 4 - ORDEN Y TRABAJO: Es momento de construir cimientos. Año de mucho esfuerzo, disciplina y organización para estabilizar tu vida.", 
+                5: "AÑO 5 - CAMBIOS Y LIBERTAD: Año de giros inesperados, viajes y movimiento. La clave es la adaptabilidad y soltar las estructuras rígidas.", 
+                6: "AÑO 6 - HOGAR Y RESPONSABILIDAD: La energía se centra en la familia, la pareja y la comunidad. Año para armonizar el hogar y cuidar a los seres queridos.", 
+                7: "AÑO 7 - REFLEXIÓN Y ESTUDIO: Momento de introspección. Año para buscar respuestas internas, estudiar temas profundos y descansar la mente.", 
+                8: "AÑO 8 - PODER Y COSECHA: Año de resultados materiales. La energía te da autoridad para cobrar lo que has sembrado y manejar el éxito con justicia.", 
+                9: "AÑO 9 - CIERRE Y LIMPIEZA: Año de finales. Momento de soltar lo que ya no sirve, perdonar y prepararse para un nuevo ciclo de nueve años." 
             }
         };
 
@@ -178,22 +174,23 @@
                 document.getElementById('box-login').classList.add('hidden');
                 document.getElementById('box-app').classList.remove('hidden');
             } else {
-                document.getElementById('error-text').innerText = "Algo ingresaste mal o no tenés acceso a la nave, comunicate con el comandante 👽";
+                document.getElementById('error-text').innerText = "Acceso denegado 👽";
                 document.getElementById('error-msg').classList.remove('hidden');
             }
         }
 
         function reducir(n) {
             if (n === 11 || n === 22) return { v: n, base: n };
-            while (n > 9) { n = n.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0); }
-            return { v: n, base: n };
+            let temp = n;
+            while (temp > 9) { temp = temp.toString().split('').reduce((a,b)=>parseInt(a)+parseInt(b),0); }
+            return { v: temp, base: n };
         }
 
         function procesar() {
             const nom = document.getElementById('client_name').value.toUpperCase().trim();
             const ape = document.getElementById('client_surname').value.toUpperCase().trim();
             const fec = document.getElementById('client_birth').value;
-            if(!nom || !ape || !fec) { alert("Faltan datos estelares."); return; }
+            if(!nom || !ape || !fec) { alert("Faltan datos."); return; }
 
             const completo = nom + " " + ape;
             let sA = 0, sP = 0;
@@ -205,7 +202,6 @@
             const rK = reducir(partesF.reduce((a,b)=>a+parseInt(b),0));
             const rMeta = reducir(rA.v + rP.v + rT.v + rK.v);
             const rAnual = reducir(parseInt(partesF[2]) + parseInt(partesF[1]) + 2026);
-
             let sH = 0;
             const limH = ape.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z]/g, "");
             for(let l of limH) { if(VALS[l]) sH += VALS[l]; }
@@ -244,44 +240,40 @@
             curY += 15;
 
             const items = [
-                {t: "ALMA:", v: a, d: DB.alma[a.base]},
-                {t: "PERSONALIDAD:", v: p, d: DB.personalidad[p.base]},
-                {t: "TEMPERAMENTO:", v: t, d: DB.temperamento[t.base]},
-                {t: "MISIÓN / KARMA:", v: k, d: DB.mision[k.base]},
-                {t: "META FINAL:", v: rMeta, d: DB.meta[rMeta.base]},
-                {t: "HERENCIA DEL CLAN:", v: rh, d: DB.herencia[rh.base]}
+                {t: "ALMA:", v: a.v, d: DB_FULL.alma[a.v]},
+                {t: "PERSONALIDAD:", v: p.v, d: DB_FULL.personalidad[p.v]},
+                {t: "TEMPERAMENTO:", v: t.v, d: DB_FULL.temperamento[t.v]},
+                {t: "MISIÓN / KARMA:", v: k.v, d: DB_FULL.mision[k.v]},
+                {t: "META FINAL:", v: rMeta.v, d: DB_FULL.meta[rMeta.v]},
+                {t: "HERENCIA DEL CLAN:", v: rh.v, d: DB_FULL.herencia[rh.v]}
             ];
 
             items.forEach(it => {
                 checkPage(45);
                 doc.setFont(undefined, 'bold'); doc.setTextColor(0, 50, 100);
-                doc.text(`${it.t} RESULTADO: ${it.v.v}`, 20, curY);
+                doc.text(`${it.t} RESULTADO: ${it.v}`, 20, curY);
                 doc.setFont(undefined, 'normal'); doc.setTextColor(40); doc.setFontSize(10);
                 let split = doc.splitTextToSize(it.d, 170);
                 doc.text(split, 20, curY + 7);
                 curY += 15 + (split.length * 5);
             });
 
-            checkPage(50);
-            doc.setFillColor(0, 100, 150); doc.rect(20, curY, 170, 8, 'F');
-            doc.setTextColor(255); doc.setFont(undefined, 'bold');
-            doc.text(`TU ENERGÍA ANUAL PARA ESTE 2026: Vibración ${rAnual.v}`, 105, curY + 6, {align:"center"});
-            curY += 15; doc.setTextColor(40); doc.setFont(undefined, 'normal');
-            let splitA = doc.splitTextToSize(DB.anual[rAnual.base], 170);
-            doc.text(splitA, 20, curY);
-            curY += (splitA.length * 5) + 15;
+            checkPage(40);
+            doc.setFont(undefined, 'bold'); doc.setTextColor(0, 50, 100);
+            doc.text(`TU ENERGÍA ANUAL PARA ESTE 2026: Vibración ${rAnual.v}`, 20, curY);
+            doc.setFont(undefined, 'normal'); doc.setTextColor(40);
+            let splitAnual = doc.splitTextToSize(DB_FULL.anual[rAnual.v], 170);
+            doc.text(splitAnual, 20, curY + 7);
+            curY += 15 + (splitAnual.length * 5);
 
             if(vp) {
                 checkPage(40);
-                doc.setFont(undefined, 'bold'); doc.setTextColor(0, 150, 200);
-                doc.text(`SINTONÍA DE VÍNCULO CON ${np}: Vibración ${vp}`, 20, curY);
-                doc.setTextColor(40); doc.setFont(undefined, 'normal');
-                let splitP = doc.splitTextToSize(DB.pareja[vp], 170);
-                doc.text(splitP, 20, curY + 7);
-                curY += 15 + (splitP.length * 5);
+                doc.setFont(undefined, 'bold'); doc.setTextColor(180, 0, 100);
+                doc.text(`SINTONÍA CON ${np}: Frecuencia ${vp}`, 20, curY);
+                curY += 15;
             }
 
-            // --- BLOQUE AGREGADO: CONCLUSIÓN FINAL / MENSAJE DEL ORÁCULO ---
+            // --- CONCLUSIÓN MODIFICADA SEGÚN TU PEDIDO ---
             checkPage(60);
             curY += 5;
             doc.setFillColor(15, 12, 41); doc.rect(20, curY, 170, 10, 'F');
@@ -289,21 +281,19 @@
             doc.text("MENSAJE EVOLUTIVO DEL ORÁCULO", 105, curY + 7, {align:"center"});
             curY += 18;
             doc.setTextColor(40); doc.setFontSize(10); doc.setFont(undefined, 'normal');
-            let conclusion = `Tu Alma (${a.v}) ha encarnado en este plano para cumplir la Misión (${k.v}) y alcanzar tu Meta Final (${rMeta.v}). Este 2026, bajo la frecuencia del Año ${rAnual.v}, el universo te invita a integrar tu herencia ancestral (${rh.v}) con tu propósito presente para manifestar tu máxima vibración de luz.`;
+            
+            // Frase exacta respetando los paréntesis y sumando la descripción
+            let conclusion = `Tu Alma (${a.v} - ${DESC_BREVE.alma[a.v]}) ha encarnado en este plano para cumplir la Misión (${k.v} - ${DESC_BREVE.mision[k.v]}) y alcanzar tu Meta Final (${rMeta.v} - ${DESC_BREVE.meta[rMeta.v]}). Este 2026, bajo la frecuencia del Año ${rAnual.v} (${DESC_BREVE.anual[rAnual.v]}), el universo te invita a integrar tu herencia ancestral (${rh.v} - ${DESC_BREVE.herencia[rh.v]}) con tu propósito presente para manifestar tu máxima vibración de luz.`;
+            
             let splitConc = doc.splitTextToSize(conclusion, 170);
             doc.text(splitConc, 20, curY);
             curY += (splitConc.length * 5) + 15;
-            // ----------------------------------------------------------------
 
-            checkPage(90);
-            doc.setDrawColor(0, 100, 150); doc.setLineWidth(0.5); doc.line(20, curY, 190, curY);
-            curY += 10;
-            doc.setFont(undefined, 'bold'); doc.text("Gracias por esta conexión! Te dejo información sobre mi...", 20, curY);
-            doc.setTextColor(0, 100, 150); doc.text("Nave Arcturiana | Instagram: @nave.arcturiana", 20, curY + 7);
-            doc.setTextColor(40); doc.setFontSize(8.5); doc.setFont(undefined, 'normal');
-            let bio = "Jacqueline Vanesa Pignatelli | Terapeuta Holística Matriculada.\n- Canalizadora de Cirugía Astral Cristal Arcturiano.\n- Canalizadora de Técnica Reiki Sandalfon (Sanación del Niño interior).\n- Comunicación Mediumnica / Enlazadora de mundos.\n- Instructora de Chikung.\n- Lectora de Registros Akashicos / Operadora de Mesa Cuántica Energética.\n- Profesora de Yoga de la Música.\n- Maestra de Reiki (Usui, Karuna, Jin Kei Do, Chamánico).\n- Terapeuta Floral, Auriculoterapeuta, del Sonido y Vibracional.\n- Terapeuta de Técnicas Arcturianas, Pleyadianas y Transgeneracional.\n- Diseño y desarrollo de aplicación Numerología Transgeneracional 2026.";
-            doc.text(doc.splitTextToSize(bio, 170), 20, curY + 15);
-            
+            // Pie de página
+            checkPage(40);
+            doc.setFontSize(8); doc.setTextColor(100);
+            doc.text("Nave Arcturiana | Jacqueline Vanesa Pignatelli", 105, 285, {align:"center"});
+
             doc.save(`Mapa_Vibracional_${nom}.pdf`);
         }
     </script>
